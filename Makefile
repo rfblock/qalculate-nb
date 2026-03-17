@@ -174,8 +174,9 @@ $(build)/qalc.js $(build)/qalc.wasm &: $(OBJS) $(call libfiles,$(QALCWASM_LIBS))
 	    $(OBJS) \
 	    -o $(build)/qalc.js
 
-PUBLIC_FILES = $(build)/qalc.js $(build)/qalc.wasm $(GNUPLOT_BINS) \
-               src/index.html src/main.js src/gnuplot-worker.js src/style.css src/favicon.png
+PUBLIC_FILES = $(build)/qalc.js $(build)/qalc.wasm \
+               src/index.html src/main.js src/style.css src/favicon.png \
+			   src/parser.js
 
 serve: deploy
 	python3 -m http.server -d public 8000

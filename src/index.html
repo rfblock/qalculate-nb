@@ -1,53 +1,25 @@
-<!doctype html>
-<html lang="en-us" style="margin: 2em;">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
-    <link rel='icon' type='image/png' href='favicon.png'>
-    <title>Qalculate Web</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel='icon' type='image/png' href='favicon.png'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css" integrity="sha512-vPg9GqsZZ4LHv9BkFfZSXt7y4D7YaARPU2JFmpZug4EgtJJrumytMAFZkNSk2LSyqWir0TNbh2tBq7UJIMxvlA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js" integrity="sha512-Qsh05D07P6dURSZn8Qk+j8GI7cEK0OhXleZvTofmucwoDSkBC0juWf1401JdSE8os2kWEezMu7e9mlnszm3yEw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="preload" href="qalc.js" as="script">
-    <link rel="preload" href="qalc.wasm" as="fetch">
-    <link rel="stylesheet" href="style.css">
+    <link rel="preload" href="qalc.wasm" as="fetch" crossorigin="anonymous">
 </head>
-
-
 <body>
-    <h1>Qalculate!</h1>
-
-    <p>This page is designed to test running Qalculate in the browser using
-      WASM. At the moment, currencies are not supported, as they require
-      external resources.</p>
-
-    <p>Plotting works, try <code>plot(3x^2; -10; 10)</code></p>
-
-    <p>The source code for this tool <a
-        href="https://github.com/flaviut/qalculate-wasm">can be found on
-        GitHub</a></p>
-
-    <div id="status">Downloading...</div>
-
-    <div class="hide" id="cell-template">
-        <div class="cell">
-            <input type="text" class="cell-input" placeholder="2x + 5 = 9">
-            <div class="cell-result"></div>
-        </div>
-    </div>
-    <div class="hide" id="plot-template">
-        <div class="plot-err">
-            <h2>Unable to plot</h2>
-        </div>
-    </div>
-
-    <div id="cells">
-
-    </div>
-
-    <script type='text/javascript' src='main.js'></script>
+	<!-- <p><span id="answer">g_0\operatorname{to}\operatorname{ft}/s^2</span></p> -->
+	<!-- <p><span id="answer">\sqrt[3]{2}</span></p> -->
+	<p><span id="answer">\sum_{n=1}^{20}\left(n+\frac{1}{2n}\right)</span></p>
+	<!-- <p><span id="answer">\frac{3x}{x}=y</span></p> -->
+	<p><span id="result"></span></p>
+	
+	<script src="parser.js"></script>
+	<script src="main.js"></script>
     <script async type="text/javascript" src="qalc.js"></script>
-    <script data-goatcounter="https://j88og8.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
 </body>
-
 </html>

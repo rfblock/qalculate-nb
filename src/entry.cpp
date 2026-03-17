@@ -27,11 +27,38 @@ bool qalc_invoke_gnuplot(
 }
 
 EMSCRIPTEN_BINDINGS(calculator_bindings) {
-    class_<Calculator>("Calculator")
-        .constructor(&getCalculator, allow_raw_pointers())
-        .function("reset", &Calculator::reset)
-        .function("loadGlobalDefinitions", select_overload<bool()>(&Calculator::loadGlobalDefinitions))
-        .function("calculateAndPrint", optional_override([](Calculator& self, std::string s, int msecs) {
-            return self.calculateAndPrint(s, msecs);
-        }));
+	class_<Calculator>("Calculator")
+	.constructor(&getCalculator, allow_raw_pointers())
+	.function("reset", &Calculator::reset)
+	.function("loadGlobalDefinitions", select_overload<bool()>(&Calculator::loadGlobalDefinitions))
+	.function("calculateAndPrint", optional_override([](Calculator& self, std::string s, int msecs, EvaluationOptions &eo, PrintOptions &po) {
+		return self.calculateAndPrint(s, msecs, eo, po);
+	}));
+
+	class_<EvaluationOptions>("EvaluationOptions")
+		.property("approximation", &EvaluationOptions::approximation);
+	
+	enum_<ApproximationMode>("ApproximationMode")
+	.value("EXACT", APPROXIMATION_EXACT)
+	.value("TRY_EXACT", APPROXIMATION_TRY_EXACT)
+	.value("APPROXIMATE", APPROXIMATION_APPROXIMATE)
+	.value("EXACT_VARIABLES", APPROXIMATION_EXACT_VARIABLES);
+
+	constant("default_user_evaluation_options", default_user_evaluation_options);
+
+	class_<PrintOptions>("PrintOptions")
+		.property("interval_display", &PrintOptions::interval_display);
+	
+	constant("default_print_options", default_print_options);
+
+	enum_<IntervalDisplay>("IntervalDisplay")
+		.value("SIGNIFICANT_DIGITS", INTERVAL_DISPLAY_SIGNIFICANT_DIGITS)
+		.value("INTERVAL", INTERVAL_DISPLAY_INTERVAL)
+		.value("PLUSMINUS", INTERVAL_DISPLAY_PLUSMINUS)
+		.value("MIDPOINT", INTERVAL_DISPLAY_MIDPOINT)
+		.value("LOWER", INTERVAL_DISPLAY_LOWER)
+		.value("UPPER", INTERVAL_DISPLAY_UPPER)
+		.value("CONCISE", INTERVAL_DISPLAY_CONCISE)
+		.value("RELATIVE", INTERVAL_DISPLAY_RELATIVE);
+
 }
