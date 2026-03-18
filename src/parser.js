@@ -1,17 +1,5 @@
 'use strict';
 
-const punct_tokens = {
-	'\\left': '',
-	'\\right': '',
-	'\\ ': ' ',
-	'\\{': '(',
-	'\\}': ')',
-}
-
-const keyword_tokens = [
-	'sin', 'cos', 'tan', 'arcsin', 'arccos', 'arctan', 'deg', 'pi'
-];
-
 const TOK_EXP = 'tok-exp';
 const TOK_COMMAND = 'tok-command';
 const TOK_PUCNT = 'tok-punct';
@@ -130,6 +118,7 @@ const latex_to_terms = (tokens, i) => {
 				terms.push(`((${arg1})/(${arg2}))`);
 			} break;
 
+			// TODO: allow for more generic LHS (i.e. \sum_{a_0=1}^{20}a_0)
 			// \sum _ {n=1} ^5n
 			// \sum _ {n=1} ^ {20} n
 			case '\\sum': {

@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
 	<link rel='icon' type='image/png' href='favicon.png'>
+	<link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css" integrity="sha512-vPg9GqsZZ4LHv9BkFfZSXt7y4D7YaARPU2JFmpZug4EgtJJrumytMAFZkNSk2LSyqWir0TNbh2tBq7UJIMxvlA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js" integrity="sha512-Qsh05D07P6dURSZn8Qk+j8GI7cEK0OhXleZvTofmucwoDSkBC0juWf1401JdSE8os2kWEezMu7e9mlnszm3yEw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -14,9 +15,15 @@
 <body>
 	<!-- <p><span id="answer">g_0\operatorname{to}\operatorname{ft}/s^2</span></p> -->
 	<!-- <p><span id="answer">\sqrt[3]{2}</span></p> -->
-	<p><span id="answer">\sum_{n=1}^{20}\left(n+\frac{1}{2n}\right)</span></p>
 	<!-- <p><span id="answer">\frac{3x}{x}=y</span></p> -->
-	<p><span id="result"></span></p>
+	<!-- <p><span id="answer">\sum_{n=1}^{20}\left(n+\frac{1}{2n}\right)</span></p> -->
+
+	<div id="notebook-cells">
+		<!-- <div class="cell" tabindex="0">
+			<span class="cell-expression"></span>
+			<span class="cell-result"></span>
+		</div> -->
+	</div>
 	
 	<script src="parser.js"></script>
 	<script src="main.js"></script>

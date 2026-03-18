@@ -1,44 +1,49 @@
-.cell {
-    margin: 1em 0;
-    border-radius: 0.5em;
-    border: 1px solid black;
-    padding: 1em;
-}
-.cell-input {
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 1em;
-    padding: 0.6em;
-}
-.cell-result {
-    border-radius: 0.75em;
-    background: #eee;
-    padding: 0.75em;
-}
-.cell-input,
-.cell-result {
-    font-family: sans-serif;
-    font-size: 0.9em;
-}
 body {
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
 }
-.hide {
-    display: none;
+
+#notebook-cells {
+	display: flex;
+	flex-direction: column;
+	max-width: 1000px;
+	width: 60%;
+	left: auto;
 }
-.plot {
-    display: block;
+
+.cell {
+	padding-left: 12px;
+	border-left: 2px solid #0000;
 }
-.plot-err {
-    color: red;
-    width: 600px;
-    height: 480px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+
+.cell.selected {
+	border-left: 2px solid #aaa;
 }
-.plot-err h2 {
-    text-align: center;
+
+.cell:hover {
+	border-left: 2px solid #aaa;
+}
+
+.cell.selected:focus-within {
+	border-left: 2px solid steelblue;
+	outline: none;
+}
+
+.cell > .cell-expression {
+	display: block;
+	border: none;
+	border: 2px solid #ddd;
+	background-color: #eee;
+}
+
+.cell-expression.mq-editable-field.mq-focused {
+	outline: none;
+	box-shadow: none;
+	border: 2px solid steelblue;
+}
+
+.cell-result {
+	margin-top: 2px;
+	display: block;
 }
