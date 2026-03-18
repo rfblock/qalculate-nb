@@ -1,8 +1,7 @@
 let MQ = MathQuill.getInterface(2);
 
 MQ.config({
-	autoCommands: 'sqrt pi theta sum int nthroot',
-	autoOperatorNames: 'sin cos tan arcsin arccos arctan deg pi mm mi ft yd in deg rad to ln log',	
+	autoCommands: 'sqrt pi theta sum int nthroot pm',
 	sumStartsWithNEquals: true,
 	autoSubscriptNumerals: true,
 });
@@ -14,7 +13,7 @@ const focus_cell = (cell, enter_edit) => {
 	if (cell == null) { return; }
 	document.querySelectorAll('.cell').forEach(x => x.classList.remove('selected'));
 	cell.classList.add('selected');
-	if (enter_edit ?? true) {
+	if (enter_edit ?? false) {
 		MQ(cell.querySelector('.cell-expression')).focus();
 	} else {
 		cell.focus();
@@ -29,11 +28,19 @@ const create_cell = ref => {
 	cell.addEventListener('keydown', e => {
 		if (e.repeat) { return; }
 		if (cell.querySelector('.cell-expression.mq-focused') != null) { return; }
-		if (e.key == 'ArrowUp') { focus_cell(cell.previousElementSibling, false); }
-		if (e.key == 'ArrowDown') { focus_cell(cell.nextElementSibling, false); }
-		if (e.key == 'Enter') { focus_cell(cell); e.preventDefault(); }
-		if (e.key == 'a') { focus_cell(create_cell(cell), false); }
-		if (e.key == 'b') { focus_cell(create_cell(cell.nextElementSibling), false); }
+		if (e.key == 'ArrowUp') { focus_cell(cell.previousElementSibling); }
+		if (e.key == 'ArrowDown') { focus_cell(cell.nextElementSibling); }
+		if (e.key == 'Enter') { focus_cell(cell, true); e.preventDefault(); }
+		if (e.key == 'a') { focus_cell(create_cell(cell)); }
+		if (e.key == 'b') { focus_cell(create_cell(cell.nextElementSibling)); }
+		if (e.key == 'd') {
+			if (cell.nextElementSibling != null) {
+				focus_cell(cell.nextElementSibling);
+			} else {
+				focus_cell(cell.previousElementSibling);
+			}
+			cell.remove();
+		}
 	});
 		const cell_expr = document.createElement('span');
 		cell.appendChild(cell_expr);
@@ -49,13 +56,13 @@ const create_cell = ref => {
 			if (e.key != 'Escape') { return; }
 
 			console.log('escape');
-			cell.focus();
+			focus_cell(cell);
 		});
 
 		const field = MQ.MathField(cell_expr, {
 			handlers: {
-				upOutOf: () => focus_cell(cell.previousElementSibling),
-				downOutOf: () => focus_cell(cell.nextElementSibling),
+				upOutOf: () => focus_cell(cell.previousElementSibling, true),
+				downOutOf: () => focus_cell(cell.nextElementSibling, true),
 				enter: () => {
 					exp = parse_latex(field.latex());
 					if (exp == '') { return; }
@@ -68,7 +75,7 @@ const create_cell = ref => {
 			}
 		});
 
-	cell.addEventListener('click', e => focus_cell(e.currentTarget));
+	cell.addEventListener('click', e => focus_cell(e.currentTarget, true));
 
 	document.querySelector('#notebook-cells').insertBefore(cell, ref);
 	return cell;
@@ -83,6 +90,19 @@ var Module = {
 		console.timeEnd('new');
 
 		Module.default_print_options.interval_display = Module.IntervalDisplay.CONCISE;
+
+		units = '';
+		for (let i = 0; i < calc.units.size(); i++) {
+			const name = calc.units.get(i).abbreviation();
+			if (name.length < 2) { continue; }
+			if (name.includes('_')) { continue; }
+			units += ' ' + name;
+		}
+		console.log(units);
+
+		MQ.config({
+			autoOperatorNames: 'sin cos tan arcsin arccos arctan ln log to' + units,
+		});
 
 		// newCell();
 	},

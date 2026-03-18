@@ -28,21 +28,29 @@ bool qalc_invoke_gnuplot(
 
 EMSCRIPTEN_BINDINGS(calculator_bindings) {
 	class_<Calculator>("Calculator")
-	.constructor(&getCalculator, allow_raw_pointers())
-	.function("reset", &Calculator::reset)
-	.function("loadGlobalDefinitions", select_overload<bool()>(&Calculator::loadGlobalDefinitions))
-	.function("calculateAndPrint", optional_override([](Calculator& self, std::string s, int msecs, EvaluationOptions &eo, PrintOptions &po) {
-		return self.calculateAndPrint(s, msecs, eo, po);
-	}));
+		.constructor(&getCalculator, allow_raw_pointers())
+		.function("reset", &Calculator::reset)
+		.function("loadGlobalDefinitions", select_overload<bool()>(&Calculator::loadGlobalDefinitions))
+		.property("units", &Calculator::units)
+		.function("calculateAndPrint", optional_override([](Calculator& self, std::string s, int msecs, EvaluationOptions &eo, PrintOptions &po) {
+			return self.calculateAndPrint(s, msecs, eo, po);
+		}));
+
+	class_<Unit>("Unit")
+		.function("abbreviation", optional_override([](Unit &self) {
+			return (self.abbreviation());
+		}));
+	
+	register_vector<Unit*>("vector<Unit*>");
 
 	class_<EvaluationOptions>("EvaluationOptions")
 		.property("approximation", &EvaluationOptions::approximation);
 	
 	enum_<ApproximationMode>("ApproximationMode")
-	.value("EXACT", APPROXIMATION_EXACT)
-	.value("TRY_EXACT", APPROXIMATION_TRY_EXACT)
-	.value("APPROXIMATE", APPROXIMATION_APPROXIMATE)
-	.value("EXACT_VARIABLES", APPROXIMATION_EXACT_VARIABLES);
+		.value("EXACT", APPROXIMATION_EXACT)
+		.value("TRY_EXACT", APPROXIMATION_TRY_EXACT)
+		.value("APPROXIMATE", APPROXIMATION_APPROXIMATE)
+		.value("EXACT_VARIABLES", APPROXIMATION_EXACT_VARIABLES);
 
 	constant("default_user_evaluation_options", default_user_evaluation_options);
 
