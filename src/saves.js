@@ -1,7 +1,7 @@
 'use strict';
 
 let notebook_name = '';
-let uuid = null;
+let last_save = null;
 
 /**
  * @type {IDBDatabase | null}
@@ -9,12 +9,13 @@ let uuid = null;
 let database = null;
 
 const begin_save = () => {
-	if (uuid != null) {
-		save_notebook();
+	if (notebook_name.trim().length == 0) {
+		// Unnamed document
+		show_save_as_dialog();
 		return;
 	}
-
-	show_save_as_dialog();
+	
+	save_notebook();
 }
 
 const show_save_as_dialog = () => {
@@ -24,11 +25,27 @@ const show_save_as_dialog = () => {
 }
 
 const dialog_save_button = () => {
+	const save = () => {
+		document.querySelector('#save-as-dialog').close();
+		save_notebook();
+		document.querySelector('#loading-modal').close();
+	}
+
 	notebook_name = document.querySelector('#save-as-dialog > input').value;
-	document.querySelector('#save-as-dialog').close();
-	if (uuid == null) { uuid = crypto.randomUUID(); }
-	save_notebook();
-	document.querySelector('#loading-modal').close();
+	list_notebooks().then(notebooks => {
+		const notebook_names = notebooks.map(x => x.notebook_name);
+		if (notebook_names.includes(notebook_name)) {
+			prompt_modal(`${notebook_name} already exists. Overwrite?`)
+				.catch(() => {})
+				.then(res => {
+					if (res == 'Yes') {
+						save();
+					}
+				});
+			return;
+		}
+		save();
+	});
 }
 
 const show_open_dialog = () => {
@@ -40,7 +57,7 @@ const show_open_dialog = () => {
 		const select = document.querySelector('#open-dialog > select');
 		notebooks.forEach(nb => {
 			const option = document.createElement('option');
-			option.value = nb.uuid;
+			option.value = nb.notebook_name;
 			option.innerText = nb.notebook_name;
 			select.appendChild(option);
 		});
@@ -65,7 +82,6 @@ const serialize_state = () => {
 
 	return {
 		notebook_name,
-		uuid,
 		cells,
 	};
 }
@@ -73,19 +89,14 @@ const serialize_state = () => {
 const save_notebook = () => {
 	if (database == null) {
 		console.error('Unable to save notebook (IndexedDB is not open)');
-		resolve({text: 'Save Failed', status: 'error'});
+		create_notification('Save Failed', 'error');
 		return;
 	}
 
 	const state = serialize_state();
 	if (state.notebook_name.trim().length == 0) {
 		console.error('Unable to save notebook (Name cannot be blank)');
-		resolve({text: 'Save Failed', status: 'error'});
-		return;
-	}
-	if (state.uuid == null) {
-		console.error('Unable to save notebook (Invalid UUID)');
-		resolve({text: 'Save Failed', status: 'error'});
+		create_notification('Save Failed', 'error');
 		return;
 	}
 
@@ -93,19 +104,18 @@ const save_notebook = () => {
 		.transaction(['notebooks'], 'readwrite')
 		.objectStore('notebooks')
 		.put(state);
-	req.onsuccess = () => resolve({text: 'Saved', status: 'success'});
+	req.onsuccess = () => create_notification('Saved', 'success');
 	req.onerror = e => {
 		console.error(`Unable to save: ${e.target.error?.message}`)
-		resolve({text: 'Save Failed', status: 'error'});
+		create_notification('Save Failed', 'error');
 	};
 }
 
-const load_notebook = load_uuid => {
-	console.log(load_uuid);
+const load_notebook = load_name => {
 	const req = database
 		.transaction(['notebooks'], 'readwrite')
 		.objectStore('notebooks')
-		.get(load_uuid);
+		.get(load_name);
 	req.onerror = e => {
 		console.error(`Unable to load: ${e.target.error?.message}`);
 		create_notification('Failed Loading Notebook', 'error');
@@ -113,7 +123,6 @@ const load_notebook = load_uuid => {
 	req.onsuccess = e => {
 		const state = e.target.result;
 		notebook_name = state.notebook_name;
-		uuid = state.uuid;
 		
 		document.querySelectorAll('.cell').forEach(x => x.remove());
 
@@ -141,7 +150,6 @@ const list_notebooks = () => {
 
 const new_notebook = () => {
 	notebook_name = '';
-	uuid = null;
 
 	document.activeElement.blur();
 	document.querySelectorAll('.cell').forEach(x => x.remove());
@@ -162,9 +170,8 @@ const initialize_database = () => {
 	req.onsuccess = e => set_db(e.target.result);
 	req.onupgradeneeded = e => {
 		set_db(e.target.result);
-		const objectStore = database.createObjectStore('notebooks', { keyPath: 'uuid' });
-		objectStore.createIndex('uuid', 'uuid', { unique: true });
-		objectStore.createIndex('notebook_name', 'notebook_name', { unique: false });
+		const objectStore = database.createObjectStore('notebooks', { keyPath: 'notebook_name' });
+		objectStore.createIndex('notebook_name', 'notebook_name', { unique: true });
 
 		objectStore.transaction.oncomplete = e => {
 			console.log('IndexedDB successfully created');

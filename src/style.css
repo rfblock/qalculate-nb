@@ -134,6 +134,10 @@ main {
 	}
 }
 
+#prompt-modal > div:nth-child(2) {
+	float: right;
+}
+
 #notifications {
 	display: flex;
 	flex-direction: column;
