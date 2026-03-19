@@ -101,7 +101,7 @@ const latex_to_terms = (tokens, i) => {
 				const ret = latex_to_terms(tokens, ++i);
 				arg2 = ret[0];
 				i = ret[1];
-				terms.push(`root(${arg2}, ${arg1})`);
+				terms.push(['root(', arg2, ',', arg1, ')']);
 			} break;
 
 			// \frac{a}{b}
@@ -115,7 +115,7 @@ const latex_to_terms = (tokens, i) => {
 				ret = latex_to_terms(tokens, i);
 				arg2 = ret[0];
 				i = ret[1];
-				terms.push(`((${arg1})/(${arg2}))`);
+				terms.push(['((', arg1, ')/(', arg2, '))']);
 			} break;
 
 			// TODO: allow for more generic LHS (i.e. \sum_{a_0=1}^{20}a_0)

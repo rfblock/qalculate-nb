@@ -1,5 +1,80 @@
+:root {
+	font-family: 'Inter';
+	--background: #eee;
+	--background-dark: #ddd;
+	--border: 2px solid #ddd;
+}
+
 body {
-	margin: 8px 0;
+	margin: 0;
+}
+
+menu {
+	display: flex;
+	align-items: flex-start;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+	padding: 0;
+	margin: 0;
+	pointer-events: none;
+	> div:last-child {
+		background: var(--background);
+		flex-grow: 1;
+		> button {
+			width: 100%;
+			color: #0000;
+			border-bottom: var(--border);
+		}
+	}
+}
+
+menu > div {
+	> button {
+		float: left;
+	}
+	button {
+		pointer-events: all;
+		background: var(--background);
+		border: none;
+		border-bottom: var(--border);
+		border-right: var(--border);
+		&:hover:not(:last-child) {
+			background: var(--background-dark);
+		}
+	}
+}
+
+menu > div:focus-within {
+	> div > div > button {
+		border-bottom: none;
+		border-left: var(--border);
+		visibility: visible;
+		&:last-child {
+			border-bottom: var(--border);
+		}
+	}
+}
+
+menu > div > div {
+	width: 0;
+	visibility: hidden;
+	> div {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		float: left;
+		> button {
+			text-align: left;
+			white-space: nowrap;
+			float: left;
+		}
+	}
+}
+
+main {
+	margin: 32px 0;
 	width: 100vw;
 	display: flex;
 	justify-content: center;
@@ -19,11 +94,11 @@ body {
 }
 
 .cell.selected {
-	border-left: 2px solid #aaa;
+	border-left: var(--border);
 }
 
 .cell:hover {
-	border-left: 2px solid #aaa;
+	border-left: var(--border);
 }
 
 .cell.selected:focus-within {
@@ -34,8 +109,8 @@ body {
 .cell > .cell-expression {
 	display: block;
 	border: none;
-	border: 2px solid #ddd;
-	background-color: #eee;
+	border: var(--border);
+	background-color: var(--background);
 }
 
 .cell-expression.mq-editable-field.mq-focused {

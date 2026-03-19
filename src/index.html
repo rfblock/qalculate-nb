@@ -6,11 +6,19 @@
 	<title>Document</title>
 	<link rel='icon' type='image/png' href='favicon.png'>
 	<link rel="stylesheet" href="style.css">
+	<!-- Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Iosevka+Charon:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+	<!-- MathQuill -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css" integrity="sha512-vPg9GqsZZ4LHv9BkFfZSXt7y4D7YaARPU2JFmpZug4EgtJJrumytMAFZkNSk2LSyqWir0TNbh2tBq7UJIMxvlA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js" integrity="sha512-Qsh05D07P6dURSZn8Qk+j8GI7cEK0OhXleZvTofmucwoDSkBC0juWf1401JdSE8os2kWEezMu7e9mlnszm3yEw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<!-- Qalculate! -->
     <link rel="preload" href="qalc.js" as="script">
     <link rel="preload" href="qalc.wasm" as="fetch" crossorigin="anonymous">
+	
 </head>
 <body>
 	<!-- <p><span id="answer">g_0\operatorname{to}\operatorname{ft}/s^2</span></p> -->
@@ -18,12 +26,41 @@
 	<!-- <p><span id="answer">\frac{3x}{x}=y</span></p> -->
 	<!-- <p><span id="answer">\sum_{n=1}^{20}\left(n+\frac{1}{2n}\right)</span></p> -->
 
-	<div id="notebook-cells">
-		<!-- <div class="cell" tabindex="0">
-			<span class="cell-expression"></span>
-			<span class="cell-result"></span>
-		</div> -->
-	</div>
+	<menu>
+		<div>
+			<button>File</button>
+			<div>
+				<div>
+					<button>New</button>
+					<button>Open</button>
+					<button>Save</button>
+					<button>Save As</button>
+				</div>
+			</div>
+		</div>
+		<div>
+			<button>Edit</button>
+			<div>
+				<div>
+					<button>Undo</button>
+					<button>Redo</button>
+					<button>Insert Cell Above</button>
+					<button>Insert Cell Below</button>
+				</div>
+			</div>
+		</div>
+		<div>
+			<button>Padding</button>
+		</div>
+	</menu>
+	<main>
+		<div id="notebook-cells">
+			<!-- <div class="cell" tabindex="0">
+				<span class="cell-expression"></span>
+				<span class="cell-result"></span>
+			</div> -->
+		</div>
+	</main>
 	
 	<script src="parser.js"></script>
 	<script src="main.js"></script>
