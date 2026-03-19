@@ -30,11 +30,10 @@
 		<div>
 			<button>File</button>
 			<div><div>
-				<button onclick="alert('TODO');">New</button>
-				<button onclick="alert('TODO');">Open</button>
-				<button onclick="alert('TODO');">Save</button>
-				<button onclick="alert('TODO');">Save As</button>
-				<button onclick="alert('TODO');">Browse</button>
+				<button onclick="new_notebook();">New</button>
+				<button onclick="show_open_dialog();">Open</button>
+				<button onclick="begin_save();">Save</button>
+				<button onclick="show_save_as_dialog();">Save As</button>
 			</div></div>
 		</div>
 		<div>
@@ -46,7 +45,15 @@
 				<button onclick="alert('TODO');">Insert Cell Below</button>
 			</div></div>
 		</div>
-		<div><button tabindex="-1">Padding</button></div>
+		<div>
+			<button>Cell</button>
+			<div><div>
+				<button onclick="alert('TODO');">Clear All</button>
+				<button onclick="alert('TODO');">Run All</button>
+				<button onclick="alert('TODO');">Goto</button>
+			</div></div>
+		</div>
+		<div><button tabindex="-1" class="spacer">Padding</button></div>
 	</menu>
 
 	<main>
@@ -57,7 +64,24 @@
 			</div> -->
 		</div>
 	</main>
+
+	<dialog id="save-as-dialog">
+		<input type="text" placeholder="Name">
+		<button onclick="dialog_save_button();">Save</button>
+	</dialog>
+
+	<dialog id="open-dialog">
+		<select name="file-select" size="20">
+			<option value=""></option>
+		</select><br/>
+		<button onclick="dialog_open_button();">Open</button>
+	</dialog>
+
+	<dialog id="loading-modal" closedby="none"><span></span></dialog>
+
+	<div id="notifications"></div>
 	
+	<script src="notifications.js"></script>
 	<script src="parser.js"></script>
 	<script src="saves.js"></script>
 	<script src="main.js"></script>

@@ -40,13 +40,16 @@ menu > div {
 		border: none;
 		border-bottom: var(--border);
 		border-right: var(--border);
-		&:hover:not(:last-child) {
+		&:hover:not(.spacer) {
 			background: var(--background-dark);
 		}
 	}
 }
 
 menu > div:focus-within {
+	> button:not(.spacer) {
+		background: var(--background-dark);
+	}
 	> div > div > button {
 		border-bottom: none;
 		border-left: var(--border);
@@ -122,4 +125,32 @@ main {
 .cell-result {
 	margin-top: 2px;
 	display: block;
+}
+
+#open-dialog {
+	min-width: 20rem;
+	> select {
+		width: 100%;
+	}
+}
+
+#notifications {
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+
+	> div {
+		border: var(--border);
+		&.success {
+			background-color: chartreuse;
+			border: 2px solid green;
+		}
+		&.error {
+			background-color: crimson;
+			border: 2px solid darkred;
+			color: white;
+		}
+	}
 }

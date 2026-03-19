@@ -9,6 +9,10 @@ MQ.config({
 let problemSpan = document.getElementById('problem');
 MQ.StaticMath(problemSpan);
 
+document.querySelectorAll('menu > div > div > div > button').forEach(x => x.addEventListener('click', () => {
+	document.activeElement.blur();
+}));
+
 const focus_cell = (cell, enter_edit) => {
 	if (cell == null) { return; }
 	document.querySelectorAll('.cell').forEach(x => x.classList.remove('selected'));

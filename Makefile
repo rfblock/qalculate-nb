@@ -176,7 +176,7 @@ $(build)/qalc.js $(build)/qalc.wasm &: $(OBJS) $(call libfiles,$(QALCWASM_LIBS))
 
 PUBLIC_FILES = $(build)/qalc.js $(build)/qalc.wasm \
                src/index.html src/main.js src/style.css src/favicon.png \
-			   src/parser.js src/saves.js
+			   src/parser.js src/saves.js src/notifications.js
 
 serve: deploy
 	python3 -m http.server -d public 8000
