@@ -18,6 +18,7 @@ const begin_save = () => {
 }
 
 const show_save_as_dialog = () => {
+	document.querySelectorAll('dialog').forEach(x => x.close());
 	document.querySelector('#save-as-dialog > input').value = notebook_name;
 	document.querySelector('#save-as-dialog').showModal();
 }
@@ -26,17 +27,13 @@ const dialog_save_button = () => {
 	notebook_name = document.querySelector('#save-as-dialog > input').value;
 	document.querySelector('#save-as-dialog').close();
 	if (uuid == null) { uuid = crypto.randomUUID(); }
-	document.querySelector('#loading-modal > span').innerText = 'Saving';
-	document.querySelector('#loading-modal').showModal();
-	save_notebook().then(res => {
-		console.log(res);
-		create_notification(res.text, res.status)
-		document.querySelector('#loading-modal').close();
-	});
+	save_notebook();
+	document.querySelector('#loading-modal').close();
 }
 
 const show_open_dialog = () => {
 	document.activeElement.blur();
+	document.querySelectorAll('dialog').forEach(x => x.close());
 	document.querySelectorAll('#open-dialog option').forEach(x => x.remove());
 	document.querySelector('#open-dialog').showModal();
 	list_notebooks().then(notebooks => {
@@ -74,35 +71,33 @@ const serialize_state = () => {
 }
 
 const save_notebook = () => {
-	return new Promise(resolve => {
-		if (database == null) {
-			console.error('Unable to save notebook (IndexedDB is not open)');
-			resolve({text: 'Save Failed', status: 'error'});
-			return;
-		}
+	if (database == null) {
+		console.error('Unable to save notebook (IndexedDB is not open)');
+		resolve({text: 'Save Failed', status: 'error'});
+		return;
+	}
 
-		const state = serialize_state();
-		if (state.notebook_name.trim().length == 0) {
-			console.error('Unable to save notebook (Name cannot be blank)');
-			resolve({text: 'Save Failed', status: 'error'});
-			return;
-		}
-		if (state.uuid == null) {
-			console.error('Unable to save notebook (Invalid UUID)');
-			resolve({text: 'Save Failed', status: 'error'});
-			return;
-		}
+	const state = serialize_state();
+	if (state.notebook_name.trim().length == 0) {
+		console.error('Unable to save notebook (Name cannot be blank)');
+		resolve({text: 'Save Failed', status: 'error'});
+		return;
+	}
+	if (state.uuid == null) {
+		console.error('Unable to save notebook (Invalid UUID)');
+		resolve({text: 'Save Failed', status: 'error'});
+		return;
+	}
 
-		const req = database
-			.transaction(['notebooks'], 'readwrite')
-			.objectStore('notebooks')
-			.put(state);
-		req.onsuccess = () => resolve({text: 'Saved', status: 'success'});
-		req.onerror = e => {
-			console.error(`Unable to save: ${e.target.error?.message}`)
-			resolve({text: 'Save Failed', status: 'error'});
-		};
-	});
+	const req = database
+		.transaction(['notebooks'], 'readwrite')
+		.objectStore('notebooks')
+		.put(state);
+	req.onsuccess = () => resolve({text: 'Saved', status: 'success'});
+	req.onerror = e => {
+		console.error(`Unable to save: ${e.target.error?.message}`)
+		resolve({text: 'Save Failed', status: 'error'});
+	};
 }
 
 const load_notebook = load_uuid => {
