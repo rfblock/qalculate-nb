@@ -84,10 +84,10 @@ create_cell();
 
 var Module = {
 	postRun: () => {
-		console.time('new');
+		console.time('Loaded qalculate in');
 		window.calc = new Module.Calculator();
 		calc.loadGlobalDefinitions();
-		console.timeEnd('new');
+		console.timeEnd('Loaded qalculate in');
 
 		Module.default_print_options.interval_display = Module.IntervalDisplay.CONCISE;
 
@@ -98,7 +98,6 @@ var Module = {
 			if (name.includes('_')) { continue; }
 			units += ' ' + name;
 		}
-		console.log(units);
 
 		MQ.config({
 			autoOperatorNames: 'sin cos tan arcsin arccos arctan ln log to' + units,
