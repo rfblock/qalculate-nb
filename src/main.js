@@ -59,6 +59,7 @@ const insert_cell_below = () => {
 }
 
 const create_cell = ref => {
+	unsaved_changes = true;
 	ref ??= null;
 	const cell = document.createElement('div');
 	cell.classList.add('cell');
@@ -77,6 +78,7 @@ const create_cell = ref => {
 			} else {
 				focus_cell(cell.previousElementSibling);
 			}
+			unsaved_changes = true;
 			cell.remove();
 		}
 	});
@@ -102,6 +104,7 @@ const create_cell = ref => {
 				upOutOf: () => focus_cell(cell.previousElementSibling, true),
 				downOutOf: () => focus_cell(cell.nextElementSibling, true),
 				enter: () => run_cell(cell),
+				edit: () => { unsaved_changes = true; }
 			}
 		});
 
@@ -111,3 +114,4 @@ const create_cell = ref => {
 	return cell;
 }
 create_cell();
+unsaved_changes = false;
