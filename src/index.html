@@ -36,6 +36,7 @@
 				<button onclick="show_save_as_dialog();">Save As</button>
 				<button onclick="alert('TODO');">Import</button>
 				<button onclick="alert('TODO');">Export</button>
+				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new/choose', '_blank');">Report</button>
 			</div></div>
 		</div>
 		<div>
@@ -66,6 +67,15 @@
 			</div> -->
 		</div>
 	</main>
+
+	<dialog open>
+		<h1>Notice</h1>
+		<p>This is a beta program. Many features are not completed. Bugs are likely to be present. Breaking changes may result in loss data at any point</p>
+		<p>Bug reports, feature requests, and questions can be filed in <code>File > Report</code></p>
+		<form method="dialog">
+			<input type="submit" value="I understand">
+		</form>
+	</dialog>
 
 	<dialog id="save-as-dialog">
 		<input type="text" placeholder="Name">
