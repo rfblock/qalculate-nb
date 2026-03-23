@@ -2,11 +2,25 @@
 
 let notebook_name = '';
 let last_save = null;
+let unsaved_changes = false;
 
 /**
  * @type {IDBDatabase | null}
  */
 let database = null;
+
+const action_new_notebook = () => {
+	if (!unsaved_changes) {
+		new_notebook();
+		return;
+	}
+
+	prompt_modal('There are unsaved changes.\nAre you sure?')
+		.then(res => {
+			if (res == 'Yes') { new_notebook(); }
+		})
+		.catch(() => {});
+};
 
 const begin_save = () => {
 	if (notebook_name.trim().length == 0) {
@@ -16,6 +30,10 @@ const begin_save = () => {
 	}
 	
 	save_notebook();
+}
+
+window.onbeforeunload = () => {
+	return unsaved_changes ? 'Unsaved Changes' : null;
 }
 
 const show_save_as_dialog = () => {
@@ -49,19 +67,32 @@ const dialog_save_button = () => {
 }
 
 const show_open_dialog = () => {
-	document.activeElement.blur();
-	document.querySelectorAll('dialog').forEach(x => x.close());
-	document.querySelectorAll('#open-dialog option').forEach(x => x.remove());
-	document.querySelector('#open-dialog').showModal();
-	list_notebooks().then(notebooks => {
-		const select = document.querySelector('#open-dialog > select');
-		notebooks.forEach(nb => {
-			const option = document.createElement('option');
-			option.value = nb.notebook_name;
-			option.innerText = nb.notebook_name;
-			select.appendChild(option);
+	const open_dialog = () => {
+		document.activeElement.blur();
+		document.querySelectorAll('dialog').forEach(x => x.close());
+		document.querySelectorAll('#open-dialog option').forEach(x => x.remove());
+		document.querySelector('#open-dialog').showModal();
+		list_notebooks().then(notebooks => {
+			const select = document.querySelector('#open-dialog > select');
+			notebooks.forEach(nb => {
+				const option = document.createElement('option');
+				option.value = nb.notebook_name;
+				option.innerText = nb.notebook_name;
+				select.appendChild(option);
+			});
 		});
-	});
+	}
+
+	if (!unsaved_changes) {
+		open_dialog();
+		return;
+	}
+
+	prompt_modal('There are unsaved changes\nAre you sure?')
+		.catch(() => {})
+		.then(res => {
+			if (res == 'Yes') { open_dialog(); }
+		});
 }
 
 const dialog_open_button = () => {
@@ -104,7 +135,10 @@ const save_notebook = () => {
 		.transaction(['notebooks'], 'readwrite')
 		.objectStore('notebooks')
 		.put(state);
-	req.onsuccess = () => create_notification('Saved', 'success');
+	req.onsuccess = () => {
+		unsaved_changes = false;
+		create_notification('Saved', 'success');
+	};
 	req.onerror = e => {
 		console.error(`Unable to save: ${e.target.error?.message}`)
 		create_notification('Save Failed', 'error');
@@ -133,6 +167,7 @@ const load_notebook = load_name => {
 			}
 			MQ(create_cell().querySelector('.cell-expression')).latex(cell.body);
 		});
+		unsaved_changes = false;
 	}
 }
 
@@ -150,10 +185,11 @@ const list_notebooks = () => {
 
 const new_notebook = () => {
 	notebook_name = '';
-
+	
 	document.activeElement.blur();
 	document.querySelectorAll('.cell').forEach(x => x.remove());
 	create_cell();
+	unsaved_changes = false;
 }
 
 const initialize_database = () => {
