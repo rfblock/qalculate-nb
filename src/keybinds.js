@@ -1,3 +1,4 @@
+'use strict';
 
 document.addEventListener('keydown', e => {
 	// ctrl, alt, shift modifiers
@@ -22,4 +23,4 @@ document.addEventListener('keydown', e => {
 		keybind[1]();
 		e.preventDefault();
 	});
-})
+});

@@ -1,7 +1,7 @@
 let MQ = MathQuill.getInterface(2);
 
 MQ.config({
-	autoCommands: 'sqrt pi theta sum int nthroot pm',
+	autoCommands: 'sqrt pi theta sum nthroot pm',
 	sumStartsWithNEquals: true,
 	autoSubscriptNumerals: true,
 });
@@ -22,6 +22,40 @@ const focus_cell = (cell, enter_edit) => {
 	} else {
 		cell.focus();
 	}
+}
+
+const run_cell = cell => {
+	const field = MQ(cell.querySelector('.cell-expression'));
+	const cell_result = cell.querySelector('.cell-result');
+	exp = parse_latex(field.latex());
+	if (exp == '') { return; }
+	let res = calc.calculateAndPrint(exp, 1000,
+		Module.default_user_evaluation_options,
+		Module.default_print_options
+	);
+	cell_result.innerText = res;
+}
+
+const run_all = () => {
+	document.activeElement.blur();
+	document.querySelectorAll('.cell').forEach(cell => {
+		run_cell(cell);
+	});
+}
+
+const clear_all_outputs = () => {
+	document.activeElement.blur();
+	document.querySelectorAll('.cell-result').forEach(result => {
+		result.innerText = '';
+	});
+}
+
+const insert_cell_above = () => {
+	focus_cell(create_cell(document.querySelector('.cell.selected')));
+}
+
+const insert_cell_below = () => {
+	focus_cell(create_cell(document.querySelector('.cell.selected').nextElementSibling));
 }
 
 const create_cell = ref => {
@@ -67,15 +101,7 @@ const create_cell = ref => {
 			handlers: {
 				upOutOf: () => focus_cell(cell.previousElementSibling, true),
 				downOutOf: () => focus_cell(cell.nextElementSibling, true),
-				enter: () => {
-					exp = parse_latex(field.latex());
-					if (exp == '') { return; }
-					let res = calc.calculateAndPrint(exp, 1000,
-						Module.default_user_evaluation_options,
-						Module.default_print_options
-					);
-					cell_result.innerText = res;
-				},
+				enter: () => run_cell(cell),
 			}
 		});
 

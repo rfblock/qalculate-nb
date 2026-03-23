@@ -16,7 +16,7 @@ var Module = {
 		}
 
 		MQ.config({
-			autoOperatorNames: 'sin cos tan arcsin arccos arctan ln log to' + units,
+			autoOperatorNames: 'sin cos tan arcsin arccos arctan ln log to' + units
 		});
 
 		// newCell();

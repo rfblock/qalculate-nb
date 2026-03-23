@@ -5,6 +5,8 @@ const command_subs = {
 	'pi': 'pi',
 	'sqrt[2]{1}': 'root($1, $0)',
 	'frac{2}': '(($1)/($2))',
+	'ln': 'ln',
+	'log': 'log',
 	'operatorname{1}': '$1',
 	'left': '',
 	'right': '',
