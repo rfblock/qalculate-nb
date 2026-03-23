@@ -1,8 +1,8 @@
-# qalculate-wasm
+# Qalculate-NB
 
-This project attempts to port Qalculate to the web.
+This is a jupyter notebook-like environment for Qalculate!
 
-Try it out at https://flaviutamas.com/qalculate-wasm/!
+Currently supports units, arithmetic operations, basic functions, and saved variables
 
 ## Usage
 
