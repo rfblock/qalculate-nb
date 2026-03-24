@@ -17,6 +17,7 @@ document.querySelectorAll('menu > div > div > div > button').forEach(x => x.addE
 const focus_cell = (cell, enter_edit) => {
 	if (cell == null) { return; }
 	document.querySelectorAll('.cell').forEach(x => x.classList.remove('selected'));
+	document.querySelectorAll('.cell-expression').forEach(x => MQ(x).blur());
 	cell.classList.add('selected');
 	if (enter_edit ?? false) {
 		MQ(cell.querySelector('.cell-expression')).focus();
