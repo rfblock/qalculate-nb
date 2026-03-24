@@ -37,6 +37,7 @@
 				<button onclick="alert('TODO');">Import</button>
 				<button onclick="alert('TODO');">Export</button>
 				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new/choose', '_blank');">Report</button>
+				<button onclick="action_about();">About</button>
 			</div></div>
 		</div>
 		<div>
@@ -44,8 +45,6 @@
 			<div><div>
 				<button onclick="alert('TODO');">Undo</button>
 				<button onclick="alert('TODO');">Redo</button>
-				<button onclick="insert_cell_above();">Insert Cell Above</button>
-				<button onclick="insert_cell_below();">Insert Cell Below</button>
 			</div></div>
 		</div>
 		<div>
@@ -53,6 +52,8 @@
 			<div><div>
 				<button onclick="clear_all_outputs();">Clear All</button>
 				<button onclick="run_all();">Run All</button>
+				<button onclick="insert_cell_above();">Insert Cell Above</button>
+				<button onclick="insert_cell_below();">Insert Cell Below</button>
 				<button onclick="alert('TODO');">Goto</button>
 			</div></div>
 		</div>
@@ -73,8 +74,23 @@
 		<p>This is a beta program. Many features are not completed. Bugs are likely to be present. Breaking changes may result in loss data at any point</p>
 		<p>Bug reports, feature requests, and questions can be filed in <code>File > Report</code></p>
 		<form method="dialog">
-			<input type="submit" value="I understand">
+			<input type="submit" value="I understand" style="float: right;">
 		</form>
+	</dialog>
+
+	<dialog id="about">
+		<h1>Qalculate! Notebook</h1>
+		<p>Version (v0.0.1b)</p>
+		<p>Source code available on <a href="https://github.com/rfblock/qalculate-nb">GitHub</a></p>
+		<p>Created by James Sanders (aka. Steggy)</p>
+		<p>Forked from <a href="https://github.com/flaviut/qalculate-wasm">flaviut/qalculate-wasm</a> by Flaviu Tamas and Noa</p>
+		<h2>Technologies</h2>
+		<p><a href="https://github.com/Qalculate/libqalculate">libqalculate</a> by Hanna Knutsson, Sven Herzberg, and others <a href="https://github.com/Qalculate/libqalculate?tab=GPL-2.0-1-ov-file#readme">(GLPv2.0)</a></p>
+		<p><a href="http://mathquill.com/">MathQuill</a> by laughinghan and stufflebear <a href="https://github.com/mathquill/mathquill?tab=MPL-2.0-1-ov-file#readme">(MPL-2.0)</a></p>
+		<h2>Author Information</h2>
+		<p>If you like what I do, and like to support, donations are gratefully accepted via Venmo at <code>@James-Sanders-581</code></p>
+		<form method="dialog" style="float: right;"><input type="submit" value="Close"></form>
+		<p>Qalculate! Notebook is licensed under <a href="https://github.com/rfblock/qalculate-nb/#MIT-1-ov-file">MIT's License</a></p>
 	</dialog>
 
 	<dialog id="save-as-dialog">

@@ -24,3 +24,7 @@ document.addEventListener('keydown', e => {
 		e.preventDefault();
 	});
 });
+
+const action_about = () => {
+	document.querySelector('#about').show();
+}
