@@ -2,7 +2,7 @@
 
 // func[default]{argc}: [$0]{$1}{$2}...{$argc}
 const command_subs = {
-	'pi': 'pi',
+	...Object.fromEntries(greek.map(x => [x, x])),
 	'sqrt[2]{1}': 'root($1, $0)',
 	'frac{2}': '(($1)/($2))',
 	'ln': 'ln',

@@ -1,9 +1,10 @@
 let MQ = MathQuill.getInterface(2);
 
 MQ.config({
-	autoCommands: 'sqrt pi theta sum nthroot pm',
+	autoCommands: 'sqrt pi theta sum nthroot pm ' + greek.join(' '),
 	sumStartsWithNEquals: true,
 	autoSubscriptNumerals: true,
+	autoOperatorNames: 'sin cos tan arcsin arccos arctan ln log to' + Module.units
 });
 
 let problemSpan = document.getElementById('problem');

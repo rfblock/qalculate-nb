@@ -6,7 +6,7 @@ document.addEventListener('keydown', e => {
 		'ctrl + O': show_open_dialog,
 		'ctrl + S': begin_save,
 		'ctrl + shift + S': show_save_as_dialog,
-		'alt + N': new_notebook,
+		'alt + N': action_new_notebook,
 	};
 
 	if (e.repeat) { return; }

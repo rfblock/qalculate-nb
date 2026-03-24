@@ -1,3 +1,11 @@
+const greek = [
+	'alpha', 'beta', 'gamma', 'Gamma', 'Delta', 'delta', 'epsilon', 'zeta', 'eta', 'Theta', 'theta',
+	'kappa', 'Lambda', 'lambda', 'mu', 'nu', 'Xi', 'xi', 'pi', 'rho', 'sigma', 'Phi', 'phi', 'chi', 'Psi',
+	'Omega', 'omega'
+]
+// Pi and Sigma are not included due to product and sum notation
+// psi is not included due to conflict with the unit [lbs/sqin]
+
 var Module = {
 	postRun: () => {
 		console.time('Loaded qalculate in');
@@ -15,11 +23,7 @@ var Module = {
 			units += ' ' + name;
 		}
 
-		MQ.config({
-			autoOperatorNames: 'sin cos tan arcsin arccos arctan ln log to' + units
-		});
-
-		// newCell();
+		Module.units = units;
 	},
 	print: function (text) {
 		if (arguments.length > 1)
