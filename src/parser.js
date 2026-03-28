@@ -10,6 +10,8 @@ const command_subs = {
 	'operatorname{1}': '$1',
 	'left': '',
 	'right': '',
+	'cdot': '*',
+	'text': '',
 }
 
 const TOK_EXP = 'tok-exp';
@@ -37,7 +39,7 @@ const tokenize_latex = str => {
 
 			if (c == '\\') {
 				type = TOK_COMMAND;
-				body = str.match(/^\\(?:[a-zA-Z0-9-&*]*[a-zA-Z-&*]| )/);
+				body = str.match(/^\\(?:[a-zA-Z-&*]*[a-zA-Z-&*]| )/);
 				if (body == null) {
 					console.error('Unable to parse expression:', str);
 					// body = '\\\ ';
@@ -205,6 +207,9 @@ const parse_latex = latex => {
 					const lower = subscript.slice(iter_var.length + 1);
 					const upper = superscript;
 					terms.push(`sum(${body}, ${lower}, ${upper}, ${iter_var})`);
+				} break;
+				default: {
+					terms.push(tok.body.slice(1));
 				} break;
 			}
 			if (lazy && stack == 0) { break; }
