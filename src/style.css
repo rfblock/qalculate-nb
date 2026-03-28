@@ -1,12 +1,38 @@
 :root {
 	font-family: 'Inter';
+
+	--text: #0a0a0a;
+	--surface: #fff;
 	--background: #eee;
 	--background-dark: #ddd;
 	--border: 2px solid #ddd;
 }
 
+:root.dark {
+	--text: #fff;
+	--surface: #222;
+	--background: #2a2a2a;
+	--background-dark: #333;
+	--border: 2px solid #333;
+}
+
+* {
+	color: var(--text);
+}
+
 body {
+	background-color: var(--surface);
 	margin: 0;
+}
+
+button {
+	background: var(--background);
+	border: var(--border);
+}
+
+input {
+	background: var(--background);
+	border: var(--border);
 }
 
 menu {
@@ -127,10 +153,15 @@ main {
 	display: block;
 }
 
+dialog {
+	background-color: var(--surface);
+}
+
 #open-dialog {
 	min-width: 20rem;
 	> select {
 		width: 100%;
+		background-color: var(--surface);
 	}
 }
 
