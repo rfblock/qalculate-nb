@@ -20,6 +20,10 @@
 	color: var(--text);
 }
 
+.mq-editable-field .mq-cursor.mq-cursor {
+	border-left: 1px solid var(--text);
+}
+
 body {
 	background-color: var(--surface);
 	margin: 0;
