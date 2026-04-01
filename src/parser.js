@@ -14,8 +14,9 @@ const command_subs = {
 	'text': '',
 }
 
-const TOK_EXP = 'tok-exp';
+const TOK_EXPRESSION = 'tok-expression';
 const TOK_COMMAND = 'tok-command';
+const TOK_UNDERSCORE = 'tok-underscore';
 const TOK_PUCNT = 'tok-punct';
 /**
  * 
@@ -23,9 +24,7 @@ const TOK_PUCNT = 'tok-punct';
  */
 const tokenize_latex = str => {
 	const tokens = [];
-	let first = true;
-	let i = 0;
-	while (str.length > 0 && i++<100) {
+	while (str.length) {
 		let c = str[0];
 		let body;
 		let type;
@@ -42,14 +41,23 @@ const tokenize_latex = str => {
 				body = str.match(/^\\(?:[a-zA-Z-&*]*[a-zA-Z-&*]| )/);
 				if (body == null) {
 					console.error('Unable to parse expression:', str);
-					// body = '\\\ ';
 				}
 				body = body[0];
 				break;
 			}
 
-			type = TOK_EXP;
-			body = str.match(/^[^\\[\]{}]+/);
+			if (c == '_') {
+				type = TOK_UNDERSCORE;
+				if (str[1] == '{') {
+					body = '_';
+					break;
+				}
+				body = '_' + str[1];
+				break;
+			}
+
+			type = TOK_EXPRESSION;
+			body = str.match(/^[^\\[\]{}_]+/);
 			if (body == null) {
 				console.error('Unable to parse expression:', str);
 			}
@@ -66,7 +74,7 @@ const tokenize_latex = str => {
 
 const flatten = arr => {
 	if (!(arr instanceof Array)) { return arr; }
-	return arr.map(x => flatten(x)).join(' ');
+	return arr.map(x => flatten(x)).join('');
 }
 
 
@@ -189,10 +197,22 @@ const parse_latex = latex => {
 				if (lazy && stack == 0) { break; }
 				continue;
 			}
-			if (tok.type == TOK_EXP) {
+			if (tok.type == TOK_EXPRESSION) {
 				terms.push(tok.body);
 				continue;
 			}
+
+			if (tok.type == TOK_UNDERSCORE) {
+				let body = tok.body;
+				if (body == '_') {
+					i++;
+					body += parse_expression(true);
+					body = body.replaceAll(' ', '').replaceAll('(', '').replaceAll(')', '');
+				}
+				terms.push(body)
+				continue;
+			}
+				
 			// tok.type == TOK_COMMAND
 			const replacement = command_map[tok.body];
 			if (replacement != undefined) {
