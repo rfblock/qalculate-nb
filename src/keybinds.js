@@ -30,8 +30,3 @@ document.addEventListener('keydown', e => {
 const action_about = () => {
 	document.querySelector('#about').show();
 }
-
-const toggle_theme = () => {
-	document.querySelector(':root').classList.toggle('dark');
-	document.activeElement.blur();
-}

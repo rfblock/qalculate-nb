@@ -97,7 +97,6 @@ const create_cell = ref => {
 			if (e.repeat) { return; }
 			if (e.key != 'Escape') { return; }
 
-			console.log('escape');
 			focus_cell(cell);
 		});
 

@@ -19,6 +19,7 @@
     <link rel="preload" href="qalc.js" as="script">
     <link rel="preload" href="qalc.wasm" as="fetch" crossorigin="anonymous">
 	
+	<script src="theme.js"></script>
 </head>
 <body>
 	<!-- <p><span id="answer">g_0\operatorname{to}\operatorname{ft}/s^2</span></p> -->
@@ -45,6 +46,7 @@
 			<div><div>
 				<button onclick="alert('TODO');">Undo</button>
 				<button onclick="alert('TODO');">Redo</button>
+				<button onclick="action_toolbox();">Toolbox</button>
 			</div></div>
 		</div>
 		<div>
@@ -63,6 +65,7 @@
 				<button onclick="toggle_theme();">Toggle Theme</button>
 			</div></div>
 		</div>
+		<div>
 		<div><button tabindex="-1" class="spacer">Padding</button></div>
 	</menu>
 
@@ -80,7 +83,7 @@
 		<p>This is a beta program. Many features are not completed. Bugs are likely to be present. Breaking changes may result in loss data at any point</p>
 		<p>Bug reports, feature requests, and questions can be filed in <code>File > Report</code></p>
 		<form method="dialog">
-			<input type="submit" value="I understand" style="float: right;">
+			<input type="submit" value="I understand" style="float: right;" autofocus>
 		</form>
 	</dialog>
 
@@ -95,7 +98,7 @@
 		<p><a href="http://mathquill.com/">MathQuill</a> by laughinghan and stufflebear <a href="https://github.com/mathquill/mathquill?tab=MPL-2.0-1-ov-file#readme">(MPL-2.0)</a></p>
 		<h2>Author Information</h2>
 		<p>If you like what I do, and like to support, donations are gratefully accepted via Venmo at <code>@James-Sanders-581</code></p>
-		<form method="dialog" style="float: right;"><input type="submit" value="Close"></form>
+		<form method="dialog" style="float: right;"><input type="submit" value="Close" autofocus></form>
 		<p>Qalculate! Notebook is licensed under <a href="https://github.com/rfblock/qalculate-nb/#MIT-1-ov-file">MIT's License</a></p>
 	</dialog>
 
@@ -111,6 +114,15 @@
 		<button onclick="dialog_open_button();">Open</button>
 	</dialog>
 
+	<dialog id="toolbox-dialog">
+		<ul id="toolbox-entry-list"></ul>
+		<form method="dialog">
+			<input type="submit" value="Close" style="float: right;" autofocus>
+		</form>
+		</ul>
+
+	</dialog>
+
 	<dialog id="loading-modal" closedby="none"><span></span></dialog>
 
 	<dialog id="prompt-modal"></dialog>
@@ -123,6 +135,7 @@
 	<script src="parser.js"></script>
 	<script src="saves.js"></script>
 	<script src="main.js"></script>
+	<script src="toolbox.js"></script>
 	<script src="keybinds.js"></script>
 	<script src="parser.test.js"></script>
 </body>
