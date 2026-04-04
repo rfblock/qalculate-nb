@@ -9,13 +9,19 @@ let unsaved_changes = false;
  */
 let database = null;
 
+const pending_on_database_load = [];
+const on_database_load = f => {
+	if (database != null) { f(); }
+	else { pending_on_database_load.push(f); }
+}
+
 const action_new_notebook = () => {
 	if (!unsaved_changes) {
 		new_notebook();
 		return;
 	}
 
-	prompt_modal('There are unsaved changes.\nAre you sure?')
+	prompt_confirm('There are unsaved changes.\nAre you sure?')
 		.then(res => {
 			if (res == 'Yes') { new_notebook(); }
 		})
@@ -38,32 +44,31 @@ window.onbeforeunload = () => {
 
 const show_save_as_dialog = () => {
 	document.querySelectorAll('dialog').forEach(x => x.close());
-	document.querySelector('#save-as-dialog > input').value = notebook_name;
-	document.querySelector('#save-as-dialog').showModal();
-}
 
-const dialog_save_button = () => {
-	const save = () => {
-		document.querySelector('#save-as-dialog').close();
-		save_notebook();
-		document.querySelector('#loading-modal').close();
-	}
-
-	notebook_name = document.querySelector('#save-as-dialog > input').value;
-	list_notebooks().then(notebooks => {
-		const notebook_names = notebooks.map(x => x.notebook_name);
-		if (notebook_names.includes(notebook_name)) {
-			prompt_modal(`${notebook_name} already exists. Overwrite?`)
-				.catch(() => {})
-				.then(res => {
-					if (res == 'Yes') {
-						save();
-					}
-				});
-			return;
-		}
-		save();
-	});
+	prompt_text(notebook_name ?? '', { value: notebook_name, placeholder: 'Name'})
+		.then(value => {
+			if (!value) {
+				create_notification('Name cannot be empty', 'error');
+				return;
+			}
+			list_notebooks().then(notebooks => {
+				const collision = notebooks.map(x => x.notebook_name).includes(value);
+				if (collision) {
+					prompt_confirm(`${value} already exists. Overwrite?`)
+						.catch(() => create_notification('Save Aborted', 'error'))
+						.then(res => {
+							if (res == 'Yes') {
+								notebook_name = value;
+								save_notebook();
+							}
+						});
+					return;
+				}
+				notebook_name = value;
+				save_notebook();
+			});
+		})
+		.catch(() => create_notification('Save Aborted', 'error'));
 }
 
 const show_open_dialog = () => {
@@ -88,7 +93,7 @@ const show_open_dialog = () => {
 		return;
 	}
 
-	prompt_modal('There are unsaved changes\nAre you sure?')
+	prompt_confirm('There are unsaved changes\nAre you sure?')
 		.catch(() => {})
 		.then(res => {
 			if (res == 'Yes') { open_dialog(); }
@@ -192,13 +197,33 @@ const new_notebook = () => {
 	unsaved_changes = false;
 }
 
+const save_formula = (latex, name, category) => {
+	database
+		.transaction('formulas', 'readwrite')
+		.objectStore('formulas')
+		.add({latex, name, category});
+}
+
+const list_formulas = () => {
+	return new Promise(resolve => {
+		database
+			.transaction('formulas', 'readonly')
+			.objectStore('formulas')
+			.getAll()
+			.onsuccess = e => {
+				resolve(e.target.result);
+			};
+	});
+}
+
 const initialize_database = () => {
 	const set_db = db => {
 		database = db;
 		database.onerror = e => console.log(e.target.error?.message);
+		pending_on_database_load.forEach(f => f());
 	}
 
-	const req = window.indexedDB.open("Notebooks");
+	const req = window.indexedDB.open("Notebooks", 2);
 	req.onerror = e => {
 		console.error(`Unable to open IndexedDB, ${e.target.error?.message}`)
 		create_notification('Failed to start DB', 'error');
@@ -206,11 +231,20 @@ const initialize_database = () => {
 	req.onsuccess = e => set_db(e.target.result);
 	req.onupgradeneeded = e => {
 		set_db(e.target.result);
-		const objectStore = database.createObjectStore('notebooks', { keyPath: 'notebook_name' });
-		objectStore.createIndex('notebook_name', 'notebook_name', { unique: true });
+		if (!database.objectStoreNames.contains('notebooks')) {
+			const nbObjectStore = database.createObjectStore('notebooks', { keyPath: 'notebook_name' });
+			nbObjectStore.createIndex('notebook_name', 'notebook_name', { unique: true });
+			
+			nbObjectStore.transaction.oncomplete = e => {
+				console.log('Notebooks table successfully created');
+			}
+		}
 
-		objectStore.transaction.oncomplete = e => {
-			console.log('IndexedDB successfully created');
+		if (!database.objectStoreNames.contains('toolbox')) {
+			const toolboxObjectStore = database.createObjectStore('formulas', { autoIncrement: true });
+			toolboxObjectStore.transaction.oncomplete = () => {
+				console.log('Toolbox table successfully created');
+			}
 		}
 	}
 }

@@ -89,7 +89,7 @@
 
 	<dialog id="about">
 		<h1>Qalculate! Notebook</h1>
-		<p>Version (v0.0.1b)</p>
+		<p>Version (v0.0.2)</p>
 		<p>Source code available on <a href="https://github.com/rfblock/qalculate-nb">GitHub</a></p>
 		<p>Created by James Sanders (aka. Steggy)</p>
 		<p>Forked from <a href="https://github.com/flaviut/qalculate-wasm">flaviut/qalculate-wasm</a> by Flaviu Tamas and Noa</p>
@@ -102,11 +102,6 @@
 		<p>Qalculate! Notebook is licensed under <a href="https://github.com/rfblock/qalculate-nb/#MIT-1-ov-file">MIT's License</a></p>
 	</dialog>
 
-	<dialog id="save-as-dialog">
-		<input type="text" placeholder="Name">
-		<button onclick="dialog_save_button();">Save</button>
-	</dialog>
-
 	<dialog id="open-dialog">
 		<select name="file-select" size="20">
 			<option value=""></option>
@@ -115,12 +110,25 @@
 	</dialog>
 
 	<dialog id="toolbox-dialog">
-		<ul id="toolbox-entry-list"></ul>
-		<form method="dialog">
-			<input type="submit" value="Close" style="float: right;" autofocus>
-		</form>
-		</ul>
-
+		<div style="display: flex;">
+			<div style="display: flex; flex-direction: column; justify-content: space-between; background: var(--background)">
+				<div id="toolbox-category-list">
+					<button>Isentropic</button>
+					<button>Ideal Gas</button>
+				</div>
+				<button onclick="toolbox_new_category();">New Category</button>
+			</div>
+			
+			<div style="display: flex; flex-direction: column;">
+				<ul id="toolbox-entry-list" style="list-style: none; background: var(--background); padding: 0; margin-left: 40px;"></ul>
+				<div style="display: flex; justify-content: flex-end;">
+					<button onclick="toolbox_new_formula();">New Formula</button>
+					<form method="dialog" style="display: inline;">
+						<input type="submit" value="Close" autofocus>
+					</form>
+				</div>
+			</div>
+		</div>
 	</dialog>
 
 	<dialog id="loading-modal" closedby="none"><span></span></dialog>

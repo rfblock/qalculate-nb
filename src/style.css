@@ -169,8 +169,25 @@ dialog {
 	}
 }
 
-#prompt-modal > div:nth-child(2) {
-	float: right;
+#toolbox-dialog li > span {
+	border: var(--border);
+}
+
+#toolbox-category-list {
+	display: flex;
+	flex-direction: column;
+}
+
+#prompt-modal {
+	input {
+		display: block;
+	}
+	div {
+		display: block;
+	}
+	button {
+		float: right;
+	}
 }
 
 #notifications {

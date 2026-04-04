@@ -9,6 +9,7 @@ document.addEventListener('keydown', e => {
 		'alt + N': action_new_notebook,
 		'alt + R': run_all,
 		'alt + C': clear_all_outputs,
+		'alt + T': action_toolbox,
 	};
 
 	if (e.repeat) { return; }
