@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Qalculate! Notebook</title>
+	<link rel='icon' type='image/png' href='favicon.png'>
+	<link rel="stylesheet" href="style.css">
+	<!-- Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Iosevka+Charon:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+	<!-- MathQuill -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css" integrity="sha512-vPg9GqsZZ4LHv9BkFfZSXt7y4D7YaARPU2JFmpZug4EgtJJrumytMAFZkNSk2LSyqWir0TNbh2tBq7UJIMxvlA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js" integrity="sha512-Qsh05D07P6dURSZn8Qk+j8GI7cEK0OhXleZvTofmucwoDSkBC0juWf1401JdSE8os2kWEezMu7e9mlnszm3yEw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<!-- Qalculate! -->
+    <link rel="preload" href="qalc.js" as="script">
+    <link rel="preload" href="qalc.wasm" as="fetch" crossorigin="anonymous">
+	
+	<script src="theme.js"></script>
+</head>
+<body>
+	<!-- <p><span id="answer">g_0\operatorname{to}\operatorname{ft}/s^2</span></p> -->
+	<!-- <p><span id="answer">\sqrt[3]{2}</span></p> -->
+	<!-- <p><span id="answer">\frac{3x}{x}=y</span></p> -->
+	<!-- <p><span id="answer">\sum_{n=1}^{20}\left(n+\frac{1}{2n}\right)</span></p> -->
+
+	<menu>
+		<div>
+			<button>File</button>
+			<div><div>
+				<button onclick="action_new_notebook();">New</button>
+				<button onclick="show_open_dialog();">Open</button>
+				<button onclick="begin_save();">Save</button>
+				<button onclick="show_save_as_dialog();">Save As</button>
+				<button onclick="alert('TODO');">Import</button>
+				<button onclick="alert('TODO');">Export</button>
+				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new/choose', '_blank');">Report</button>
+				<button onclick="action_about();">About</button>
+			</div></div>
+		</div>
+		<div>
+			<button>Edit</button>
+			<div><div>
+				<button onclick="alert('TODO');">Undo</button>
+				<button onclick="alert('TODO');">Redo</button>
+				<button onclick="action_toolbox();">Toolbox</button>
+			</div></div>
+		</div>
+		<div>
+			<button>Cell</button>
+			<div><div>
+				<button onclick="clear_all_outputs();">Clear All</button>
+				<button onclick="run_all();">Run All</button>
+				<button onclick="insert_cell_above();">Insert Cell Above</button>
+				<button onclick="insert_cell_below();">Insert Cell Below</button>
+				<button onclick="alert('TODO');">Goto</button>
+			</div></div>
+		</div>
+		<div>
+			<button>Theme</button>
+			<div><div>
+				<button onclick="toggle_theme();">Toggle Theme</button>
+			</div></div>
+		</div>
+		<div>
+		<div><button tabindex="-1" class="spacer">Padding</button></div>
+	</menu>
+
+	<main>
+		<div id="notebook-cells">
+			<!-- <div class="cell" tabindex="0">
+				<span class="cell-expression"></span>
+				<span class="cell-result"></span>
+			</div> -->
+		</div>
+	</main>
+
+	<dialog open>
+		<h1>Notice</h1>
+		<p>This is a beta program. Many features are not completed. Bugs are likely to be present. Breaking changes may result in loss data at any point</p>
+		<p>Bug reports, feature requests, and questions can be filed in <code>File > Report</code></p>
+		<form method="dialog">
+			<input type="submit" value="I understand" style="float: right;" autofocus>
+		</form>
+	</dialog>
+
+	<dialog id="about">
+		<h1>Qalculate! Notebook</h1>
+		<p>Version (v0.0.2)</p>
+		<p>Source code available on <a href="https://github.com/rfblock/qalculate-nb">GitHub</a></p>
+		<p>Created by James Sanders (aka. Steggy)</p>
+		<p>Forked from <a href="https://github.com/flaviut/qalculate-wasm">flaviut/qalculate-wasm</a> by Flaviu Tamas and Noa</p>
+		<h2>Technologies</h2>
+		<p><a href="https://github.com/Qalculate/libqalculate">libqalculate</a> by Hanna Knutsson, Sven Herzberg, and others <a href="https://github.com/Qalculate/libqalculate?tab=GPL-2.0-1-ov-file#readme">(GLPv2.0)</a></p>
+		<p><a href="http://mathquill.com/">MathQuill</a> by laughinghan and stufflebear <a href="https://github.com/mathquill/mathquill?tab=MPL-2.0-1-ov-file#readme">(MPL-2.0)</a></p>
+		<h2>Author Information</h2>
+		<p>If you like what I do, and like to support, donations are gratefully accepted via Venmo at <code>@James-Sanders-581</code></p>
+		<form method="dialog" style="float: right;"><input type="submit" value="Close" autofocus></form>
+		<p>Qalculate! Notebook is licensed under <a href="https://github.com/rfblock/qalculate-nb/#MIT-1-ov-file">MIT's License</a></p>
+	</dialog>
+
+	<dialog id="open-dialog">
+		<select name="file-select" size="20">
+			<option value=""></option>
+		</select>
+		<button onclick="dialog_open_button();">Open</button>
+	</dialog>
+
+	<dialog id="toolbox-dialog">
+		<div style="display: flex;">
+			<div style="display: flex; flex-direction: column; justify-content: space-between; background: var(--background)">
+				<div id="toolbox-category-list">
+					<button>Isentropic</button>
+					<button>Ideal Gas</button>
+				</div>
+				<button onclick="toolbox_new_category();">New Category</button>
+			</div>
+			
+			<div style="display: flex; flex-direction: column;">
+				<ul id="toolbox-entry-list" style="list-style: none; background: var(--background); padding: 0; margin-left: 40px;"></ul>
+				<div style="display: flex; justify-content: flex-end;">
+					<button onclick="toolbox_new_formula();">New Formula</button>
+					<form method="dialog" style="display: inline;">
+						<input type="submit" value="Close" autofocus>
+					</form>
+				</div>
+			</div>
+		</div>
+	</dialog>
+
+	<dialog id="loading-modal" closedby="none"><span></span></dialog>
+
+	<dialog id="prompt-modal"></dialog>
+
+	<div id="notifications"></div>
+	
+	<script src="calculator.js"></script>
+    <script src="qalc.js"></script>
+	<script src="notifications.js"></script>
+	<script src="parser.js"></script>
+	<script src="saves.js"></script>
+	<script src="main.js"></script>
+	<script src="toolbox.js"></script>
+	<script src="keybinds.js"></script>
+	<script src="parser.test.js"></script>
+</body>
+</html>
