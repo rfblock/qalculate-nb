@@ -230,9 +230,9 @@ const initialize_database = () => {
 	};
 	req.onsuccess = e => set_db(e.target.result);
 	req.onupgradeneeded = e => {
-		set_db(e.target.result);
-		if (!database.objectStoreNames.contains('notebooks')) {
-			const nbObjectStore = database.createObjectStore('notebooks', { keyPath: 'notebook_name' });
+		const db = e.target.result;
+		if (!db.objectStoreNames.contains('notebooks')) {
+			const nbObjectStore = db.createObjectStore('notebooks', { keyPath: 'notebook_name' });
 			nbObjectStore.createIndex('notebook_name', 'notebook_name', { unique: true });
 			
 			nbObjectStore.transaction.oncomplete = e => {
@@ -240,12 +240,13 @@ const initialize_database = () => {
 			}
 		}
 
-		if (!database.objectStoreNames.contains('toolbox')) {
-			const toolboxObjectStore = database.createObjectStore('formulas', { autoIncrement: true });
+		if (!db.objectStoreNames.contains('toolbox')) {
+			const toolboxObjectStore = db.createObjectStore('formulas', { autoIncrement: true });
 			toolboxObjectStore.transaction.oncomplete = () => {
 				console.log('Toolbox table successfully created');
 			}
 		}
+		requestAnimationFrame(() => set_db(db));
 	}
 }
 initialize_database();
