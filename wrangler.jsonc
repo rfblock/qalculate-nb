@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "qalculate-nb",
+  "compatibility_date": "2026-04-06",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "src"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
