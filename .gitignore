@@ -781,3 +781,9 @@ MigrationBackup/
 .ionide/
 
 # End of https://www.toptal.com/developers/gitignore/api/c,vim,c++,node,macos,linux,emacs,windows,intellij+all,visualstudio,visualstudiocode
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
