@@ -38,7 +38,7 @@ const tokenize_latex = str => {
 
 			if (c == '\\') {
 				type = TOK_COMMAND;
-				body = str.match(/^\\(?:[a-zA-Z-&*]*[a-zA-Z-&*]| )/);
+				body = str.match(/^\\(?:[a-zA-Z&*]*[a-zA-Z&*]| )/);
 				if (body == null) {
 					console.error('Unable to parse expression:', str);
 				}
