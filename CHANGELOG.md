@@ -12,6 +12,19 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 - This Changelog
 - Toolbox (accessed by `Edit > Toolbox` or `alt + T`)
 
+### Changed
+
+- Report menu (from `File > Report` has been moved to `Help`) and was split into
+	- Report a bug
+	- Request a feature
+	- Ask a question
+- About menu has been moved to `Help`
+
+### Fixed
+
+- Parsing issue with multiplication of a negative number
+- Parsing issue with parentheses pasted from outside source
+
 ## [0.0.1]
 
 ### Added

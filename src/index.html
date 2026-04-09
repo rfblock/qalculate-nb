@@ -38,8 +38,6 @@
 				<button onclick="show_save_as_dialog();">Save As</button>
 				<button onclick="alert('TODO');">Import</button>
 				<button onclick="alert('TODO');">Export</button>
-				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new/choose', '_blank');">Report</button>
-				<button onclick="action_about();">About</button>
 			</div></div>
 		</div>
 		<div>
@@ -67,6 +65,16 @@
 			</div></div>
 		</div>
 		<div>
+			<button>Help</button>
+			<div><div>
+				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new?template=bug_report.md', '_blank');">Report a bug</button>
+				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new?template=feature_request.md', '_blank');">Request a feature</button>
+				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new?template=question.md', '_blank');">Ask a question</button>
+				<button onclick="action_whats_new();">What's New</button>
+				<button onclick="action_about();">About</button>
+			</div></div>
+		</div>
+		<div></div>
 		<div><button tabindex="-1" class="spacer">Padding</button></div>
 	</menu>
 
@@ -78,6 +86,44 @@
 			</div> -->
 		</div>
 	</main>
+
+	<dialog id="whats-new" style="overflow-y: auto;">
+		<script>(function(){ /* Open this dialog if never seen latest */
+			const current_version = 'v0.0.2';
+			if (localStorage.getItem('last-viewed-version') != current_version) {
+				localStorage.setItem('last-viewed-version', current_version);
+				action_whats_new();
+			}
+		})();</script>
+		<h1>What's New</h1>
+		<h2>v0.0.2</h2>
+		<h3>Added</h3>
+		<ul>
+			<li><p>Help menu (available on the menu bar)</p></li>
+			<li><p>Changelog (This Dialog), accessible through <code>Help > What's New</code></p></li>
+			<li><p>Toolbox accessible through <code>alt+T</code> or <code>Edit > Toolbox</code></p></li>
+		</ul>
+		<h3>Changed</h3>
+		<ul>
+			<li>
+				<p><code>Report</code> menu (from <code>File > Report</code>) has been moved to <code>Help</code> and split into:</p>
+				<ul>
+					<li><p>Report a bug</p></li>
+					<li><p>Request a feature</p></li>
+					<li><p>Ask a question</p></li>
+				</ul>
+			</li>
+			<li><p><code>About</code> menu has been moved to <code>Help</code></p></li>
+		</ul>
+		<h3>Fixed</h3>
+		<ul>
+			<li><p>Parsing issue with multipication of a negative</p></li>
+			<li><p>Parsing issue with parentheses pasted from outside source</p></li>
+		</ul>
+		<form method="dialog">
+			<input type="submit" value="Close" style="float: right;" autofocus>
+		</form>
+	</dialog>
 
 	<dialog open>
 		<h1>Notice</h1>

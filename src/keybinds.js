@@ -29,5 +29,9 @@ document.addEventListener('keydown', e => {
 });
 
 const action_about = () => {
-	document.querySelector('#about').show();
+	document.querySelector('#about').showModal();
+}
+
+const action_whats_new = () => {
+	document.querySelector('#whats-new').showModal();
 }

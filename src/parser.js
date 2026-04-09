@@ -57,7 +57,7 @@ const tokenize_latex = str => {
 			}
 
 			type = TOK_EXPRESSION;
-			body = str.match(/^[^\\[\]{}_]+/);
+			body = str.match(/^[^\\()[\]{}_]+/);
 			if (body == null) {
 				console.error('Unable to parse expression:', str);
 			}
