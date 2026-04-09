@@ -228,6 +228,10 @@ const initialize_database = () => {
 		console.error(`Unable to open IndexedDB, ${e.target.error?.message}`)
 		create_notification('Failed to start DB', 'error');
 	};
+	req.onblocked = e => {
+		console.error(`Unable to open IndexedDB`);
+		create_notification('Failed to update DB\nPlease close other tabs', 'error');
+	}
 	req.onsuccess = e => set_db(e.target.result);
 	req.onupgradeneeded = e => {
 		const db = e.target.result;
