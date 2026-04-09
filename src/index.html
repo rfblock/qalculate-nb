@@ -92,7 +92,7 @@
 			const current_version = 'v0.0.2';
 			if (localStorage.getItem('last-viewed-version') != current_version) {
 				localStorage.setItem('last-viewed-version', current_version);
-				action_whats_new();
+				document.querySelector('#whats-new').showModal();
 			}
 		})();</script>
 		<h1>What's New</h1>
