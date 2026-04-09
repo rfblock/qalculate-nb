@@ -11,6 +11,7 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 
 - This Changelog
 - Toolbox (accessed by `Edit > Toolbox` or `alt + T`)
+- Click to copy cell output
 
 ### Changed
 

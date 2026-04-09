@@ -87,6 +87,11 @@ const create_cell = ref => {
 		cell.appendChild(cell_result);
 		cell_result.classList.add('cell-result');
 		cell_result.tabIndex = 0;
+		cell_result.addEventListener('click', () => {
+			navigator.clipboard.writeText(cell_result.innerText)
+				.then(() => { create_notification('Copied', 'success') })
+				.catch(() => { create_notification('Failed to copy', 'error') });
+		});
 
 		cell_expr.addEventListener('keydown', e => {
 			if (e.repeat) { return; }
