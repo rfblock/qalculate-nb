@@ -21,7 +21,7 @@ const action_new_notebook = () => {
 		return;
 	}
 
-	prompt_confirm('There are unsaved changes.\nAre you sure?')
+	prompt_confirm('There are unsaved changes.\nAre you sure you want to continue?\n All unsaved changes will be lost.')
 		.then(res => {
 			if (res == 'Yes') { new_notebook(); }
 		})
