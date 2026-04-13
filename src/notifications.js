@@ -1,15 +1,17 @@
 'use strict';
 
-const show_loading_modal = text => {
+import { MQ } from "./math.js";
+
+export const show_loading_modal = text => {
 	document.querySelector('#loading-modal > span').innerText = text;
 	document.querySelector('#loading-modal').showModal();
 }
 
-const close_loading_modal = () => {
+export const close_loading_modal = () => {
 	document.querySelector('#loading-modal').close();
 }
 
-const prompt_confirm = (text, buttons) => {
+export const prompt_confirm = (text, buttons) => {
 	buttons ??= ['Yes', 'Cancel'];
 	const modal = document.querySelector('#prompt-modal');
 	modal.innerText = '';
@@ -36,7 +38,7 @@ const prompt_confirm = (text, buttons) => {
 	});
 }
 
-const prompt_text = (text, opt) => {
+export const prompt_text = (text, opt) => {
 	opt ??= {};
 	opt.value ??= '';
 	opt.placeholder ??= '';
@@ -80,7 +82,7 @@ const prompt_text = (text, opt) => {
 	});
 }
 
-const prompt_math = text => {
+export const prompt_math = text => {
 	text ??= '';
 
 	const modal = document.querySelector('#prompt-modal')
@@ -117,7 +119,7 @@ const prompt_math = text => {
 	});
 }
 
-const create_notification = (text, status) => {
+export const create_notification = (text, status) => {
 	status ??= 'neutral';
 	const dialog = document.createElement('div');
 	dialog.classList.add(status);

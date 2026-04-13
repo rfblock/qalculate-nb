@@ -170,13 +170,14 @@ $(build)/qalc.js $(build)/qalc.wasm &: $(OBJS) $(call libfiles,$(QALCWASM_LIBS))
 	    --bind \
 	    $(LDFLAGS) \
 	    -s WARN_UNALIGNED=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s FILESYSTEM=0 -s ASSERTIONS=0 \
+		-s MODULARIZE=1 -s EXPORT_ES6=1 \
 	    $(call prepend,-l,$(QALCWASM_LIBS)) \
 	    $(OBJS) \
 	    -o $(build)/qalc.js
 
 PUBLIC_FILES = $(build)/qalc.js $(build)/qalc.wasm \
                src/index.html src/style.css src/favicon.png \
-			   src/*.js
+			   $(shell find src -name "*.js")
 
 serve: deploy
 	python3 -m http.server -d public 8000

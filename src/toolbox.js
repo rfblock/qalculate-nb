@@ -1,5 +1,9 @@
 'use strict';
 
+import { MQ } from './math.js';
+import { prompt_math, prompt_text, create_notification } from './notifications.js';
+import { on_database_load, save_formula, list_formulas } from './saves.js'
+
 let formulas;
 
 on_database_load(() => list_formulas().then(formula_list => {
@@ -60,7 +64,7 @@ const render_category_list = () => {
 	});
 }
 
-const action_toolbox = () => {
+window.action_toolbox = () => {
 	document.querySelectorAll('dialog').forEach(x => x.close());
 
 	const toolbox_dialog = document.querySelector('#toolbox-dialog');
@@ -69,7 +73,7 @@ const action_toolbox = () => {
 	render_category_list();
 }
 
-const toolbox_new_category = () => {
+window.toolbox_new_category = () => {
 	prompt_text('Category Name')
 		.then(category => {
 			if (Object.keys(formulas).includes(category)) {
@@ -82,7 +86,7 @@ const toolbox_new_category = () => {
 		.catch(() => {});
 };
 
-const toolbox_new_formula = () => {
+window.toolbox_new_formula = () => {
 	prompt_math('')
 		.then(latex => {
 			if (latex == '') { return; }

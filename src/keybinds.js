@@ -3,12 +3,12 @@
 document.addEventListener('keydown', e => {
 	// ctrl, alt, shift modifiers
 	const keybinds = {
-		'ctrl + O': show_open_dialog,
-		'ctrl + S': begin_save,
-		'ctrl + shift + S': show_save_as_dialog,
+		'ctrl + O': action_open_file,
+		'ctrl + S': action_save,
+		'ctrl + shift + S': action_save_as,
 		'alt + N': action_new_notebook,
-		'alt + R': run_all,
-		'alt + C': clear_all_outputs,
+		'alt + R': action_run_all,
+		'alt + C': action_clear_all,
 		'alt + T': action_toolbox,
 	};
 
@@ -28,10 +28,10 @@ document.addEventListener('keydown', e => {
 	});
 });
 
-const action_about = () => {
+window.action_about = () => {
 	document.querySelector('#about').showModal();
 }
 
-const action_whats_new = () => {
+window.action_whats_new = () => {
 	document.querySelector('#whats-new').showModal();
 }

@@ -1,8 +1,14 @@
 'use strict';
 
+import { create_cell } from "./cells.js";
+import { MQ } from "./math.js";
+import { create_notification, prompt_confirm, prompt_text } from "./notifications.js";
+
 let notebook_name = '';
 let last_save = null;
 let unsaved_changes = false;
+
+export const set_unsaved_changes = (x) => unsaved_changes = x;
 
 /**
  * @type {IDBDatabase | null}
@@ -10,12 +16,12 @@ let unsaved_changes = false;
 let database = null;
 
 const pending_on_database_load = [];
-const on_database_load = f => {
+export const on_database_load = f => {
 	if (database != null) { f(); }
 	else { pending_on_database_load.push(f); }
 }
 
-const action_new_notebook = () => {
+window.action_new_notebook = () => {
 	if (!unsaved_changes) {
 		new_notebook();
 		return;
@@ -28,10 +34,10 @@ const action_new_notebook = () => {
 		.catch(() => {});
 };
 
-const begin_save = () => {
+window.action_save = () => {
 	if (notebook_name.trim().length == 0) {
 		// Unnamed document
-		show_save_as_dialog();
+		action_save_as();
 		return;
 	}
 	
@@ -42,7 +48,7 @@ window.onbeforeunload = () => {
 	return unsaved_changes ? 'Unsaved Changes' : null;
 }
 
-const show_save_as_dialog = () => {
+window.action_save_as = () => {
 	document.querySelectorAll('dialog').forEach(x => x.close());
 
 	prompt_text(notebook_name ?? '', { value: notebook_name, placeholder: 'Name'})
@@ -71,7 +77,7 @@ const show_save_as_dialog = () => {
 		.catch(() => create_notification('Save Aborted', 'error'));
 }
 
-const show_open_dialog = () => {
+window.action_open_file = () => {
 	const open_dialog = () => {
 		document.activeElement.blur();
 		document.querySelectorAll('dialog').forEach(x => x.close());
@@ -100,7 +106,7 @@ const show_open_dialog = () => {
 		});
 }
 
-const dialog_open_button = () => {
+window.dialog_open_button = () => {
 	document.querySelector('#open-dialog').close();
 	const val = document.querySelector('#open-dialog > select').value;
 	load_notebook(val);
@@ -176,7 +182,7 @@ const load_notebook = load_name => {
 	}
 }
 
-const list_notebooks = () => {
+export const list_notebooks = () => {
 	return new Promise(resolve => {
 		database
 		.transaction(['notebooks'], 'readonly')
@@ -197,14 +203,14 @@ const new_notebook = () => {
 	unsaved_changes = false;
 }
 
-const save_formula = (latex, name, category) => {
+export const save_formula = (latex, name, category) => {
 	database
 		.transaction('formulas', 'readwrite')
 		.objectStore('formulas')
 		.add({latex, name, category});
 }
 
-const list_formulas = () => {
+export const list_formulas = () => {
 	return new Promise(resolve => {
 		database
 			.transaction('formulas', 'readonly')

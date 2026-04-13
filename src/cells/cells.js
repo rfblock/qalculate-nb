@@ -1,15 +1,9 @@
 'use strict';
 
-let MQ = MathQuill.getInterface(2);
+import { MQ, create_math_cell, run_math_cell } from './math.js'
+import { set_unsaved_changes } from './saves.js';
 
-MQ.config({
-	autoCommands: 'sqrt pi theta sum nthroot infty ' + greek.join(' '),
-	sumStartsWithNEquals: true,
-	autoSubscriptNumerals: true,
-	autoOperatorNames: 'sin cos tan arcsin arccos arctan ln log to' + Module.units
-});
-
-const focus_cell = (cell, enter_edit) => {
+export const focus_cell = (cell, enter_edit) => {
 	if (cell == null) { return; }
 	document.querySelectorAll('.cell').forEach(x => x.classList.remove('selected'));
 	document.querySelectorAll('.cell-expression').forEach(x => MQ(x).blur());
@@ -22,44 +16,53 @@ const focus_cell = (cell, enter_edit) => {
 }
 
 const run_cell = cell => {
-	const field = MQ(cell.querySelector('.cell-expression'));
-	const cell_result = cell.querySelector('.cell-result');
-	const exp = parse_latex(field.latex());
-	if (exp == '') { return; }
-	let res = calc.calculateAndPrint(exp, 1000,
-		Module.default_user_evaluation_options,
-		Module.default_print_options
-	);
-	cell_result.innerText = res;
+	switch (get_cell_type(cell)) {
+		case 'math': run_math_cell(cell); break;
+	}
 }
 
-const run_all = () => {
+/**
+ * @param {HTMLDivElement} cell 
+ */
+const get_cell_type = cell => {
+	const types = ['math', 'markdown'];
+	for (let type of types) {
+		if (cell.classList.contains(`cell-${type}`)) {
+			return type;
+		}
+	}
+	
+	return null;
+}
+
+window.action_run_all = () => {
 	document.activeElement.blur();
 	document.querySelectorAll('.cell').forEach(cell => {
 		run_cell(cell);
 	});
 }
 
-const clear_all_outputs = () => {
+window.action_clear_all = () => {
 	document.activeElement.blur();
 	document.querySelectorAll('.cell-result').forEach(result => {
 		result.innerText = '';
 	});
 }
 
-const insert_cell_above = () => {
+window.insert_cell_above = () => {
 	focus_cell(create_cell(document.querySelector('.cell.selected')));
 }
 
-const insert_cell_below = () => {
+window.insert_cell_below = () => {
 	focus_cell(create_cell(document.querySelector('.cell.selected').nextElementSibling));
 }
 
-const create_cell = ref => {
-	unsaved_changes = true;
+export const create_cell = (ref, type) => {
+	set_unsaved_changes(true);
 	ref ??= null;
+	type ??= 'math';
 	const cell = document.createElement('div');
-	cell.classList.add('cell');
+	cell.classList.add('cell', `cell-${type}`);
 	cell.tabIndex = 0;
 	cell.addEventListener('keydown', e => {
 		if (e.repeat) { return; }
@@ -75,7 +78,7 @@ const create_cell = ref => {
 			} else {
 				focus_cell(cell.previousElementSibling);
 			}
-			unsaved_changes = true;
+			set_unsaved_changes(true);
 			cell.remove();
 		}
 	});
@@ -100,16 +103,12 @@ const create_cell = ref => {
 			focus_cell(cell);
 		});
 
-		const field = MQ.MathField(cell_expr, {
-			handlers: {
-				upOutOf: () => focus_cell(cell.previousElementSibling, true),
-				downOutOf: () => focus_cell(cell.nextElementSibling, true),
-				enter: () => run_cell(cell),
-				edit: () => { unsaved_changes = true; }
-			}
-		});
-
 	cell.addEventListener('click', e => focus_cell(e.currentTarget, true));
+
+	switch (type) {
+		case 'math': create_math_cell(cell); break;
+		case 'markdown': create_markdown_cell(cell); break;
+	}
 
 	document.querySelector('#notebook-cells').insertBefore(cell, ref);
 	return cell;
