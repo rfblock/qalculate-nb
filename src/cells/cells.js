@@ -1,15 +1,16 @@
 'use strict';
 
-import { MQ, create_math_cell, run_math_cell } from './math.js'
+import { MQ, create_math_cell, get_math_cell_value, run_math_cell } from './math.js'
+import { create_markdown_cell, get_markdown_cell_value } from './markdown.js'
 import { set_unsaved_changes } from './saves.js';
 
 export const focus_cell = (cell, enter_edit) => {
 	if (cell == null) { return; }
 	document.querySelectorAll('.cell').forEach(x => x.classList.remove('selected'));
-	document.querySelectorAll('.cell-expression').forEach(x => MQ(x).blur());
+	document.querySelectorAll('.cell-expression').forEach(x => MQ(x)?.blur());
 	cell.classList.add('selected');
 	if (enter_edit ?? false) {
-		MQ(cell.querySelector('.cell-expression')).focus();
+		MQ(cell.querySelector('.cell-expression'))?.focus();
 	} else {
 		cell.focus();
 	}
@@ -24,7 +25,7 @@ const run_cell = cell => {
 /**
  * @param {HTMLDivElement} cell 
  */
-const get_cell_type = cell => {
+export const get_cell_type = cell => {
 	const types = ['math', 'markdown'];
 	for (let type of types) {
 		if (cell.classList.contains(`cell-${type}`)) {
@@ -32,6 +33,18 @@ const get_cell_type = cell => {
 		}
 	}
 	
+	return null;
+}
+
+export const get_cell_value = cell => {
+	if (cell.classList.contains('cell-math')) {
+		return get_math_cell_value(cell);
+	}
+
+	if (cell.classList.contains('cell-markdown')) {
+		return get_markdown_cell_value(cell);
+	}
+
 	return null;
 }
 
@@ -49,12 +62,12 @@ window.action_clear_all = () => {
 	});
 }
 
-window.insert_cell_above = () => {
-	focus_cell(create_cell(document.querySelector('.cell.selected')));
+window.insert_cell_above = type => {
+	focus_cell(create_cell(document.querySelector('.cell.selected'), type));
 }
 
-window.insert_cell_below = () => {
-	focus_cell(create_cell(document.querySelector('.cell.selected').nextElementSibling));
+window.insert_cell_below = type => {
+	focus_cell(create_cell(document.querySelector('.cell.selected')?.nextElementSibling, type));
 }
 
 export const create_cell = (ref, type) => {
@@ -67,6 +80,7 @@ export const create_cell = (ref, type) => {
 	cell.addEventListener('keydown', e => {
 		if (e.repeat) { return; }
 		if (cell.querySelector('.cell-expression.mq-focused') != null) { return; }
+		if (cell.querySelector('.cell-expression > .ProseMirror-focused') != null) { return; }
 		if (e.key == 'ArrowUp') { focus_cell(cell.previousElementSibling); }
 		if (e.key == 'ArrowDown') { focus_cell(cell.nextElementSibling); }
 		if (e.key == 'Enter') { focus_cell(cell, true); e.preventDefault(); }

@@ -27,13 +27,17 @@ export const create_math_cell = cell => {
 	});
 }
 
+export const get_math_cell_value = cell => {
+	return MQ(cell.querySelector('.cell-expression')).latex();
+}
+
 /**
  * @param {HTMLDivElement} cell 
  */
 export const run_math_cell = cell => {
-	const field = MQ(cell.querySelector('.cell-expression'));
 	const cell_result = cell.querySelector('.cell-result');
-	const exp = parse_latex(field.latex());
+	const val = get_math_cell_value(cell);
+	const exp = parse_latex(val);
 	if (exp == '') { return; }
 	let res = calc.calculateAndPrint(exp, 1000,
 		Module.default_user_evaluation_options,

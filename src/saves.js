@@ -1,6 +1,7 @@
 'use strict';
 
-import { create_cell } from "./cells.js";
+import { create_cell, get_cell_type, get_cell_value } from "./cells.js";
+import { delete_markdown_editors, set_markdown_cell } from "./markdown.js";
 import { MQ } from "./math.js";
 import { create_notification, prompt_confirm, prompt_text } from "./notifications.js";
 
@@ -99,7 +100,7 @@ window.action_open_file = () => {
 		return;
 	}
 
-	prompt_confirm('There are unsaved changes\nAre you sure?')
+	prompt_confirm('There are unsaved changes.\nAre you sure you want to continue?\n All unsaved changes will be lost.')
 		.catch(() => {})
 		.then(res => {
 			if (res == 'Yes') { open_dialog(); }
@@ -114,11 +115,10 @@ window.dialog_open_button = () => {
 
 const serialize_state = () => {
 	const cells = []
-	document.querySelectorAll('.cell-expression').forEach(elem => {
-		const cell = MQ(elem);
+	document.querySelectorAll('.cell').forEach(cell => {
 		cells.push({
-			type: 'qalc',
-			body: cell.latex(),
+			type: get_cell_type(cell),
+			body: get_cell_value(cell),
 		});
 	});
 
@@ -170,13 +170,16 @@ const load_notebook = load_name => {
 		notebook_name = state.notebook_name;
 		
 		document.querySelectorAll('.cell').forEach(x => x.remove());
+		delete_markdown_editors();
 
 		state.cells.forEach(cell => {
-			if (cell.type != 'qalc') {
+			if (cell.type == 'math') {
+				MQ(create_cell(null, cell.type).querySelector('.cell-expression')).latex(cell.body);
+			} else if (cell.type == 'markdown') {
+				set_markdown_cell(create_cell(null, cell.type), cell.body);
+			} else {
 				console.error(`Unknown cell type ${cell.type}`);
-				return;
 			}
-			MQ(create_cell().querySelector('.cell-expression')).latex(cell.body);
 		});
 		unsaved_changes = false;
 	}
@@ -199,6 +202,7 @@ const new_notebook = () => {
 	
 	document.activeElement.blur();
 	document.querySelectorAll('.cell').forEach(x => x.remove());
+	delete_markdown_editors()
 	create_cell();
 	unsaved_changes = false;
 }

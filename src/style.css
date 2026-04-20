@@ -152,6 +152,10 @@ main {
 	border: 2px solid steelblue;
 }
 
+.cell-expression > div {
+	outline: none;
+}
+
 .cell-result {
 	margin-top: 2px;
 	display: block;
