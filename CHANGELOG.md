@@ -5,6 +5,21 @@ All notable changes will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (due to a lack of public API).
 
+## [0.0.3]
+
+### Added
+
+- Markdown cells
+	- To create a markdown cell, press `m` on an empty cell
+	- To create a markdown cell directly, click `Cell > Insert Markdown Cell [Above/Below]`
+	- Markdown cells can be formated as rich text
+		- Text can be entered in standard markdown (i.e. `**xyz**` for bold)
+		- Text can also be entered in the same manner as other text editors (i.e. `ctrl + B` for bold)
+
+### Changed
+
+- Creating a cell has been changed to `Cell > Insert Math Cell [Above/Below]` (from `Cell > Insert Cell [Above/Below]`)
+
 ## [0.0.2]
 
 ### Added

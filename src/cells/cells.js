@@ -1,7 +1,7 @@
 'use strict';
 
-import { MQ, create_math_cell, get_math_cell_value, run_math_cell } from './math.js'
-import { create_markdown_cell, get_markdown_cell_value } from './markdown.js'
+import { MQ, create_math_cell, get_math_cell_value, run_math_cell, set_math_cell_content } from './math.js'
+import { create_markdown_cell, get_markdown_cell_value, set_markdown_cell_content } from './markdown.js'
 import { set_unsaved_changes } from './saves.js';
 
 export const focus_cell = (cell, enter_edit) => {
@@ -37,15 +37,19 @@ export const get_cell_type = cell => {
 }
 
 export const get_cell_value = cell => {
-	if (cell.classList.contains('cell-math')) {
-		return get_math_cell_value(cell);
-	}
-
-	if (cell.classList.contains('cell-markdown')) {
-		return get_markdown_cell_value(cell);
+	switch (get_cell_type(cell)) {
+		case 'math': return get_math_cell_value(cell);
+		case 'markdown': return get_markdown_cell_value(cell);
 	}
 
 	return null;
+}
+
+export const set_cell_content = (cell, content) => {
+	switch (get_cell_type(cell)) {
+		case 'math': return set_math_cell_content(cell, content);
+		case 'markdown': return set_markdown_cell_content(cell, content);
+	}
 }
 
 window.action_run_all = () => {
@@ -68,6 +72,14 @@ window.insert_cell_above = type => {
 
 window.insert_cell_below = type => {
 	focus_cell(create_cell(document.querySelector('.cell.selected')?.nextElementSibling, type));
+}
+
+const convert_to_markdown = cell => {
+	if (get_cell_type(cell) != 'math') { return; }
+	if (get_cell_value(cell).trim().length > 0) { return; }
+	const md = create_cell(cell, 'markdown');
+	focus_cell(md, true);
+	cell.remove();
 }
 
 export const create_cell = (ref, type) => {
@@ -95,6 +107,7 @@ export const create_cell = (ref, type) => {
 			set_unsaved_changes(true);
 			cell.remove();
 		}
+		if (e.key == 'm') { convert_to_markdown(cell); }
 	});
 		const cell_expr = document.createElement('span');
 		cell.appendChild(cell_expr);

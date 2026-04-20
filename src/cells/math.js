@@ -31,6 +31,10 @@ export const get_math_cell_value = cell => {
 	return MQ(cell.querySelector('.cell-expression')).latex();
 }
 
+export const set_math_cell_content = (cell, content) => {
+	MQ(cell.querySelector('.cell-expression')).latex(content);
+}
+
 /**
  * @param {HTMLDivElement} cell 
  */

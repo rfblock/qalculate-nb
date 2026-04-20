@@ -1,8 +1,7 @@
 'use strict';
 
-import { create_cell, get_cell_type, get_cell_value } from "./cells.js";
-import { delete_markdown_editors, set_markdown_cell } from "./markdown.js";
-import { MQ } from "./math.js";
+import { create_cell, set_cell_content, get_cell_type, get_cell_value } from "./cells.js";
+import { delete_markdown_editors } from "./markdown.js";
 import { create_notification, prompt_confirm, prompt_text } from "./notifications.js";
 
 let notebook_name = '';
@@ -173,13 +172,7 @@ const load_notebook = load_name => {
 		delete_markdown_editors();
 
 		state.cells.forEach(cell => {
-			if (cell.type == 'math') {
-				MQ(create_cell(null, cell.type).querySelector('.cell-expression')).latex(cell.body);
-			} else if (cell.type == 'markdown') {
-				set_markdown_cell(create_cell(null, cell.type), cell.body);
-			} else {
-				console.error(`Unknown cell type ${cell.type}`);
-			}
+			set_cell_content(create_cell(null, cell.type), cell.body)
 		});
 		unsaved_changes = false;
 	}
