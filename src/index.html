@@ -91,7 +91,7 @@
 
 	<dialog id="whats-new">
 		<script>(function(){ /* Open this dialog if never seen latest */
-			const current_version = 'v0.0.3';
+			const current_version = 'v0.0.4';
 			if (localStorage.getItem('last-viewed-version') != current_version) {
 				localStorage.setItem('last-viewed-version', current_version);
 				document.querySelector('#whats-new').showModal();
@@ -99,6 +99,12 @@
 		})();</script>
 		<div style="overflow-y: auto; max-height: 85vh;">
 			<h1>What's New</h1>
+			<h2>v0.0.4</h2>
+			<h3>Added</h3>
+			<ul>
+				<li>Infinity (can be typed by typing <code>infty</code>)</li>
+			</ul>
+			
 			<h2>v0.0.3</h2>
 			<h3>Added</h3>
 			<ul>

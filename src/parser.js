@@ -14,6 +14,7 @@ const command_subs = {
 	'right': '',
 	'cdot': '*',
 	'text': '',
+	'infty': 'infinity',
 }
 
 const TOK_EXPRESSION = 'tok-expression';
