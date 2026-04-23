@@ -94,7 +94,6 @@ window.toolbox_new_formula = () => {
 			requestAnimationFrame(() => {
 				prompt_text('', { placeholder: 'Formula Name' })
 				.then(name => {
-					debugger;
 					name ??= '';
 					save_formula(latex, name, selected_toolbox_category);
 					formulas[selected_toolbox_category].push({

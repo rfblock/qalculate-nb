@@ -9,6 +9,8 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 
 ### Added
 
+- Print to PDF. Printing can be done by pressing `ctrl + P` or by clicking `File > Print`. Documents can currently only be printed in light mode (attempting to print in dark mode will convert to light mode)
+- Boxed cells. To box a cell, click `Cells > Box Cell`.
 - `where` keyword. Expressions can be evaluated at a point (i.e. `3x+12 where x=1` evaluates to `15`)
 
 ## [0.0.4]

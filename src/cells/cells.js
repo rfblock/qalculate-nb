@@ -3,6 +3,7 @@
 import { MQ, create_math_cell, get_math_cell_value, run_math_cell, set_math_cell_content } from './math.js'
 import { create_markdown_cell, get_markdown_cell_value, set_markdown_cell_content } from './markdown.js'
 import { set_unsaved_changes } from './saves.js';
+import { create_notification } from './notifications.js';
 
 export const focus_cell = (cell, enter_edit) => {
 	if (cell == null) { return; }
@@ -73,6 +74,14 @@ window.insert_cell_above = type => {
 window.insert_cell_below = type => {
 	focus_cell(create_cell(document.querySelector('.cell.selected')?.nextElementSibling, type));
 }
+
+export const box_cell = cell => {
+	cell ??= document.querySelector('.cell.selected');
+	cell.classList.toggle('boxed')
+	set_unsaved_changes(true);
+}
+
+window.box_cell = box_cell;
 
 const convert_to_markdown = cell => {
 	if (get_cell_type(cell) != 'math') { return; }

@@ -1,6 +1,6 @@
 'use strict';
 
-import { create_cell, set_cell_content, get_cell_type, get_cell_value } from "./cells.js";
+import { create_cell, set_cell_content, get_cell_type, get_cell_value, box_cell } from "./cells.js";
 import { delete_markdown_editors } from "./markdown.js";
 import { create_notification, prompt_confirm, prompt_text } from "./notifications.js";
 
@@ -118,6 +118,7 @@ const serialize_state = () => {
 		cells.push({
 			type: get_cell_type(cell),
 			body: get_cell_value(cell),
+			boxed: cell.classList.contains('boxed'),
 		});
 	});
 
@@ -172,7 +173,11 @@ const load_notebook = load_name => {
 		delete_markdown_editors();
 
 		state.cells.forEach(cell => {
-			set_cell_content(create_cell(null, cell.type), cell.body)
+			const e = create_cell(null, cell.type)
+			set_cell_content(e, cell.body);
+			if (cell.boxed) {
+				box_cell(e);
+			}
 		});
 		unsaved_changes = false;
 	}

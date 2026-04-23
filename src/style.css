@@ -6,14 +6,23 @@
 	--background: #eee;
 	--background-dark: #ddd;
 	--border: 2px solid #ddd;
+	--border-boxed: 2px solid black;
 }
 
-:root.dark {
+:root.dark:not(.print) {
 	--text: #fff;
 	--surface: #222;
 	--background: #2a2a2a;
 	--background-dark: #333;
 	--border: 2px solid #333;
+	--border-boxed: 2px solid white;
+}
+
+:root.print {
+	--surface: none;
+	--background: none;
+	--background-dark: none;
+	--border: none;
 }
 
 * {
@@ -58,6 +67,10 @@ menu {
 			border-bottom: var(--border);
 		}
 	}
+}
+
+:root.print menu {
+	display: none;
 }
 
 menu > div {
@@ -116,8 +129,8 @@ main {
 #notebook-cells {
 	display: flex;
 	flex-direction: column;
-	max-width: 1000px;
-	width: 60%;
+	max-width: 95%;
+	width: 1000px;
 	left: auto;
 }
 
@@ -132,6 +145,17 @@ main {
 
 .cell:hover {
 	border-left: var(--border);
+}
+
+.cell.boxed {
+	> .cell-expression {
+		border: var(--border-boxed);
+		border-bottom: none;
+	}
+	> .cell-result {
+		border: var(--border-boxed);
+		border-top: none;
+	}
 }
 
 .cell.selected:focus-within {
@@ -157,7 +181,8 @@ main {
 }
 
 .cell-result {
-	margin-top: 2px;
+	padding-top: 2px;
+	padding-left: 24px;
 	display: block;
 }
 

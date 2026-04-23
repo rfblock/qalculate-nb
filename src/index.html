@@ -38,6 +38,7 @@
 				<button onclick="action_save_as();">Save As</button>
 				<button onclick="alert('TODO');">Import</button>
 				<button onclick="alert('TODO');">Export</button>
+				<button onclick="print();">Print</button>
 			</div></div>
 		</div>
 		<div>
@@ -53,6 +54,7 @@
 			<div><div>
 				<button onclick="action_clear_all();">Clear All</button>
 				<button onclick="action_run_all();">Run All</button>
+				<button onclick="box_cell();">Box Cell</button>
 				<button onclick="insert_cell_above('math');">Insert Math Cell Above</button>
 				<button onclick="insert_cell_below('math');">Insert Math Cell Below</button>
 				<button onclick="insert_cell_above('markdown');">Insert Markdown Cell Above</button>
@@ -102,6 +104,8 @@
 			<h2>v0.0.5</h2>
 			<h3>Added</h3>
 			<ul>
+				<li>Print to PDF. Printing can be done by pressing <code>ctrl + P</code> or by clicking <code>File > Print</code> Documents can currently only be printed in light mode (attempting to print in dark mode will convert to light mode)</li>
+				<li>Boxed cells. To box a cell, click <code>Cells > Box Cell</code></li>
 				<li><code>where</code> keyword. Expressions can be evaluated at a point (i.e. <code>3x+12 where x=1</code> evaluates to <code>15</code>)</li>
 			</ul>
 
@@ -176,7 +180,7 @@
 
 	<dialog id="about">
 		<h1>Qalculate! Notebook</h1>
-		<p>Version (v0.0.2)</p>
+		<p>Version (v0.0.5)</p>
 		<p>Source code available on <a href="https://github.com/rfblock/qalculate-nb">GitHub</a></p>
 		<p>Created by James Sanders (aka. Steggy)</p>
 		<p>Forked from <a href="https://github.com/flaviut/qalculate-wasm">flaviut/qalculate-wasm</a> by Flaviu Tamas and Noa</p>
