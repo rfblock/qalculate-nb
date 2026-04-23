@@ -9,7 +9,7 @@ MQ.config({
 	autoCommands: 'sqrt pi theta sum nthroot infty ' + greek.join(' '),
 	sumStartsWithNEquals: true,
 	autoSubscriptNumerals: true,
-	autoOperatorNames: 'sin cos tan arcsin arccos arctan ln log to'
+	autoOperatorNames: 'sin cos tan arcsin arccos arctan ln log to where'
 });
 
 /**

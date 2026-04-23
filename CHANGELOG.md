@@ -5,6 +5,12 @@ All notable changes will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (due to a lack of public API).
 
+## [0.0.5]
+
+### Added
+
+- `where` keyword. Expressions can be evaluated at a point (i.e. `3x+12 where x=1` evaluates to `15`)
+
 ## [0.0.4]
 
 ### Added
