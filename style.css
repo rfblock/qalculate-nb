@@ -1,0 +1,241 @@
+:root {
+	font-family: 'Inter';
+
+	--text: #0a0a0a;
+	--surface: #fff;
+	--background: #eee;
+	--background-dark: #ddd;
+	--border: 2px solid #ddd;
+	--border-boxed: 2px solid black;
+}
+
+:root.dark:not(.print) {
+	--text: #fff;
+	--surface: #222;
+	--background: #2a2a2a;
+	--background-dark: #333;
+	--border: 2px solid #333;
+	--border-boxed: 2px solid white;
+}
+
+:root.print {
+	--surface: none;
+	--background: none;
+	--background-dark: none;
+	--border: none;
+}
+
+* {
+	color: var(--text);
+}
+
+.mq-editable-field .mq-cursor.mq-cursor {
+	border-left: 1px solid var(--text);
+}
+
+body {
+	background-color: var(--surface);
+	margin: 0;
+}
+
+button {
+	background: var(--background);
+	border: var(--border);
+}
+
+input {
+	background: var(--background);
+	border: var(--border);
+}
+
+menu {
+	display: flex;
+	align-items: flex-start;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+	padding: 0;
+	margin: 0;
+	pointer-events: none;
+	> div:last-child {
+		background: var(--background);
+		flex-grow: 1;
+		> button {
+			width: 100%;
+			color: #0000;
+			border-bottom: var(--border);
+		}
+	}
+}
+
+:root.print menu {
+	display: none;
+}
+
+menu > div {
+	> button {
+		float: left;
+	}
+	button {
+		pointer-events: all;
+		background: var(--background);
+		border: none;
+		border-bottom: var(--border);
+		border-right: var(--border);
+		&:hover:not(.spacer) {
+			background: var(--background-dark);
+		}
+	}
+}
+
+menu > div:focus-within {
+	> button:not(.spacer) {
+		background: var(--background-dark);
+	}
+	> div > div > button {
+		border-bottom: none;
+		border-left: var(--border);
+		visibility: visible;
+		&:last-child {
+			border-bottom: var(--border);
+		}
+	}
+}
+
+menu > div > div {
+	width: 0;
+	visibility: hidden;
+	> div {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		float: left;
+		> button {
+			text-align: left;
+			white-space: nowrap;
+			float: left;
+		}
+	}
+}
+
+main {
+	margin: 32px 0;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+}
+
+#notebook-cells {
+	display: flex;
+	flex-direction: column;
+	max-width: 95%;
+	width: 1000px;
+	left: auto;
+}
+
+.cell {
+	padding-left: 12px;
+	border-left: 2px solid #0000;
+}
+
+.cell.selected {
+	border-left: var(--border);
+}
+
+.cell:hover {
+	border-left: var(--border);
+}
+
+.cell.boxed {
+	> .cell-expression {
+		border: var(--border-boxed);
+		border-bottom: none;
+	}
+	> .cell-result {
+		border: var(--border-boxed);
+		border-top: none;
+	}
+}
+
+.cell.selected:focus-within {
+	border-left: 2px solid steelblue;
+	outline: none;
+}
+
+.cell > .cell-expression {
+	display: block;
+	border: none;
+	border: var(--border);
+	background-color: var(--background);
+}
+
+.cell-expression.mq-editable-field.mq-focused {
+	outline: none;
+	box-shadow: none;
+	border: 2px solid steelblue;
+}
+
+.cell-expression > div {
+	outline: none;
+}
+
+.cell-result {
+	padding-top: 2px;
+	padding-left: 24px;
+	display: block;
+}
+
+dialog {
+	background-color: var(--surface);
+}
+
+#open-dialog {
+	min-width: 20rem;
+	> select {
+		width: 100%;
+		background-color: var(--surface);
+	}
+}
+
+#toolbox-dialog li > span {
+	border: var(--border);
+}
+
+#toolbox-category-list {
+	display: flex;
+	flex-direction: column;
+}
+
+#prompt-modal {
+	input {
+		display: block;
+	}
+	div {
+		display: block;
+	}
+	button {
+		float: right;
+	}
+}
+
+#notifications {
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+
+	> div {
+		border: var(--border);
+		&.success {
+			background-color: chartreuse;
+			border: 2px solid green;
+		}
+		&.error {
+			background-color: crimson;
+			border: 2px solid darkred;
+			color: white;
+		}
+	}
+}

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Qalculate! Notebook</title>
+	<link rel='icon' type='image/png' href='favicon.png'>
+	<link rel="stylesheet" href="style.css">
+	<!-- Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Iosevka+Charon:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+	<!-- MathQuill -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css" integrity="sha512-vPg9GqsZZ4LHv9BkFfZSXt7y4D7YaARPU2JFmpZug4EgtJJrumytMAFZkNSk2LSyqWir0TNbh2tBq7UJIMxvlA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js" integrity="sha512-Qsh05D07P6dURSZn8Qk+j8GI7cEK0OhXleZvTofmucwoDSkBC0juWf1401JdSE8os2kWEezMu7e9mlnszm3yEw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<!-- Qalculate! -->
+    <link rel="prefetch" href="qalc.js" as="script">
+    <link rel="preload" href="qalc.wasm" as="fetch" crossorigin="anonymous">
+	<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "79a7d964c89e4abca7f565c3564310d4"}'></script><!-- End Cloudflare Web Analytics -->
+
+	<script src="theme.js"></script>
+</head>
+<body>
+	<!-- <p><span id="answer">g_0\operatorname{to}\operatorname{ft}/s^2</span></p> -->
+	<!-- <p><span id="answer">\sqrt[3]{2}</span></p> -->
+	<!-- <p><span id="answer">\frac{3x}{x}=y</span></p> -->
+	<!-- <p><span id="answer">\sum_{n=1}^{20}\left(n+\frac{1}{2n}\right)</span></p> -->
+
+	<menu>
+		<div>
+			<button>File</button>
+			<div><div>
+				<button onclick="action_new_notebook();">New</button>
+				<button onclick="action_open_file();">Open</button>
+				<button onclick="action_save();">Save</button>
+				<button onclick="action_save_as();">Save As</button>
+				<button onclick="alert('TODO');">Import</button>
+				<button onclick="alert('TODO');">Export</button>
+				<button onclick="print();">Print</button>
+			</div></div>
+		</div>
+		<div>
+			<button>Edit</button>
+			<div><div>
+				<button onclick="alert('TODO');">Undo</button>
+				<button onclick="alert('TODO');">Redo</button>
+				<button onclick="action_toolbox();">Toolbox</button>
+			</div></div>
+		</div>
+		<div>
+			<button>Cell</button>
+			<div><div>
+				<button onclick="action_clear_all();">Clear All</button>
+				<button onclick="action_run_all();">Run All</button>
+				<button onclick="box_cell();">Box Cell</button>
+				<button onclick="insert_cell_above('math');">Insert Math Cell Above</button>
+				<button onclick="insert_cell_below('math');">Insert Math Cell Below</button>
+				<button onclick="insert_cell_above('markdown');">Insert Markdown Cell Above</button>
+				<button onclick="insert_cell_below('markdown');">Insert Markdown Cell Below</button>
+				<button onclick="alert('TODO');">Goto</button>
+			</div></div>
+		</div>
+		<div>
+			<button>Theme</button>
+			<div><div>
+				<button onclick="toggle_theme();">Toggle Theme</button>
+			</div></div>
+		</div>
+		<div>
+			<button>Help</button>
+			<div><div>
+				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new?template=bug_report.md', '_blank');">Report a bug</button>
+				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new?template=feature_request.md', '_blank');">Request a feature</button>
+				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new?template=question.md', '_blank');">Ask a question</button>
+				<button onclick="action_whats_new();">What's New</button>
+				<button onclick="action_about();">About</button>
+			</div></div>
+		</div>
+		<div></div>
+		<div><button tabindex="-1" class="spacer">Padding</button></div>
+	</menu>
+
+	<main>
+		<div id="notebook-cells">
+			<!-- <div class="cell" tabindex="0">
+				<span class="cell-expression"></span>
+				<span class="cell-result"></span>
+			</div> -->
+		</div>
+	</main>
+
+	<dialog id="whats-new">
+		<script>(function(){ /* Open this dialog if never seen latest */
+			const current_version = 'v0.0.6';
+			if (localStorage.getItem('last-viewed-version') != current_version) {
+				localStorage.setItem('last-viewed-version', current_version);
+				document.querySelector('#whats-new').showModal();
+			}
+		})();</script>
+		<div style="overflow-y: auto; max-height: 85vh;">
+			<h1>What's New</h1>
+			<h2>v0.0.6</h2>
+			<h3>Added</h3>
+			<ul>
+				<li>Inverse, Hyperbolic, Inverse Hyperbolic trig functions. (Inverse hyperbolic trig functions are written as <code>artanh</code> instead of <code>arctanh</code>)</li>
+			</ul>
+
+			<h2>v0.0.5</h2>
+			<h3>Added</h3>
+			<ul>
+				<li>Print to PDF. Printing can be done by pressing <code>ctrl + P</code> or by clicking <code>File > Print</code> Documents can currently only be printed in light mode (attempting to print in dark mode will convert to light mode)</li>
+				<li>Boxed cells. To box a cell, click <code>Cells > Box Cell</code></li>
+				<li><code>where</code> keyword. Expressions can be evaluated at a point (i.e. <code>3x+12 where x=1</code> evaluates to <code>15</code>)</li>
+			</ul>
+
+			<h2>v0.0.4</h2>
+			<h3>Added</h3>
+			<ul>
+				<li>Infinity (can be typed by typing <code>infty</code>)</li>
+			</ul>
+
+			<h2>v0.0.3</h2>
+			<h3>Added</h3>
+			<ul>
+				<li>
+					<p>Markdown Cells</p>
+					<ul>
+						<li><p>To create a markdown cell, press <code>m</code> on an empty cell</p></li>
+						<li><p>To create a markdown cell directly, click <code>Cell > Insert Markdown Cell [Above/Below]</code></p></li>
+						<li>
+							<p>Markdown cells can be formated as rich text</p>
+							<ul>
+								<li><p>Text can be entered in standard markdown (i.e. <code>**xyz**</code> for bold)</p></li>
+								<li><p>Text can also be entered in the same manner as other text editors (i.e. `ctrl + B` for bold)</p></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<h3>Changed</h3>
+			<ul>
+				<li><p>Creating a cell has been changed to <code>Cell > Insert Math Cell [Above/Below]</code> (from <code>Cell > Insert Cell [Above/Below]</code>)</p></li>
+			</ul>
+
+			<h2>v0.0.2</h2>
+			<h3>Added</h3>
+			<ul>
+				<li><p>Help menu (available on the menu bar)</p></li>
+				<li><p>Changelog (This Dialog), accessible through <code>Help > What's New</code></p></li>
+				<li><p>Toolbox accessible through <code>alt+T</code> or <code>Edit > Toolbox</code></p></li>
+				<li><p>Click to copy cell output</p></li>
+			</ul>
+			<h3>Changed</h3>
+			<ul>
+				<li>
+					<p><code>Report</code> menu (from <code>File > Report</code>) has been moved to <code>Help</code> and split into:</p>
+					<ul>
+						<li><p>Report a bug</p></li>
+						<li><p>Request a feature</p></li>
+						<li><p>Ask a question</p></li>
+					</ul>
+				</li>
+				<li><p><code>About</code> menu has been moved to <code>Help</code></p></li>
+			</ul>
+			<h3>Fixed</h3>
+			<ul>
+				<li><p>Parsing issue with multipication of a negative</p></li>
+				<li><p>Parsing issue with parentheses pasted from outside source</p></li>
+			</ul>
+		</div>
+		<form method="dialog">
+			<input type="submit" value="Close" style="float: right;" autofocus>
+		</form>
+	</dialog>
+
+	<dialog open>
+		<h1>Notice</h1>
+		<p>This is a beta program. Many features are not completed. Bugs are likely to be present. Breaking changes may result in loss data at any point</p>
+		<p>Bug reports, feature requests, and questions can be filed in <code>File > Report</code></p>
+		<form method="dialog">
+			<input type="submit" value="I understand" style="float: right;" autofocus>
+		</form>
+	</dialog>
+
+	<dialog id="about">
+		<h1>Qalculate! Notebook</h1>
+		<p>Version (v0.0.6)</p>
+		<p>Source code available on <a href="https://github.com/rfblock/qalculate-nb">GitHub</a></p>
+		<p>Created by James Sanders (aka. Steggy)</p>
+		<p>Forked from <a href="https://github.com/flaviut/qalculate-wasm">flaviut/qalculate-wasm</a> by Flaviu Tamas and Noa</p>
+		<h2>Technologies</h2>
+		<p><a href="https://github.com/Qalculate/libqalculate">libqalculate</a> by Hanna Knutsson, Sven Herzberg, and others <a href="https://github.com/Qalculate/libqalculate?tab=GPL-2.0-1-ov-file#readme">(GLPv2.0)</a></p>
+		<p><a href="http://mathquill.com/">MathQuill</a> by laughinghan and stufflebear <a href="https://github.com/mathquill/mathquill?tab=MPL-2.0-1-ov-file#readme">(MPL-2.0)</a></p>
+		<p><a href="https://tiptap.dev/product/editor">TipTap</a> by TipTap <a href="https://github.com/ueberdosis/tiptap/blob/main/LICENSE.md">(MIT, Free Version)</a></p>
+		<h2>Author Information</h2>
+		<p>If you like what I do, and would like to support, donations are gratefully accepted via Venmo at <code>@James-Sanders-581</code></p>
+		<form method="dialog" style="float: right;"><input type="submit" value="Close" autofocus></form>
+		<p>Qalculate! Notebook is licensed under <a href="https://github.com/rfblock/qalculate-nb/#MIT-1-ov-file">MIT's License</a></p>
+	</dialog>
+
+	<dialog id="open-dialog">
+		<select name="file-select" size="20">
+			<option value=""></option>
+		</select>
+		<button onclick="dialog_open_button();">Open</button>
+	</dialog>
+
+	<dialog id="toolbox-dialog">
+		<div style="display: flex;">
+			<div style="display: flex; flex-direction: column; justify-content: space-between; background: var(--background)">
+				<div id="toolbox-category-list">
+					<button>Isentropic</button>
+					<button>Ideal Gas</button>
+				</div>
+				<button onclick="toolbox_new_category();">New Category</button>
+			</div>
+			
+			<div style="display: flex; flex-direction: column;">
+				<ul id="toolbox-entry-list" style="list-style: none; background: var(--background); padding: 0; margin-left: 40px;"></ul>
+				<div style="display: flex; justify-content: flex-end;">
+					<button onclick="toolbox_new_formula();">New Formula</button>
+					<form method="dialog" style="display: inline;">
+						<input type="submit" value="Close" autofocus>
+					</form>
+				</div>
+			</div>
+		</div>
+	</dialog>
+
+	<dialog id="loading-modal" closedby="none"><span></span></dialog>
+
+	<dialog id="prompt-modal"></dialog>
+
+	<div id="notifications"></div>
+	
+	<script type="module" src="main.js"></script>
+	<script type="module" src="qalc.js"></script>
+</body>
+</html>
