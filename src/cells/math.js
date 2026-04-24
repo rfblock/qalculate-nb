@@ -5,11 +5,17 @@ import { focus_cell } from './cells.js'
 
 export const MQ = MathQuill.getInterface(2);
 
+let trigFunctions = ['sin', 'cos', 'tan', 'sec', 'csc', 'cot']
+let hyperbolicFunctions = trigFunctions.map(x => `${x}h`);
+trigFunctions = trigFunctions.concat(trigFunctions.map(x => `arc${x}`));
+hyperbolicFunctions = hyperbolicFunctions.concat(hyperbolicFunctions.map(x => `ar${x}`));
+trigFunctions = trigFunctions.concat(hyperbolicFunctions);
+
 MQ.config({
 	autoCommands: 'sqrt pi theta sum nthroot infty ' + greek.join(' '),
 	sumStartsWithNEquals: true,
 	autoSubscriptNumerals: true,
-	autoOperatorNames: 'sin cos tan arcsin arccos arctan ln log to where'
+	autoOperatorNames: trigFunctions.join(' ') + ' ln log to where'
 });
 
 /**
