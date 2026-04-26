@@ -19,7 +19,7 @@ const set_current_version = ver => {
 	latest_version_waiting_resolves.length = 0;
 }
 
-fetch('/CHANGELOG.MD').then(res => res.text().then(text => {
+fetch('/CHANGELOG.md').then(res => res.text().then(text => {
 		new Editor({
 			extensions: [ StarterKit, Markdown ],
 			element: document.querySelector('#whats-new > div'),
