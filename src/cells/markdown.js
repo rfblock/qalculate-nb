@@ -1,12 +1,60 @@
 import { Editor } from 'https://esm.sh/@tiptap/core'
 import StarterKit from 'https://esm.sh/@tiptap/starter-kit'
+import Image from 'https://esm.sh/@tiptap/extension-image'
+import FileHandler from 'https://esm.sh/@tiptap/extension-file-handler'
 
 const cell_editor_map = {};
 
 export const create_markdown_cell = element => {
 	const editor = new Editor({
 		element: element.querySelector('.cell-expression'),
-		extensions: [StarterKit],
+		extensions: [
+			StarterKit,
+			Image,
+			FileHandler.configure({
+				allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+				onDrop: (currentEditor, files, pos) => {
+					files.forEach(file => {
+						const fileReader = new FileReader();
+						
+						fileReader.readAsDataURL(file);
+						fileReader.onload = () => {
+						currentEditor
+							.chain()
+							.insertContentAt(pos, {
+								type: 'image',
+								attrs: {
+									src: fileReader.result,
+								},
+							})
+							.focus()
+							.run()
+						}
+					})
+				},
+				onPaste: (currentEditor, files, htmlContent) => {
+					files.forEach(file => {
+						if (htmlContent) { return false; }
+
+						const fileReader = new FileReader();
+
+						fileReader.readAsDataURL(file);
+						fileReader.onload = () => {
+							currentEditor
+								.chain()
+								.insertContentAt(currentEditor.state.selection.anchor, {
+									type: 'image',
+									attrs: {
+										src: fileReader.result,
+									},
+								})
+								.focus()
+								.run();
+						}
+					});
+				}
+			})
+		],
 		content: '',
 	});
 
