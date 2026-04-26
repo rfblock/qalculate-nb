@@ -7,6 +7,18 @@ import { create_notification, prompt_confirm, prompt_text } from "./notification
 let notebook_name = '';
 let unsaved_changes = false;
 
+const set_notebook_name = x => {
+	document.querySelector('title').innerText = x || 'Qalculate! Notebook';
+	notebook_name = x;
+}
+
+const prompt_unsaved_changes = next => {
+	if (!unsaved_changes) { next(); return; }
+
+	prompt_confirm('There are unsaved changes.\nAre you sure you want to continue?\n All unsaved changes will be lost.')
+		.then(res => { if (res == 'Yes') next(); }, () => {});
+}
+
 const AUTOSAVE_INTERVAL = 1000; // TODO: Make this configurable
 let last_modification = null;
 export const set_unsaved_changes = x => {
@@ -37,16 +49,7 @@ export const on_database_load = f => {
 }
 
 window.action_new_notebook = () => {
-	if (!unsaved_changes) {
-		new_notebook();
-		return;
-	}
-
-	prompt_confirm('There are unsaved changes.\nAre you sure you want to continue?\n All unsaved changes will be lost.')
-		.then(res => {
-			if (res == 'Yes') { new_notebook(); }
-		})
-		.catch(() => {});
+	prompt_unsaved_changes(new_notebook);
 };
 
 window.action_save = () => {
@@ -79,13 +82,13 @@ window.action_save_as = () => {
 						.catch(() => create_notification('Save Aborted', 'error'))
 						.then(res => {
 							if (res == 'Yes') {
-								notebook_name = value;
+								set_notebook_name(value);
 								save_notebook();
 							}
 						});
 					return;
 				}
-				notebook_name = value;
+				set_notebook_name(value);
 				save_notebook();
 			});
 		})
@@ -109,16 +112,7 @@ window.action_open_file = () => {
 		});
 	}
 
-	if (!unsaved_changes) {
-		open_dialog();
-		return;
-	}
-
-	prompt_confirm('There are unsaved changes.\nAre you sure you want to continue?\n All unsaved changes will be lost.')
-		.catch(() => {})
-		.then(res => {
-			if (res == 'Yes') { open_dialog(); }
-		});
+	prompt_unsaved_changes(open_dialog);
 }
 
 window.dialog_open_button = () => {
@@ -143,7 +137,7 @@ const serialize_state = () => {
 	};
 }
 
-const save_notebook = autosave => {
+const save_notebook = (autosave) => {
 	autosave ??= false;
 
 	if (database == null) {
@@ -153,8 +147,8 @@ const save_notebook = autosave => {
 	}
 
 	const state = serialize_state();
-	const nb_name = state.notebook_name = autosave ? 'autosave' : notebook_name;
-	if (nb_name.trim().length == 0) {
+	state.notebook_name = autosave ? 'autosave' : notebook_name;
+	if (state.notebook_name.trim().length == 0) {
 		console.error('Unable to save notebook (Name cannot be blank)');
 		create_notification('Save Failed', 'error');
 		return;
@@ -176,6 +170,23 @@ const save_notebook = autosave => {
 	};
 }
 
+const load_state = state => {
+	set_notebook_name(state.notebook_name);
+	
+	document.querySelectorAll('.cell').forEach(x => x.remove());
+	delete_markdown_editors();
+
+	state.cells.forEach(cell => {
+		const e = create_cell(null, cell.type)
+		set_cell_content(e, cell.body);
+		if (cell.boxed) {
+			box_cell(e);
+		}
+	});
+
+	unsaved_changes = false;
+}
+
 const load_notebook = load_name => {
 	const req = database
 		.transaction(['notebooks'], 'readwrite')
@@ -187,20 +198,37 @@ const load_notebook = load_name => {
 	};
 	req.onsuccess = e => {
 		const state = e.target.result;
-		notebook_name = state.notebook_name;
-		
-		document.querySelectorAll('.cell').forEach(x => x.remove());
-		delete_markdown_editors();
-
-		state.cells.forEach(cell => {
-			const e = create_cell(null, cell.type)
-			set_cell_content(e, cell.body);
-			if (cell.boxed) {
-				box_cell(e);
-			}
-		});
-		unsaved_changes = false;
+		load_state(state);
 	}
+}
+
+window.action_export_notebook = () => {
+	const filename = (notebook_name || 'untitled') + '.qnb';
+
+	const uri = URL.createObjectURL(new Blob([JSON.stringify(serialize_state())]))
+	const anchor = document.createElement('a');
+	anchor.href = uri;
+	anchor.download = filename;
+	anchor.click();
+}
+
+window.action_import_notebook = () => {
+	prompt_unsaved_changes(() => {
+		const input = document.createElement('input');
+		input.type = 'file';
+		input.onchange = e => {
+			const file = e.target.files[0];
+			const reader = new FileReader();
+			reader.readAsText(file);
+			reader.onload = reader_event => {
+				const state = JSON.parse(reader_event.target.result);
+				state.notebook_name = 'imported-' + state.notebook_name;
+				load_state(state);
+				create_notification(`Imported ${notebook_name}.qnb`, 'success');
+			}
+		}
+		input.click();
+	});
 }
 
 export const list_notebooks = () => {
@@ -216,7 +244,7 @@ export const list_notebooks = () => {
 }
 
 const new_notebook = () => {
-	notebook_name = '';
+	set_notebook_name('');
 	
 	document.activeElement.blur();
 	document.querySelectorAll('.cell').forEach(x => x.remove());
