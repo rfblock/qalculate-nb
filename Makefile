@@ -177,7 +177,7 @@ $(build)/qalc.js $(build)/qalc.wasm &: $(OBJS) $(call libfiles,$(QALCWASM_LIBS))
 
 PUBLIC_FILES = $(build)/qalc.js $(build)/qalc.wasm \
                src/index.html src/style.css src/favicon.png \
-			   $(shell find src -name "*.js") CHANGELOG.MD
+			   $(shell find src -name "*.js") CHANGELOG.md
 
 serve: deploy
 	python3 -m http.server -d public 8000
