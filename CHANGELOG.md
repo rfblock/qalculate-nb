@@ -9,6 +9,7 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 
 ### Added
 
+- Autosaving.
 - Images can be pasted into markdown cells.
 
 ### Fixed

@@ -20,7 +20,10 @@ export const focus_cell = (cell, enter_edit) => {
 const run_cell = cell => {
 	switch (get_cell_type(cell)) {
 		case 'math': run_math_cell(cell); break;
+		default: return;
 	}
+
+	set_unsaved_changes();
 }
 
 /**
@@ -51,6 +54,10 @@ export const set_cell_content = (cell, content) => {
 		case 'math': return set_math_cell_content(cell, content);
 		case 'markdown': return set_markdown_cell_content(cell, content);
 	}
+}
+
+export const set_cell_result = (cell, result) => {
+	cell.querySelector('.cell-result').innerText = result;
 }
 
 window.action_run_all = () => {

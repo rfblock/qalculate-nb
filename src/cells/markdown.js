@@ -1,3 +1,5 @@
+import { set_unsaved_changes } from './saves.js'
+
 import { Editor } from 'https://esm.sh/@tiptap/core'
 import StarterKit from 'https://esm.sh/@tiptap/starter-kit'
 import Image from 'https://esm.sh/@tiptap/extension-image'
@@ -56,6 +58,7 @@ export const create_markdown_cell = element => {
 			})
 		],
 		content: '',
+		onUpdate: () => set_unsaved_changes(),
 	});
 
 	element.id = Math.random().toString(36).slice(2);

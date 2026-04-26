@@ -5,10 +5,25 @@ import { delete_markdown_editors } from "./markdown.js";
 import { create_notification, prompt_confirm, prompt_text } from "./notifications.js";
 
 let notebook_name = '';
-let last_save = null;
 let unsaved_changes = false;
 
-export const set_unsaved_changes = (x) => unsaved_changes = x;
+const AUTOSAVE_INTERVAL = 1000; // TODO: Make this configurable
+let last_modification = null;
+export const set_unsaved_changes = x => {
+	x ??= true;
+	unsaved_changes = x;
+	if (unsaved_changes) {
+		clearTimeout(last_modification);
+		last_modification = setTimeout(() => {
+			if (!unsaved_changes) { return; }
+			if (notebook_name.trim().length == 0) {
+				save_notebook(true);
+			} else {
+				save_notebook();
+			}
+		}, AUTOSAVE_INTERVAL);
+	}
+};
 
 /**
  * @type {IDBDatabase | null}
@@ -128,7 +143,9 @@ const serialize_state = () => {
 	};
 }
 
-const save_notebook = () => {
+const save_notebook = autosave => {
+	autosave ??= false;
+
 	if (database == null) {
 		console.error('Unable to save notebook (IndexedDB is not open)');
 		create_notification('Save Failed', 'error');
@@ -136,7 +153,8 @@ const save_notebook = () => {
 	}
 
 	const state = serialize_state();
-	if (state.notebook_name.trim().length == 0) {
+	const nb_name = state.notebook_name = autosave ? 'autosave' : notebook_name;
+	if (nb_name.trim().length == 0) {
 		console.error('Unable to save notebook (Name cannot be blank)');
 		create_notification('Save Failed', 'error');
 		return;
@@ -147,7 +165,9 @@ const save_notebook = () => {
 		.objectStore('notebooks')
 		.put(state);
 	req.onsuccess = () => {
-		unsaved_changes = false;
+		if (!autosave) {
+			unsaved_changes = false;
+		}
 		create_notification('Saved', 'success');
 	};
 	req.onerror = e => {
