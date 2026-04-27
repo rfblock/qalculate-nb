@@ -1,5 +1,7 @@
 'use strict';
 
+import { run_cell } from './cells.js'
+
 document.addEventListener('keydown', e => {
 	// ctrl, alt, shift modifiers
 	const keybinds = {
@@ -12,6 +14,8 @@ document.addEventListener('keydown', e => {
 		'alt + R': action_run_all,
 		'alt + C': action_clear_all,
 		'alt + T': action_toolbox,
+
+		'alt + Enter': () => { run_cell(); insert_cell_below('math'); }
 	};
 
 	if (e.repeat) { return; }

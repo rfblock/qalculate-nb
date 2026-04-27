@@ -17,7 +17,8 @@ export const focus_cell = (cell, enter_edit) => {
 	}
 }
 
-const run_cell = cell => {
+export const run_cell = cell => {
+	cell ??= document.querySelector('.cell.selected');
 	switch (get_cell_type(cell)) {
 		case 'math': run_math_cell(cell); break;
 		default: return;
