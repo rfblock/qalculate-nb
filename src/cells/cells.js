@@ -96,7 +96,14 @@ const convert_to_markdown = cell => {
 	if (get_cell_value(cell).trim().length > 0) { return; }
 	const md = create_cell(cell, 'markdown');
 	focus_cell(md, true);
+	delete_cell(cell);
+}
+
+export const delete_cell = cell => {
+	cell ??= document.querySelector('.cell.selected');
+
 	cell.remove();
+	set_unsaved_changes();
 }
 
 export const create_cell = (ref, type) => {
@@ -122,7 +129,7 @@ export const create_cell = (ref, type) => {
 				focus_cell(cell.previousElementSibling);
 			}
 			set_unsaved_changes(true);
-			cell.remove();
+			delete_cell(cell);
 		}
 		if (e.key == 'm') { convert_to_markdown(cell); }
 	});
@@ -147,6 +154,25 @@ export const create_cell = (ref, type) => {
 
 			focus_cell(cell);
 		});
+
+		const delete_cell_btn = document.createElement('div');
+		cell.appendChild(delete_cell_btn);
+		delete_cell_btn.classList.add('trash');
+		delete_cell_btn.addEventListener('click', () => delete_cell(cell));
+
+		const footer_buttons = document.createElement('div');
+		footer_buttons.classList.add('footer-buttons');
+		cell.appendChild(footer_buttons);
+
+		const append_math_btn = document.createElement('span')
+		footer_buttons.appendChild(append_math_btn);
+		append_math_btn.innerText = '+Math';
+		append_math_btn.addEventListener('click', () => create_cell(cell.nextElementSibling, 'math'));
+
+		const append_md_btn = document.createElement('span')
+		footer_buttons.appendChild(append_md_btn);
+		append_md_btn.innerText = '+Markdown';
+		append_md_btn.addEventListener('click', () => create_cell(cell.nextElementSibling, 'markdown'));
 
 	cell.addEventListener('click', e => focus_cell(e.currentTarget, true));
 

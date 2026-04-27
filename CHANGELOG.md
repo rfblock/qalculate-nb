@@ -10,6 +10,7 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 ### Added
 
  - Alt + Enter to run + insert a cell below
+ - Delete, add cell buttons on hover
 
 ## [0.1.0]
 

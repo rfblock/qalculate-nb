@@ -136,6 +136,7 @@ main {
 }
 
 .cell {
+	position: relative;
 	padding-left: 12px;
 	border-left: 2px solid #0000;
 }
@@ -185,6 +186,49 @@ main {
 	padding-top: 2px;
 	padding-left: 24px;
 	display: block;
+}
+
+.trash {
+	visibility: hidden;
+	top: -9px;
+	right: 12px;
+	position: absolute;
+	background: var(--surface);
+	border: var(--border);
+	border-radius: 2px;
+	cursor: pointer;
+
+	&::after {
+		width: 16px;
+		height: 16px;
+		display: inline-block;
+		vertical-align: -0.125em;
+		content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1zm1 2H6v12h12zm-9 3h2v6H9zm4 0h2v6h-2zM9 4v2h6V4z'/%3E%3C/svg%3E");
+	}
+}
+
+.cell:hover > .trash {
+	visibility: visible;
+}
+
+.footer-buttons {
+	visibility: hidden;
+	position: absolute;
+	bottom: -9px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 1;
+
+	> span {
+		cursor: pointer;
+		margin-left: 4px;
+		background: var(--surface);
+		border: var(--border);
+	}
+}
+
+.cell:hover > .footer-buttons {
+	visibility: visible;
 }
 
 dialog {
