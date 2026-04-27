@@ -134,6 +134,7 @@ export const create_cell = (ref, type) => {
 		cell_result.classList.add('cell-result');
 		cell_result.tabIndex = 0;
 		cell_result.addEventListener('click', () => {
+			if (!cell_result.innerText) { return; }
 			navigator.clipboard.writeText(cell_result.innerText)
 				.then(() => { create_notification('Copied', 'success') })
 				.catch(() => { create_notification('Failed to copy', 'error') });
