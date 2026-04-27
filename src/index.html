@@ -72,6 +72,7 @@
 		<div>
 			<button>Help</button>
 			<div><div>
+				<button onclick="show_tutorial();">Tutorial</button>
 				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new?template=bug_report.md', '_blank');">Report a bug</button>
 				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new?template=feature_request.md', '_blank');">Request a feature</button>
 				<button onclick="window.open('https://github.com/rfblock/qalculate-nb/issues/new?template=question.md', '_blank');">Ask a question</button>
@@ -92,6 +93,74 @@
 		</div>
 	</main>
 
+	<dialog id="tutorial">
+		<div>
+			<form method="dialog"><input type="submit" value="X"></form>
+			<ul style="padding: 0; margin: 0; list-style: none;" id="tutorial-steps">
+				<li> <!--TODO: Highlight where to click-->
+					<p>Welcome to Qalculate! Click <code>Next</code> to begin the tutorial</p>
+				</li>
+				<li>
+					<p>Start by clicking on the cell and typing <code>2+2</code> then <kbd>Enter</kbd></p>
+				</li>
+				<li>
+					<p>
+						Pressing <kbd>Enter</kbd> runs the cell, <br>
+						Create a new math cell by hovering over the current cell and clicking <code>+Math</code></p>
+				</li>
+				<li>
+					<p>Now try a square root. Type <code>sqrt5</code> in the cell</p>
+				</li>
+				<li> <!--TODO: Find a way to highlight edit/command mode-->
+					<p>
+						Now click on the cell and press <kbd>Esc</kbd> (or <kbd>Tab</kbd> ) <br/> Notice how the cell is no longer outlined in blue
+						You are now in command mode <br/>
+						Press <kbd>a</kbd> to insert a cell above <br/>
+						Press <kbd>b</kbd> to insert a cell below
+						Press <kbd>m</kbd> to convert a cell to markdown
+					</p>
+				</li>
+				<li>
+					<p>
+						Now type and run <code>L_0<kbd>Tab</kbd>=3 ft</code> (in a math cell) <br/>
+						Insert a new cell below and type and run <code>L0^2</code> <br/>
+						Now edit the second cell to <code>L0^2 to m^2</code> <br>
+						Notice how the <code>to</code> command converts between units
+					</p>
+				</li>
+				<li>
+					<p>
+						Edit the first cell to be <code>L_0 = 12 ft</code> <br/>
+						Re-run all the cells by pressing <kbd>Alt</kbd> + <kbd>r</kbd>
+					</p>
+				</li>
+				<li>
+					<p>
+						Create a markdown cell ( <kbd>Esc</kbd>, <kbd>b</kbd>, <kbd>m</kbd> or <code>+Markdown</code> ) <br/>
+						Type <code># <kbd>Space</kbd> Heading 1 <kbd>Enter</kbd> ## <kbd>Space</kbd> Heading 2 <kbd>Enter</kbd> Hello, World!</code>
+					</p>
+				</li>
+				<li>
+					<p>
+						You have now learned the basics of the notebook! <br>
+						For advanced features, try selecting text and pressing
+						<ul>
+							<li><kbd>ctrl</kbd> + <kbd>i</kbd></li>
+							<li><kbd>ctrl</kbd> + <kbd>b</kbd></li>
+							<li><kbd>ctrl</kbd> + <kbd>u</kbd></li>
+						</ul>
+						See what happens when you type <code>* Text</code> or <code>---</code> <br>
+						Try pasting images into a markdown cell
+					</p>
+				</li>
+			</ul>
+			<div>
+				<button id="tutorial-prev" hidden>Prev</button><button id="tutorial-next">Next</button>
+				<script src="tutorial.js" type="module"></script>
+			</div>
+		</div>
+	</dialog>
+
 	<dialog id="whats-new">
 		<div style="overflow-y: auto; max-height: 85vh; max-width: 80vw;">
 		</div>
@@ -99,6 +168,19 @@
 			<input type="submit" value="Close" style="float: right;" autofocus>
 		</form>
 		<script src="whats-new.js" type="module"></script>
+	</dialog>
+
+	<dialog id="prompt-tutorial">
+		<p>A tutorial is available at <code>Help > Tutorial</code></p>
+		<form method="dialog">
+			<input type="submit" value="OK">
+		</form>
+		<script>
+			if (localStorage.getItem('last-viewed-version') == null) {
+				window.first_time_viewer = true;
+				document.querySelector('#prompt-tutorial').show();
+			}
+		</script>
 	</dialog>
 
 	<dialog open>

@@ -30,6 +30,10 @@ fetch('/CHANGELOG.md').then(res => res.text().then(text => {
 
 		const latest = text.match(/## \[(.+?)]/)[1];
 		set_current_version(latest);
+		if (window.first_time_viewer) {
+			localStorage.setItem('last-viewed-version', 'NA');
+			return;
+		}
 		if (localStorage.getItem('last-viewed-version') != latest) {
 			localStorage.setItem('last-viewed-version', latest);
 			document.querySelector('#whats-new').showModal();

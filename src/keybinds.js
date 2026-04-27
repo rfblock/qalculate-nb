@@ -9,7 +9,7 @@ document.addEventListener('keydown', e => {
 		'ctrl + S': action_save,
 		'ctrl + shift + S': action_save_as,
 		'alt + N': action_new_notebook,
-		'ctrl + I': action_import_notebook,
+		// 'ctrl + I': action_import_notebook,
 		'ctrl + E': action_export_notebook,
 		'alt + R': action_run_all,
 		'alt + C': action_clear_all,
