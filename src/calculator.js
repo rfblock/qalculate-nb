@@ -1,4 +1,5 @@
 import LoadModule from './qalc.js'
+import { create_notification } from './notifications.js';
 
 export const greek = [
 	'alpha', 'beta', 'gamma', 'Gamma', 'Delta', 'delta', 'epsilon', 'zeta', 'eta', 'Theta', 'theta',
@@ -8,43 +9,53 @@ export const greek = [
 // Pi and Sigma are not included due to product and sum notation
 // psi is not included due to conflict with the unit [lbs/sqin]
 
-export let calc;
-export let Module;
+let calc;
+let Module;
 
-LoadModule({
-	print: function (text) {
-		if (arguments.length > 1)
-			text = Array.prototype.slice.call(arguments).join(' ');
-		console.log(text);
-	},
-	printErr: function (text) {
-		if (arguments.length > 1)
-			text = Array.prototype.slice.call(arguments).join(' ');
-		console.error(text);
-	},
-	totalDependencies: 0,
-	monitorRunDependencies: function (left) {
-		this.totalDependencies = Math.max(this.totalDependencies, left);
-		console.log(
-			left
-				? 'Preparing... (' +
-					  (this.totalDependencies - left) +
-					  '/' +
-					  this.totalDependencies +
-					  ')'
-				: 'All downloads complete.'
+export const calculate = exp => {
+	try {
+		return calc.calculateAndPrint(exp, 1000,
+			Module.default_user_evaluation_options,
+			Module.default_print_options
 		);
-	},
-}).then(_module => {
-	Module = _module;
-	window.Module = Module;
-	
-	console.time('Loaded qalculate in');
-	calc = new Module.Calculator();
-	window.calc = calc;
-	calc.loadGlobalDefinitions();
-	console.timeEnd('Loaded qalculate in');
+	} catch (e) {
+		console.log(e);
+		create_notification('An error has occured,\nRestarting the kernel', 'error');
+		restart_calculator();
+	}
+}
 
-	Module.default_print_options.interval_display = Module.IntervalDisplay.CONCISE;
+export const restart_calculator = () => {
+	LoadModule({
+		print: function (text) {
+		if (arguments.length > 1)
+			text = Array.prototype.slice.call(arguments).join(' ');
+			console.log(text);
+		},
+		printErr: function (text) {},
+		totalDependencies: 0,
+		monitorRunDependencies: function (left) {
+			this.totalDependencies = Math.max(this.totalDependencies, left);
+			console.log(
+				left
+					? 'Preparing... (' +
+						(this.totalDependencies - left) +
+						'/' +
+						this.totalDependencies +
+						')'
+					: 'All downloads complete.'
+			);
+		},
+	}).then(_module => {
+		Module = _module;
+		Module.default_print_options.interval_display = Module.IntervalDisplay.CONCISE;
 
-});
+		calc = new Module.Calculator();
+		calc.loadGlobalDefinitions();
+	});
+}
+
+if (calc === undefined) {
+	calc = null;
+	restart_calculator();
+}

@@ -1,5 +1,6 @@
 'use strict';
 
+import { restart_calculator } from "./calculator.js";
 import { create_cell, set_cell_content, get_cell_type, get_cell_value, box_cell } from "./cells.js";
 import { delete_markdown_editors } from "./markdown.js";
 import { create_notification, prompt_confirm, prompt_text } from "./notifications.js";
@@ -248,7 +249,8 @@ const new_notebook = () => {
 	
 	document.activeElement.blur();
 	document.querySelectorAll('.cell').forEach(x => x.remove());
-	delete_markdown_editors()
+	delete_markdown_editors();
+	restart_calculator();
 	create_cell();
 	unsaved_changes = false;
 }

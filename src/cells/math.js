@@ -1,5 +1,5 @@
 import { set_unsaved_changes } from './saves.js';
-import { greek, calc, Module } from './calculator.js'
+import { greek, calculate } from './calculator.js'
 import { parse_latex } from './parser.js'
 import { focus_cell } from './cells.js'
 
@@ -49,9 +49,5 @@ export const run_math_cell = cell => {
 	const val = get_math_cell_value(cell);
 	const exp = parse_latex(val);
 	if (exp == '') { return; }
-	let res = calc.calculateAndPrint(exp, 1000,
-		Module.default_user_evaluation_options,
-		Module.default_print_options
-	);
-	cell_result.innerText = res;
+	cell_result.innerText = calculate(exp);
 }

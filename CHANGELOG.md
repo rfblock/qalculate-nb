@@ -5,7 +5,16 @@ All notable changes will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (due to a lack of public API).
 
+## [0.1.3]
+
+### Fixed
+
+ - Qalculate! crashing will now show a notification and restart automatically
+ - Qalculate! will automatically restart when running all cells or opening/creating a new notebook
+
 ## [0.1.2]
+
+### Added
 
  - Tutorial, `Help > Tutorial`
 

@@ -4,6 +4,7 @@ import { MQ, create_math_cell, get_math_cell_value, run_math_cell, set_math_cell
 import { create_markdown_cell, get_markdown_cell_value, set_markdown_cell_content } from './markdown.js'
 import { set_unsaved_changes } from './saves.js';
 import { create_notification } from './notifications.js';
+import { restart_calculator } from '../calculator.js';
 
 export const focus_cell = (cell, enter_edit) => {
 	if (cell == null) { return; }
@@ -63,6 +64,7 @@ export const set_cell_result = (cell, result) => {
 
 window.action_run_all = () => {
 	document.activeElement.blur();
+	restart_calculator();
 	document.querySelectorAll('.cell').forEach(cell => {
 		run_cell(cell);
 	});
