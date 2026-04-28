@@ -207,8 +207,9 @@ main {
 
 .trash {
 	visibility: hidden;
-	top: -9px;
+	top: -10px;
 	right: 12px;
+	padding-bottom: 2px;
 	position: absolute;
 	background: var(--surface);
 	border: var(--border);
@@ -216,11 +217,14 @@ main {
 	cursor: pointer;
 
 	&::after {
+		display: block;
 		width: 16px;
 		height: 16px;
-		display: inline-block;
-		vertical-align: -0.125em;
-		content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1zm1 2H6v12h12zm-9 3h2v6H9zm4 0h2v6h-2zM9 4v2h6V4z'/%3E%3C/svg%3E");
+		background-color: currentColor;
+		mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1zm1 2H6v12h12zm-9 3h2v6H9zm4 0h2v6h-2zM9 4v2h6V4z'/%3E%3C/svg%3E");
+		mask-repeat: no-repeat;
+		mask-size: 100% 100%;
+		content: " ";
 	}
 }
 
