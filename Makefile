@@ -176,8 +176,10 @@ $(build)/qalc.js $(build)/qalc.wasm &: $(OBJS) $(call libfiles,$(QALCWASM_LIBS))
 	    -o $(build)/qalc.js
 
 PUBLIC_FILES = $(build)/qalc.js $(build)/qalc.wasm \
-               src/index.html src/style.css src/favicon.png \
-			   $(shell find src -name "*.js") CHANGELOG.md
+               src/index.html src/style.css \
+			   src/landing/landing.html src/landing/landing.css \
+			   src/favicon.png src/landing/showcase.mp4 \
+			   $(shell find src -name "*.js") CHANGELOG.md \
 
 serve: deploy
 	python3 -m http.server -d public 8000
@@ -188,6 +190,9 @@ public.zip: $(PUBLIC_FILES)
 .PHONY: deploy
 deploy: public.zip
 	unzip -q -o -d public $<
+	mkdir -p public/landing/
+	mv public/landing.html public/landing/index.html
+	mv public/showcase.mp4 public/landing.css public/landing/
 
 .PHONY: clean
 clean:

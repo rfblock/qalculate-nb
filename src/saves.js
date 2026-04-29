@@ -163,7 +163,7 @@ const save_notebook = (autosave) => {
 		if (!autosave) {
 			unsaved_changes = false;
 		}
-		create_notification('Saved', 'success');
+		create_notification('Saved');
 	};
 	req.onerror = e => {
 		console.error(`Unable to save: ${e.target.error?.message}`)

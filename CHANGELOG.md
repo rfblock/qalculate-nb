@@ -12,6 +12,10 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
  - Qalculate! crashing will now show a notification and restart automatically
  - Qalculate! will automatically restart when running all cells or opening/creating a new notebook
 
+## Removed
+
+ - `Help > Goto` (never implemented)
+
 ## [0.1.2]
 
 ### Added
