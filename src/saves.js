@@ -63,9 +63,13 @@ window.action_save = () => {
 	save_notebook();
 }
 
-window.onbeforeunload = () => {
-	return unsaved_changes ? 'Unsaved Changes' : null;
-}
+window.addEventListener('beforeunload', e => {
+	if (unsaved_changes) {
+		e.preventDefault();
+		e.returnValue = true;
+		return true;
+	}
+});
 
 window.action_save_as = () => {
 	document.querySelectorAll('dialog').forEach(x => x.close());
