@@ -122,4 +122,5 @@ export const delete_markdown_editors = () => {
 	});
 
 	Object.keys(cell_toc_map).forEach(x => delete cell_toc_map[x]);
+	recalculate_anchors();
 }
