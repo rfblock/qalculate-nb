@@ -1,0 +1,397 @@
+:root {
+	font-family: 'Inter';
+
+	--text: #0a0a0a;
+	--surface: #fff;
+	--background: #eee;
+	--background-dark: #ddd;
+	--border: 2px solid #ddd;
+	--border-boxed: 2px solid black;
+	--selected: purple;
+}
+
+:root.dark:not(.print) {
+	--text: #fff;
+	--surface: #222;
+	--background: #2a2a2a;
+	--background-dark: #333;
+	--border: 2px solid #333;
+	--border-boxed: 2px solid white;
+}
+
+:root.print {
+	--surface: #0000;
+	--background: #0000;
+	--background-dark: #0000;
+	--border: none;
+	--selected: #0000;
+}
+
+* {
+	color: var(--text);
+}
+
+.mq-editable-field .mq-cursor.mq-cursor {
+	border-left: 1px solid var(--text);
+}
+
+/* https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/kbd */
+kbd {
+	background-color: #eeeeee;
+	border-radius: 3px;
+	border: 1px solid #b4b4b4;
+	box-shadow:
+	0 1px 1px rgb(0 0 0 / 0.2),
+	0 2px 0 0 rgb(255 255 255 / 0.7) inset;
+	color: #333333;
+	display: inline-block;
+	font-size: 0.85em;
+	font-weight: bold;
+	line-height: 1;
+	padding: 2px 4px;
+	white-space: nowrap;
+}
+
+body {
+	background-color: var(--surface);
+	margin: 0;
+}
+
+button {
+	background: var(--background);
+	border: var(--border);
+}
+
+input {
+	background: var(--background);
+	border: var(--border);
+}
+
+menu {
+	z-index: 1;
+	display: flex;
+	align-items: flex-start;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+	padding: 0;
+	margin: 0;
+	pointer-events: none;
+	> div:last-child {
+		background: var(--background);
+		flex-grow: 1;
+		> button {
+			width: 100%;
+			color: #0000;
+			border-bottom: var(--border);
+		}
+	}
+}
+
+:root.print menu {
+	display: none;
+}
+
+menu > div {
+	> button {
+		float: left;
+	}
+	button {
+		pointer-events: all;
+		background: var(--background);
+		border: none;
+		border-bottom: var(--border);
+		border-right: var(--border);
+		&:hover:not(.spacer) {
+			background: var(--background-dark);
+		}
+	}
+}
+
+menu > div:focus-within {
+	> button:not(.spacer) {
+		background: var(--background-dark);
+	}
+	> div > div > button {
+		border-bottom: none;
+		border-left: var(--border);
+		visibility: visible;
+		&:last-child {
+			border-bottom: var(--border);
+		}
+	}
+}
+
+menu > div > div {
+	width: 0;
+	visibility: hidden;
+	> div {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		float: left;
+		> button {
+			text-align: left;
+			white-space: nowrap;
+			float: left;
+		}
+	}
+}
+
+main {
+	margin: 32px 0;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+#notebook-cells {
+	display: flex;
+	flex-direction: column;
+	max-width: 95%;
+	width: 1000px;
+	left: auto;
+}
+
+.cell {
+	position: relative;
+	padding-left: 12px;
+	border-left: 2px solid #0000;
+}
+
+.cell.selected {
+	border-left: var(--border);
+}
+
+.cell:hover {
+	border-left: var(--border);
+}
+
+.cell.boxed {
+	> .cell-expression {
+		border: var(--border-boxed);
+		border-bottom: none;
+	}
+	> .cell-result {
+		border: var(--border-boxed);
+		border-top: none;
+	}
+}
+
+.cell.selected:focus-within {
+	border-left: 2px solid steelblue;
+	outline: none;
+}
+
+.cell > .cell-expression {
+	display: block;
+	border: none;
+	border: var(--border);
+	background-color: var(--background);
+}
+
+.cell-expression.mq-editable-field.mq-focused {
+	outline: none;
+	box-shadow: none;
+	border: 2px solid steelblue;
+}
+
+.cell-expression > div {
+	outline: none;
+}
+
+.cell-result {
+	padding-top: 2px;
+	padding-left: 24px;
+	display: block;
+}
+
+.trash {
+	visibility: hidden;
+	top: -10px;
+	right: 12px;
+	padding-bottom: 2px;
+	position: absolute;
+	background: var(--surface);
+	border: var(--border);
+	border-radius: 2px;
+	cursor: pointer;
+
+	&::after {
+		display: block;
+		width: 16px;
+		height: 16px;
+		background-color: currentColor;
+		mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M17 6h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1zm1 2H6v12h12zm-9 3h2v6H9zm4 0h2v6h-2zM9 4v2h6V4z'/%3E%3C/svg%3E");
+		mask-repeat: no-repeat;
+		mask-size: 100% 100%;
+		content: " ";
+	}
+}
+
+.cell:hover > .trash {
+	visibility: visible;
+}
+
+img.ProseMirror-selectednode {
+	outline: 3px solid var(--selected);
+}
+
+.tiptap {
+	pre {
+		background-color: #222;
+		border-radius: 0.3rem;
+		margin: 1.5rem 0;
+		padding: 0.75rem 1rem;
+
+		code {
+			color: white;
+		}
+	}
+}
+
+.footer-buttons {
+	visibility: hidden;
+	position: absolute;
+	bottom: -9px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 1;
+
+	> span {
+		cursor: pointer;
+		margin-left: 4px;
+		background: var(--surface);
+		border: var(--border);
+	}
+}
+
+.cell:hover > .footer-buttons {
+	visibility: visible;
+}
+
+dialog {
+	background-color: var(--surface);
+}
+
+@media (max-width: 1350px) {
+	#table-of-contents {
+		display: none;
+	}
+}
+#table-of-contents {
+	position: fixed;
+	left: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+	max-height: 65%;
+	overflow-y: auto;
+
+	p {
+		display: block;
+		text-decoration: none;
+		cursor: pointer;
+		margin: 0.4rem;
+	}
+
+	.anchor-level-1 {
+		font-size: 1.3rem;
+	}
+
+	.anchor-level-2 {
+		padding-left: 20px;
+		font-size: 1.3rem;
+	}
+
+	.anchor-level-3 {
+		padding-left: 40px;
+		font-size: 1rem;
+	}
+
+	.anchor-level-4 {
+		padding-left: 60px;
+		font-size: 0.8rem;
+	}
+
+	.anchor-level-5 {
+		padding-left: 80px;
+		font-size: 0.8rem;
+	}
+
+	.anchor-level-6 {
+		padding-left: 100px;
+		font-size: 0.8rem;
+	}
+
+	:not(.anchor-scrolled) {
+		color: #aaa
+	}
+}
+
+#open-dialog {
+	min-width: 20rem;
+	> select {
+		width: 100%;
+		background-color: var(--surface);
+	}
+}
+
+#toolbox-dialog li > span {
+	border: var(--border);
+}
+
+#toolbox-category-list {
+	display: flex;
+	flex-direction: column;
+}
+
+#tutorial {
+	z-index: 1;
+
+	position: absolute;
+	margin: 0;
+	bottom: 18px;
+	right: 18px;
+	left: auto;
+
+	> div {
+
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+	}
+}
+
+#prompt-modal {
+	input {
+		display: block;
+	}
+	div {
+		display: block;
+	}
+	button {
+		float: right;
+	}
+}
+
+#notifications {
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+
+	> div {
+		border: var(--border);
+		&.success {
+			background-color: chartreuse;
+			border: 2px solid green;
+		}
+		&.error {
+			background-color: crimson;
+			border: 2px solid darkred;
+			color: white;
+		}
+	}
+}
