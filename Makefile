@@ -28,8 +28,8 @@ libreqs = $(call libfiles,$($(1)_REQS))
 
 QALCWASM_LIBS := qalculate gmp mpfr xml2
 
-QALCULATE_VER := 4.9.0
-QALCULATE_CHKSUM := sha-256=6130ed28f7fb8688bccede4f3749b7f75e4a000b8080840794969d21d1c1bf0f
+QALCULATE_VER := 5.10.0
+QALCULATE_CHKSUM := sha-256=904592d33a98ed4a26a59fa34c855578e096144fb91965b8afc90e06797dba8e
 QALCULATE_REQS := gmp mpfr xml2
 QALCULATE_URL = https://github.com/Qalculate/libqalculate/releases/download/v$(1)/libqalculate-$(1).tar.gz
 

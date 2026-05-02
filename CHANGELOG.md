@@ -5,6 +5,18 @@ All notable changes will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (due to a lack of public API).
 
+## [0.1.6]
+
+### Changed
+
+- Qalculate! has been updated to use 5.1.0
+  - For Qalculate! changes, see the [Qalculate! Website](https://qalculate.github.io/)
+  - Notable changes: added `slugs`, `ppm`, `ppb`
+
+### Fixed
+
+- `%` in an expression no longer throws an error
+
 ## [0.1.5]
 
 ### Changed

@@ -13,6 +13,7 @@ const command_subs = {
 	'cdot': '*',
 	'text': '',
 	'infty': 'infinity',
+	'%': '%'
 }
 
 const TOK_EXPRESSION = 'tok-expression';
@@ -39,7 +40,7 @@ const tokenize_latex = str => {
 
 			if (c == '\\') {
 				type = TOK_COMMAND;
-				body = str.match(/^\\(?:[a-zA-Z&*]*[a-zA-Z&*]| )/);
+				body = str.match(/^\\(?:[a-zA-Z&*]*[a-zA-Z&*]|[ %])/);
 				if (body == null) {
 					console.error('Unable to parse expression:', str);
 				}
@@ -88,7 +89,7 @@ export const parse_latex = latex => {
 	
 	const command_map = {};
 	Object.keys(command_subs).forEach(proto => {
-		const cmd = '\\' + (proto.match(/(?:[a-zA-Z0-9-&*]*[a-zA-Z-&*]| )/))[0];
+		const cmd = '\\' + proto.match(/(?:[a-zA-Z0-9-&*]*[a-zA-Z-&*]|[ %])/)[0];
 		const sub = command_subs[proto];
 
 		const arg_proto = proto.slice(cmd.length-1);
