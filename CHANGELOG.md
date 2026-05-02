@@ -5,6 +5,18 @@ All notable changes will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (due to a lack of public API).
 
+## [0.1.5]
+
+### Changed
+
+ - Horizontal rules (`---`) print as a page break
+
+### Fixed
+
+ - Table of contents clears when creating a new file
+ - Unsaved changes dialog will appear when closing a file on most browsers
+ - Printing no longer changes color theme temporarily
+
 ## [0.1.4]
 
 ### Added
