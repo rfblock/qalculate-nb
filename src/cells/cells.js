@@ -64,9 +64,10 @@ export const set_cell_result = (cell, result) => {
 
 window.action_run_all = () => {
 	document.activeElement.blur();
-	restart_calculator();
-	document.querySelectorAll('.cell').forEach(cell => {
-		run_cell(cell);
+	restart_calculator().then(() => {
+		document.querySelectorAll('.cell').forEach(cell => {
+			run_cell(cell);
+		});
 	});
 }
 

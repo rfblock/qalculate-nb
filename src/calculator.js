@@ -14,10 +14,23 @@ let Module;
 
 export const calculate = exp => {
 	try {
-		return calc.calculateAndPrint(exp, 1000,
-			Module.default_user_evaluation_options,
-			Module.default_print_options
-		);
+		const res = calc.calculateAndPrint(exp, 1000,
+				Module.default_user_evaluation_options,
+				Module.default_print_options
+			);
+		const msg = calc.message();
+		if (msg == null) {
+			return {res, msg}
+		}
+		const ret = {
+			res,
+			msg: {
+				msg: msg.message(),
+				type: msg.type().value,
+			},
+		};
+		calc.nextMessage();
+		return ret;
 	} catch (e) {
 		console.log(e);
 		create_notification('An error has occured,\nRestarting the kernel', 'error');
@@ -26,32 +39,36 @@ export const calculate = exp => {
 }
 
 export const restart_calculator = () => {
-	LoadModule({
-		print: function (text) {
-		if (arguments.length > 1)
-			text = Array.prototype.slice.call(arguments).join(' ');
-			console.log(text);
-		},
-		printErr: function (text) {},
-		totalDependencies: 0,
-		monitorRunDependencies: function (left) {
-			this.totalDependencies = Math.max(this.totalDependencies, left);
-			console.log(
-				left
-					? 'Preparing... (' +
-						(this.totalDependencies - left) +
-						'/' +
-						this.totalDependencies +
-						')'
-					: 'All downloads complete.'
-			);
-		},
-	}).then(_module => {
-		Module = _module;
-		Module.default_print_options.interval_display = Module.IntervalDisplay.CONCISE;
+	return new Promise((resolve, reject) => {
+		LoadModule({
+			print: function (text) {
+			if (arguments.length > 1)
+				text = Array.prototype.slice.call(arguments).join(' ');
+				console.log(text);
+			},
+			printErr: function (text) {},
+			totalDependencies: 0,
+			monitorRunDependencies: function (left) {
+				this.totalDependencies = Math.max(this.totalDependencies, left);
+				console.log(
+					left
+						? 'Preparing... (' +
+							(this.totalDependencies - left) +
+							'/' +
+							this.totalDependencies +
+							')'
+						: 'All downloads complete.'
+				);
+			},
+		}).then(_module => {
+			Module = _module;
+			Module.default_print_options.interval_display = Module.IntervalDisplay.CONCISE;
 
-		calc = new Module.Calculator();
-		calc.loadGlobalDefinitions();
+			calc = new Module.Calculator();
+			window.calc = calc;
+			calc.loadGlobalDefinitions();
+			resolve();
+		});
 	});
 }
 

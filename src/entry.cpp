@@ -31,6 +31,8 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 		.constructor(&getCalculator, allow_raw_pointers())
 		.function("reset", &Calculator::reset)
 		.function("loadGlobalDefinitions", select_overload<bool()>(&Calculator::loadGlobalDefinitions))
+		.function("message", select_overload<CalculatorMessage*()>(&Calculator::message), allow_raw_pointers())
+		.function("nextMessage", &Calculator::nextMessage, allow_raw_pointers())
 		.property("units", &Calculator::units)
 		.function("calculateAndPrint", optional_override([](Calculator& self, std::string s, int msecs, EvaluationOptions &eo, PrintOptions &po) {
 			return self.calculateAndPrint(s, msecs, eo, po);
@@ -69,4 +71,13 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 		.value("CONCISE", INTERVAL_DISPLAY_CONCISE)
 		.value("RELATIVE", INTERVAL_DISPLAY_RELATIVE);
 
+
+	class_<CalculatorMessage>("CalculatorMessage")
+		.function("message", &CalculatorMessage::message)
+		.function("type", &CalculatorMessage::type);
+
+	enum_<MessageType>("MessageType")
+		.value("INFORMATION", MESSAGE_INFORMATION)
+		.value("WARNING", MESSAGE_WARNING)
+		.value("ERROR", MESSAGE_ERROR);
 }

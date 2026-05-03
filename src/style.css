@@ -31,7 +31,8 @@
 	}
 
 	body > :not(main),
-	.footer-buttons, .trash {
+	.footer-buttons, .trash,
+	.cell-message {
 		display: none;
 	}
 
@@ -215,6 +216,17 @@ main {
 	padding-top: 2px;
 	padding-left: 24px;
 	display: block;
+}
+
+.cell-message {
+	font-size: 0.8rem;
+	font-style: italic;
+}
+.message-warning {
+	color: rgb(106, 87, 232);
+}
+.message-error {
+	color: rgb(237, 58, 58);
 }
 
 .trash {

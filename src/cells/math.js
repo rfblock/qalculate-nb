@@ -49,5 +49,13 @@ export const run_math_cell = cell => {
 	const val = get_math_cell_value(cell);
 	const exp = parse_latex(val);
 	if (exp == '') { return; }
-	cell_result.innerText = calculate(exp);
+	const res = calculate(exp);
+	cell_result.textContent = res.res
+	if (res.msg) {
+		const msg = document.createElement('span');
+		cell_result.prepend(msg);
+		msg.classList.add('cell-message');
+		msg.classList.add('message-' + ['info', 'warning', 'error'][res.msg.type]);
+		msg.innerText = res.msg.msg + '\n';
+	}
 }
