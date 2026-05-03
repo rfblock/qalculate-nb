@@ -58,6 +58,7 @@ export const restart_calculator = () => {
 		}).then(_module => {
 			Module = _module;
 			Module.default_print_options.interval_display = Module.IntervalDisplay.CONCISE;
+			Module.default_print_options.spell_out_logical_operators = true;
 
 			calc = new Module.Calculator();
 			window.calc = calc;

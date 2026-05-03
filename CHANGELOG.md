@@ -18,6 +18,8 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
   - For Qalculate! changes, see the [Qalculate! Website](https://qalculate.github.io/)
   - Notable changes: added `slugs`, `ppm`, `ppb`
 - `Run All` is now `Restart and Run All`
+- Boolean values will be shown as `true` or `false` instead of `1` or `0`
+- Logical operators will be shown as `and` or `or` instead of `&&` or `||`
 
 ### Fixed
 

@@ -57,7 +57,8 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 	constant("default_user_evaluation_options", default_user_evaluation_options);
 
 	class_<PrintOptions>("PrintOptions")
-		.property("interval_display", &PrintOptions::interval_display);
+		.property("interval_display", &PrintOptions::interval_display)
+		.property("spell_out_logical_operators", &PrintOptions::spell_out_logical_operators);
 	
 	constant("default_print_options", default_print_options);
 
