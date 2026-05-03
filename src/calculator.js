@@ -18,19 +18,14 @@ export const calculate = exp => {
 				Module.default_user_evaluation_options,
 				Module.default_print_options
 			);
-		const msg = calc.message();
-		if (msg == null) {
-			return {res, msg}
-		}
-		const ret = {
-			res,
-			msg: {
+		const msgs = [];
+		for (let msg = calc.message(); msg != null; msg = calc.nextMessage()) {
+			msgs.push({
 				msg: msg.message(),
 				type: msg.type().value,
-			},
-		};
-		calc.nextMessage();
-		return ret;
+			});
+		}
+		return { res, msgs };
 	} catch (e) {
 		console.log(e);
 		create_notification('An error has occured,\nRestarting the kernel', 'error');

@@ -51,11 +51,11 @@ export const run_math_cell = cell => {
 	if (exp == '') { return; }
 	const res = calculate(exp);
 	cell_result.textContent = res.res
-	if (res.msg) {
-		const msg = document.createElement('span');
-		cell_result.prepend(msg);
-		msg.classList.add('cell-message');
-		msg.classList.add('message-' + ['info', 'warning', 'error'][res.msg.type]);
-		msg.innerText = res.msg.msg + '\n';
-	}
+	res.msgs.forEach(msg => {
+		const msg_node = document.createElement('span');
+		cell_result.prepend(msg_node);
+		msg_node.classList.add('cell-message');
+		msg_node.classList.add('message-' + ['info', 'warning', 'error'][msg.type]);
+		msg_node.innerText = msg.msg + '\n';
+	});
 }

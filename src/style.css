@@ -2,6 +2,9 @@
 	font-family: 'Inter';
 
 	--text: #0a0a0a;
+	--text-blue: rgb(106, 87, 232);
+	--text-red: rgb(237, 58, 58);
+
 	--surface: #fff;
 	--background: #eee;
 	--background-dark: #ddd;
@@ -13,6 +16,9 @@
 @media not print {
 	:root.dark {
 		--text: #fff;
+		--text-blue: #aca4f4;
+		--text-red: #f99090;
+
 		--surface: #222;
 		--background: #2a2a2a;
 		--background-dark: #333;
@@ -223,10 +229,10 @@ main {
 	font-style: italic;
 }
 .message-warning {
-	color: rgb(106, 87, 232);
+	color: var(--text-blue);
 }
 .message-error {
-	color: rgb(237, 58, 58);
+	color: var(--text-red);
 }
 
 .trash {
