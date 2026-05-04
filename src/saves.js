@@ -4,6 +4,7 @@ import { restart_calculator } from "./calculator.js";
 import { create_cell, set_cell_content, get_cell_type, get_cell_value, box_cell } from "./cells.js";
 import { delete_markdown_editors } from "./markdown.js";
 import { create_notification, prompt_confirm, prompt_text } from "./notifications.js";
+import { relist_variables } from "./variable-panel.js"
 
 let notebook_name = '';
 let unsaved_changes = false;
@@ -180,6 +181,7 @@ const load_state = state => {
 	
 	document.querySelectorAll('.cell').forEach(x => x.remove());
 	delete_markdown_editors();
+	restart_calculator();
 
 	state.cells.forEach(cell => {
 		const e = create_cell(null, cell.type)

@@ -34,16 +34,39 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 		.function("message", select_overload<CalculatorMessage*()>(&Calculator::message), allow_raw_pointers())
 		.function("nextMessage", &Calculator::nextMessage, allow_raw_pointers())
 		.property("units", &Calculator::units)
+		.property("variables", &Calculator::variables)
 		.function("calculateAndPrint", optional_override([](Calculator& self, std::string s, int msecs, EvaluationOptions &eo, PrintOptions &po) {
 			return self.calculateAndPrint(s, msecs, eo, po);
 		}));
 
 	class_<Unit>("Unit")
 		.function("abbreviation", optional_override([](Unit &self) {
-			return (self.abbreviation());
+			return self.abbreviation();
 		}));
 	
 	register_vector<Unit*>("vector<Unit*>");
+
+	class_<KnownVariable, base<Variable>>("KnownVariable")
+		.function("get", &KnownVariable::get);
+
+	class_<Variable, base<ExpressionItem>>("Variable")
+		.function("isKnown", &Variable::isKnown)
+		.function("toKnownVariable", optional_override([](Variable &self) {
+			return (KnownVariable*) &self;
+		}), allow_raw_pointers());
+
+	register_vector<Variable*>("vector<Variable*>");
+		
+	class_<ExpressionItem>("ExpressionItem")
+		.function("isLocal", &ExpressionItem::isLocal)
+		.function("name", optional_override([](ExpressionItem &self) {
+			return self.name();
+		}));
+
+	class_<MathStructure>("MathStructure")
+		.function("print", optional_override([](MathStructure &self, PrintOptions &po) {
+			return self.print(po);
+		}));
 
 	class_<EvaluationOptions>("EvaluationOptions")
 		.property("approximation", &EvaluationOptions::approximation);

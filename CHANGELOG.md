@@ -11,6 +11,7 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 
  - Messages given by Qalculate! will appear beneath a cell (i.e. overwriting a constant)
    - Messages will not be printed when exporting to PDF
+ - Variable viewer panel
 
 ### Changed
 

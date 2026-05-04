@@ -4,7 +4,8 @@ import { MQ, create_math_cell, get_math_cell_value, run_math_cell, set_math_cell
 import { create_markdown_cell, get_markdown_cell_value, set_markdown_cell_content } from './markdown.js'
 import { set_unsaved_changes } from './saves.js';
 import { create_notification } from './notifications.js';
-import { restart_calculator } from '../calculator.js';
+import { restart_calculator } from './calculator.js';
+import { relist_variables } from './variable-panel.js';
 
 export const focus_cell = (cell, enter_edit) => {
 	if (cell == null) { return; }
@@ -18,11 +19,17 @@ export const focus_cell = (cell, enter_edit) => {
 	}
 }
 
-export const run_cell = cell => {
+export const run_cell = (cell, update_variable_list) => {
 	cell ??= document.querySelector('.cell.selected');
+	update_variable_list ??= true;
+	
 	switch (get_cell_type(cell)) {
 		case 'math': run_math_cell(cell); break;
 		default: return;
+	}
+
+	if (update_variable_list) {
+		relist_variables();
 	}
 
 	set_unsaved_changes();
@@ -66,8 +73,9 @@ window.action_run_all = () => {
 	document.activeElement.blur();
 	restart_calculator().then(() => {
 		document.querySelectorAll('.cell').forEach(cell => {
-			run_cell(cell);
+			run_cell(cell, false);
 		});
+		relist_variables();
 	});
 }
 

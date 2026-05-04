@@ -303,18 +303,21 @@ dialog {
 	background-color: var(--surface);
 }
 
+.panel {
+	position: fixed;
+	overflow-y: auto;
+}
+
 @media (max-width: 1350px) {
 	#table-of-contents {
 		display: none;
 	}
 }
 #table-of-contents {
-	position: fixed;
 	left: 1rem;
 	top: 50%;
 	transform: translateY(-50%);
 	max-height: 65%;
-	overflow-y: auto;
 
 	p {
 		display: block;
@@ -354,6 +357,33 @@ dialog {
 
 	:not(.anchor-scrolled) {
 		color: #aaa
+	}
+}
+
+#variable-panel {
+	top: 1rem;
+	right: 0;
+	padding-right: 1rem;
+	height: 100%;
+	border: var(--border);
+	background: var(--surface);
+
+	&:not(:has(tr)) {
+		display: none;
+	}
+
+	table {
+		display: block;
+		width: 12rem;
+		overflow: auto;
+
+		tr:nth-child(odd) {
+			background: var(--background-dark);
+		}
+
+		td {
+			white-space: nowrap;
+		}
 	}
 }
 
@@ -412,6 +442,9 @@ dialog {
 
 	> div {
 		border: var(--border);
+		&.neutral {
+			background-color: var(--surface);
+		}
 		&.success {
 			background-color: chartreuse;
 			border: 2px solid green;

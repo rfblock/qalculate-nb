@@ -2,6 +2,7 @@ import { set_unsaved_changes } from './saves.js';
 import { greek, calculate } from './calculator.js'
 import { parse_latex } from './parser.js'
 import { focus_cell } from './cells.js'
+import { run_cell } from './cells.js';
 
 export const MQ = MathQuill.getInterface(2);
 
@@ -27,7 +28,7 @@ export const create_math_cell = cell => {
 		handlers: {
 			upOutOf: () => focus_cell(cell.previousElementSibling, true),
 			downOutOf: () => focus_cell(cell.nextElementSibling, true),
-			enter: () => run_math_cell(cell),
+			enter: () => run_cell(cell),
 			edit: () => { set_unsaved_changes(true); }
 		}
 	});

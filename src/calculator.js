@@ -1,5 +1,6 @@
 import LoadModule from './qalc.js'
 import { create_notification } from './notifications.js';
+import { relist_variables } from './variable-panel.js';
 
 export const greek = [
 	'alpha', 'beta', 'gamma', 'Gamma', 'Delta', 'delta', 'epsilon', 'zeta', 'eta', 'Theta', 'theta',
@@ -33,6 +34,22 @@ export const calculate = exp => {
 	}
 }
 
+export const get_variables = () => {
+	const local_variables = [];
+	let i = 0;
+	let v;
+	do {
+		v = calc.variables.get(i++);
+		if (!v?.isLocal()) { continue; }
+		local_variables.push({
+			name: v.name(),
+			value: v.toKnownVariable().get().print(Module.default_print_options),
+		});
+	} while (v != null);
+
+	return local_variables;
+}
+
 export const restart_calculator = () => {
 	return new Promise((resolve, reject) => {
 		LoadModule({
@@ -63,6 +80,7 @@ export const restart_calculator = () => {
 			calc = new Module.Calculator();
 			window.calc = calc;
 			calc.loadGlobalDefinitions();
+			relist_variables();
 			resolve();
 		});
 	});
