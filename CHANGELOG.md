@@ -25,6 +25,7 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 ### Fixed
 
 - `%` in an expression no longer throws an error
+- `Restart and Run All` now restarts first, then runs, instead of vice verca.
 
 ## [0.1.5]
 
