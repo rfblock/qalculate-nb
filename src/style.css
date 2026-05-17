@@ -42,6 +42,8 @@
 		display: none;
 	}
 
+	.ML__toggles { visibility: hidden; }
+
 	hr {
 		break-before: page;
 		visibility: hidden;
@@ -52,8 +54,13 @@
 	color: var(--text);
 }
 
-.mq-editable-field .mq-cursor.mq-cursor {
-	border-left: 1px solid var(--text);
+math-field {
+	width: 100%;
+	background: none;
+	border: none;
+	outline: none;
+
+	&::part(container) > .ML__toggles { display: none; }
 }
 
 /* https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/kbd */
@@ -175,6 +182,7 @@ main {
 	position: relative;
 	padding-left: 12px;
 	border-left: 2px solid #0000;
+	&:hover > .ML__toggles { visibility: visible; }
 }
 
 .cell.selected {
