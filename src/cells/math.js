@@ -1,15 +1,15 @@
+'use strict';
+
 import { set_unsaved_changes } from './saves.js';
-import { greek, calculate } from './calculator.js'
-import { parse_mathml } from './parser.js'
-import { focus_cell } from './cells.js'
+import { greek, calculate } from './calculator.js';
+import { parse_mathml } from './parser.js';
+import { focus_cell } from './cells.js';
 import { run_cell } from './cells.js';
 
-import { MathfieldElement, convertLatexToMathMl } from 'https://esm.run/mathlive'
+import { MathfieldElement, convertLatexToMathMl } from 'https://esm.run/mathlive';
 
 MathfieldElement.fontsDirectory = 'https://cdn.jsdelivr.net/npm/mathlive/fonts';
 MathfieldElement.soundsDirectory = null;
-
-export const MQ = undefined;
 
 let trigFunctions = ['sin', 'cos', 'tan', 'sec', 'csc', 'cot']
 let hyperbolicFunctions = trigFunctions.map(x => `${x}h`);
@@ -17,23 +17,11 @@ trigFunctions = trigFunctions.concat(trigFunctions.map(x => `arc${x}`));
 hyperbolicFunctions = hyperbolicFunctions.concat(hyperbolicFunctions.map(x => `ar${x}`));
 trigFunctions = trigFunctions.concat(hyperbolicFunctions);
 
-// MQ.config({
-// 	autoCommands: 'sqrt pi theta sum nthroot infty ' + greek.join(' '),
-// 	sumStartsWithNEquals: true,
-// 	autoSubscriptNumerals: true,
-// 	autoOperatorNames: trigFunctions.join(' ') + ' ln log to where'
-// });
-
 /**
  * @param {HTMLDivElement} cell 
  */
 export const create_math_cell = cell => {
 	const cell_expr = cell.querySelector('.cell-expression');
-	// const field = MQ.MathField(cell_expr, {
-	// 	handlers: {
-	// 		edit: () => { set_unsaved_changes(true); }
-	// 	}
-	// });
 	const field = new MathfieldElement();
 	field.mathModeSpace = '\\,';
 	field.defaultMode = 'math';

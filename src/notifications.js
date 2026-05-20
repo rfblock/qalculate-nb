@@ -1,7 +1,6 @@
 'use strict';
 
-import { MQ } from "./math.js";
-
+import { MathfieldElement } from 'https://esm.run/mathlive';
 export const show_loading_modal = text => {
 	document.querySelector('#loading-modal > span').innerText = text;
 	document.querySelector('#loading-modal').showModal();
@@ -95,7 +94,8 @@ export const prompt_math = text => {
 	return new Promise((resolve, reject) => {
 		const span = document.createElement('div');
 		modal.appendChild(span);
-		const field = MQ.MathField(span);
+		const field = new MathfieldElement();
+		span.appendChild(field);
 
 		// Float styling reverses buttons
 		const cancel_button = document.createElement('button');
@@ -111,7 +111,7 @@ export const prompt_math = text => {
 		ok_button.innerText = 'Ok';
 		ok_button.addEventListener('click', () => {
 			modal.close();
-			resolve(field.latex());
+			resolve(field.value);
 		});
 
 		modal.addEventListener('close', reject);

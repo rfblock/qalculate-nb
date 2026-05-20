@@ -1,6 +1,6 @@
 'use strict';
 
-import { MQ } from './math.js';
+import { MathfieldElement } from 'https://esm.run/mathlive';
 import { prompt_math, prompt_text, create_notification } from './notifications.js';
 import { on_database_load, save_formula, list_formulas } from './saves.js'
 
@@ -32,11 +32,12 @@ const render_formula_list = category => {
 		const span = document.createElement('span');
 		li.appendChild(span);
 
-		const field = MQ.StaticMath(span);
-		field.latex(eq.latex);
+		const field = new MathfieldElement();
+		span.appendChild(field);
+		field.value = eq.latex;
 		
 		span.addEventListener('click', () => {
-			navigator.clipboard.writeText(field.latex());
+			navigator.clipboard.writeText(field.value);
 			create_notification('Copied');
 			document.querySelector('#toolbox-dialog').close();
 		});

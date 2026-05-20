@@ -1,6 +1,6 @@
 'use strict';
 
-import { MQ, create_math_cell, get_math_cell_value, run_math_cell, set_math_cell_content } from './math.js'
+import { create_math_cell, get_math_cell_value, run_math_cell, set_math_cell_content } from './math.js'
 import { create_markdown_cell, focus_markdown_cell, get_markdown_cell_value, set_markdown_cell_content } from './markdown.js'
 import { set_unsaved_changes } from './saves.js';
 import { create_notification } from './notifications.js';

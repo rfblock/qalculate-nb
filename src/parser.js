@@ -25,17 +25,23 @@ Parser key assumptions:
 
 const non_marking = ['\u2061', '\u2062', '\u2063', '\u2064']
 
+const accent_map = {
+	'\u20d7': 'vec',
+	'\u00af': 'bar',
+	'\u005e': 'hat',
+}
+
 const tag_map = {
 	'mi': () => { throw new Error("Child(ren) in leaf element"); },
 	'mn': () => { throw new Error("Child(ren) in leaf element"); },
 	'mo': () => { throw new Error("Child(ren) in leaf element"); },
 	'mfrac': x =>      `((${x[0]})/(${x[1]}))`,
-	'mover': x =>      `${x[0]}_over_${x[1]}`,
+	'mover': x =>      `${x[0]}_over_${accent_map[x[1]] ?? x[1] }`,
 	'mroot': x =>      `root((${x[0]}), (${x[1]}))`,
 	'mrow': x =>       `${x.join('')}`,
 	'msqrt': x =>      `sqrt(${x[0]})`,
-	'msub': x =>       `${x[0]}_sub_${x[1]}`,
-	'msubsup': x =>    `(${x[0]}_sub_${x[1]}^${x[2]})`, // TODO: If x[0] is <mo>, parse as a function (i.e. sum)
+	'msub': x =>       `${x[0]}_${x[1]}`,
+	'msubsup': x =>    `(${x[0]}_${x[1]}^${x[2]})`, // TODO: If x[0] is <mo>, parse as a function (i.e. sum)
 	'msup': x =>       `(${x[0]}^${x[1]})`,
 	'mtable': x =>     `[${x.join(',')}]`,
 	'mtr': x =>        `[${x.join(',')}]`,

@@ -217,12 +217,6 @@ main {
 	background-color: var(--background);
 }
 
-.cell-expression.mq-editable-field.mq-focused {
-	outline: none;
-	box-shadow: none;
-	border: 2px solid steelblue;
-}
-
 .cell-expression > div {
 	outline: none;
 }
