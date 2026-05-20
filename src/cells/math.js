@@ -28,7 +28,6 @@ export const create_math_cell = cell => {
 
 	field.addEventListener('beforeinput', e => {
 		if (e.inputType == 'insertLineBreak') {
-			console.log(convertLatexToMathMl(get_math_cell_value(cell)));
 			run_cell(cell);
 			e.preventDefault();
 		}

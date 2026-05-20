@@ -25,6 +25,15 @@ Parser key assumptions:
 
 const non_marking = ['\u2061', '\u2062', '\u2063', '\u2064']
 
+// Some of these are technically not needed (sum) because Qalculate! supports unicode
+// But it makes programming easier (comparing to 'sum' instead of a unicode value)
+const operator_map = {
+	'\u00b1': '±',
+	'\u2213': '∓', // NOTE: Not supported by Qalculate!
+	'∑': 'sum',
+}
+
+// This will be changed _eventually_, but there is currently a bug with MathField that prevents proper accents from working
 const accent_map = {
 	'\u20d7': 'vec',
 	'\u00af': 'bar',
@@ -46,20 +55,32 @@ const tag_map = {
 	'mtable': x =>     `[${x.join(',')}]`,
 	'mtr': x =>        `[${x.join(',')}]`,
 	'mtd': x =>        `(${x.join(',')})`,
-	'munder': x =>     { throw new Error("Not Implemented"); },
-	'munderover': x => { throw new Error("Not Implemented"); },
+	'munder': x =>     `${x[0]}_under_${x[1]}`,
+	'munderover': x => `${x[0]}_under_${x[1]}_over_${accent_map[x[2]] ?? x[2] }`,
 }
 
 const traverse_mathml = node => {
+	if (!node || node.getAttribute('traversed')) { return ''; }
 	if (node.tagName == 'mspace') { return ' '; }
 
+	node.setAttribute('traversed', true);
 	if (node.children.length == 0) {
-		return non_marking.includes(node.textContent) ? '' : node.textContent;
+		return non_marking.includes(node.textContent) ? '' : (operator_map[node.textContent] ?? node.textContent);
 	}
 
-	const children = [...node.children];
+	const children = [...node.children].map(x => traverse_mathml(x));
+
+	if (node.tagName == 'msubsup' && node.firstChild.tagName == 'mo') {
+		if (children[0] == 'sum') {
+			const index = children[1].split('=', 2)[0];
+			const start = children[1].split('=', 2)[1];
+			const body = traverse_mathml(node.nextElementSibling);
+			return `sum((${body}), (${start}), (${children[2]}), (${index}))`;
+		}
+	}
+
 	try {
-		return tag_map[node.tagName](children.map(x => traverse_mathml(x)));
+		return tag_map[node.tagName](children);
 	} catch (e) {
 		if (e instanceof TypeError) { console.error(`Unknown MathML tag: ${node.tagName}`) }
 		throw e;
@@ -69,7 +90,6 @@ const traverse_mathml = node => {
 export const parse_mathml = mathml => {
 	// Parsed DOM is unsafe and should be sanitized if ever used in the actual DOM
 	const doc = new DOMParser().parseFromString(`<mrow>${mathml}</mrow>`, 'text/xml');
-	console.log(doc);
 	if (doc.querySelector('parsererror')) {
 		console.error(doc.querySelector('parsererror'));
 		throw new Error('Failed to parse MathML');
