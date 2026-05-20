@@ -60,7 +60,8 @@ math-field {
 	border: none;
 	outline: none;
 
-	&::part(container) > .ML__toggles { display: none; }
+	&::part(virtual-keyboard-toggle), &::part(menu-toggle) { visibility: hidden; }
+	&:hover::part(virtual-keyboard-toggle), &:hover::part(menu-toggle) { visibility: visible; }
 }
 
 /* https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/kbd */

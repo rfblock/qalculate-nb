@@ -1,10 +1,13 @@
 import { set_unsaved_changes } from './saves.js';
 import { greek, calculate } from './calculator.js'
-import { parse_latex } from './parser.js'
+import { parse_mathml } from './parser.js'
 import { focus_cell } from './cells.js'
 import { run_cell } from './cells.js';
 
-import { MathfieldElement } from 'https://esm.run/mathlive'
+import { MathfieldElement, convertLatexToMathMl } from 'https://esm.run/mathlive'
+
+MathfieldElement.fontsDirectory = 'https://cdn.jsdelivr.net/npm/mathlive/fonts';
+MathfieldElement.soundsDirectory = null;
 
 export const MQ = undefined;
 
@@ -33,8 +36,11 @@ export const create_math_cell = cell => {
 	// });
 	const field = new MathfieldElement();
 	field.mathModeSpace = '\\,';
+	field.defaultMode = 'math';
+
 	field.addEventListener('beforeinput', e => {
 		if (e.inputType == 'insertLineBreak') {
+			console.log(convertLatexToMathMl(get_math_cell_value(cell)));
 			run_cell(cell);
 			e.preventDefault();
 		}
@@ -65,7 +71,7 @@ export const set_math_cell_content = (cell, content) => {
 export const run_math_cell = cell => {
 	const cell_result = cell.querySelector('.cell-result');
 	const val = get_math_cell_value(cell);
-	const exp = parse_latex(val);
+	const exp = parse_mathml(convertLatexToMathMl(val));
 	if (exp == '') { return; }
 	const res = calculate(exp);
 	cell_result.textContent = res.res
