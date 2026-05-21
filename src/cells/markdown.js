@@ -108,6 +108,10 @@ export const create_markdown_cell = element => {
 	return editor;
 }
 
+export const focus_markdown_cell = cell => {
+	cell_editor_map[cell.id]?.commands.focus()
+}
+
 export const get_markdown_cell_value = element => {
 	return cell_editor_map[element.id]?.getJSON();
 }

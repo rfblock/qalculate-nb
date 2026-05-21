@@ -1,7 +1,7 @@
 'use strict';
 
-import { MQ, create_math_cell, get_math_cell_value, run_math_cell, set_math_cell_content } from './math.js'
-import { create_markdown_cell, get_markdown_cell_value, set_markdown_cell_content } from './markdown.js'
+import { create_math_cell, get_math_cell_value, run_math_cell, set_math_cell_content } from './math.js'
+import { create_markdown_cell, focus_markdown_cell, get_markdown_cell_value, set_markdown_cell_content } from './markdown.js'
 import { set_unsaved_changes } from './saves.js';
 import { create_notification } from './notifications.js';
 import { restart_calculator } from './calculator.js';
@@ -10,10 +10,10 @@ import { relist_variables } from './variable-panel.js';
 export const focus_cell = (cell, enter_edit) => {
 	if (cell == null) { return; }
 	document.querySelectorAll('.cell').forEach(x => x.classList.remove('selected'));
-	document.querySelectorAll('.cell-expression').forEach(x => MQ(x)?.blur());
 	cell.classList.add('selected');
 	if (enter_edit ?? false) {
-		MQ(cell.querySelector('.cell-expression'))?.focus();
+		cell.querySelector('math-field')?.focus();
+		focus_markdown_cell(cell);
 	} else {
 		cell.focus();
 	}
@@ -124,10 +124,14 @@ export const create_cell = (ref, type) => {
 	const cell = document.createElement('div');
 	cell.classList.add('cell', `cell-${type}`);
 	cell.tabIndex = 0;
+
+		const cell_expr = document.createElement('span');
+		cell.appendChild(cell_expr);
+		cell_expr.classList.add('cell-expression');
+
 	cell.addEventListener('keydown', e => {
 		if (e.repeat) { return; }
-		if (cell.querySelector('.cell-expression.mq-focused') != null) { return; }
-		if (cell.querySelector('.cell-expression > .ProseMirror-focused') != null) { return; }
+		if (cell_expr.contains(document.activeElement)) { return; }
 		if (e.key == 'ArrowUp') { focus_cell(cell.previousElementSibling); }
 		if (e.key == 'ArrowDown') { focus_cell(cell.nextElementSibling); }
 		if (e.key == 'Enter') { focus_cell(cell, true); e.preventDefault(); }
@@ -144,9 +148,6 @@ export const create_cell = (ref, type) => {
 		}
 		if (e.key == 'm') { convert_to_markdown(cell); }
 	});
-		const cell_expr = document.createElement('span');
-		cell.appendChild(cell_expr);
-		cell_expr.classList.add('cell-expression');
 
 		const cell_result = document.createElement('span');
 		cell.appendChild(cell_result);
@@ -185,7 +186,7 @@ export const create_cell = (ref, type) => {
 		append_md_btn.innerText = '+Markdown';
 		append_md_btn.addEventListener('click', () => create_cell(cell.nextElementSibling, 'markdown'));
 
-	cell.addEventListener('click', e => focus_cell(e.currentTarget, true));
+	cell.addEventListener('click', e => focus_cell(cell, true));
 
 	switch (type) {
 		case 'math': create_math_cell(cell); break;

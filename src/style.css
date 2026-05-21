@@ -40,7 +40,10 @@
 	.footer-buttons, .trash,
 	.cell-message {
 		display: none;
+		visibility: hidden;
 	}
+
+	.ML__toggles { visibility: hidden; }
 
 	hr {
 		break-before: page;
@@ -52,8 +55,19 @@
 	color: var(--text);
 }
 
-.mq-editable-field .mq-cursor.mq-cursor {
-	border-left: 1px solid var(--text);
+math-field {
+	width: 100%;
+	background: none;
+	border: none;
+	outline: none;
+
+	&::part(virtual-keyboard-toggle), &::part(menu-toggle) { visibility: hidden; }
+	&:hover::part(virtual-keyboard-toggle), &:hover::part(menu-toggle) {
+		visibility: visible;
+		@media print {
+			visibility: hidden;
+		}
+	}
 }
 
 /* https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/kbd */
@@ -175,6 +189,7 @@ main {
 	position: relative;
 	padding-left: 12px;
 	border-left: 2px solid #0000;
+	&:hover > .ML__toggles { visibility: visible; }
 }
 
 .cell.selected {
@@ -206,12 +221,6 @@ main {
 	border: none;
 	border: var(--border);
 	background-color: var(--background);
-}
-
-.cell-expression.mq-editable-field.mq-focused {
-	outline: none;
-	box-shadow: none;
-	border: 2px solid steelblue;
 }
 
 .cell-expression > div {
@@ -395,7 +404,8 @@ dialog {
 	}
 }
 
-#toolbox-dialog li > span {
+#toolbox-dialog li > math-field {
+	background: var(--background);
 	border: var(--border);
 }
 
