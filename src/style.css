@@ -40,6 +40,7 @@
 	.footer-buttons, .trash,
 	.cell-message {
 		display: none;
+		visibility: hidden;
 	}
 
 	.ML__toggles { visibility: hidden; }
@@ -61,7 +62,12 @@ math-field {
 	outline: none;
 
 	&::part(virtual-keyboard-toggle), &::part(menu-toggle) { visibility: hidden; }
-	&:hover::part(virtual-keyboard-toggle), &:hover::part(menu-toggle) { visibility: visible; }
+	&:hover::part(virtual-keyboard-toggle), &:hover::part(menu-toggle) {
+		visibility: visible;
+		@media print {
+			visibility: hidden;
+		}
+	}
 }
 
 /* https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/kbd */
@@ -398,7 +404,8 @@ dialog {
 	}
 }
 
-#toolbox-dialog li > span {
+#toolbox-dialog li > math-field {
+	background: var(--background);
 	border: var(--border);
 }
 

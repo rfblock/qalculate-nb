@@ -10,6 +10,8 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 ### Added
  - Matrices
  - Pressing enter on a markdown cell will begin editing the markdown cell
+ - On screen keyboard
+ - Highlighting
 
 ### Changed
  - Replaced MathQuill with MathLive

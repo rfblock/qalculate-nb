@@ -29,14 +29,15 @@ const render_formula_list = category => {
 		const li = document.createElement('li');
 		list_element.appendChild(li);
 		
-		const span = document.createElement('span');
-		li.appendChild(span);
+		// const span = document.createElement('span');
+		// li.appendChild(span);
 
 		const field = new MathfieldElement();
-		span.appendChild(field);
+		li.appendChild(field);
 		field.value = eq.latex;
+		field.setAttribute('read-only', true);
 		
-		span.addEventListener('click', () => {
+		field.addEventListener('click', () => {
 			navigator.clipboard.writeText(field.value);
 			create_notification('Copied');
 			document.querySelector('#toolbox-dialog').close();
