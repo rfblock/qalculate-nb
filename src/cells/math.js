@@ -1,10 +1,9 @@
 'use strict';
 
 import { set_unsaved_changes } from './saves.js';
-import { greek, calculate } from './calculator.js';
+import { calculate } from './calculator.js';
 import { parse_mathml } from './parser.js';
-import { focus_cell } from './cells.js';
-import { run_cell } from './cells.js';
+import { focus_cell, run_cell } from './cells.js';
 
 import { MathfieldElement, convertLatexToMathMl } from 'https://esm.run/mathlive';
 
@@ -25,6 +24,10 @@ export const create_math_cell = cell => {
 	const field = new MathfieldElement();
 	field.mathModeSpace = '\\,';
 	field.defaultMode = 'math';
+
+	field.addEventListener('click', e => {
+		focus_cell(cell, true);
+	});
 
 	field.addEventListener('beforeinput', e => {
 		if (e.inputType == 'insertLineBreak') {
@@ -60,8 +63,16 @@ export const run_math_cell = cell => {
 	const val = get_math_cell_value(cell);
 	const exp = parse_mathml(convertLatexToMathMl(val));
 	if (exp == '') { return; }
+
+	cell_result.textContent = '';
 	const res = calculate(exp);
-	cell_result.textContent = res.res
+
+	if (res.res instanceof Array) {
+		res.res.forEach(plot => cell_result.appendChild(plot));
+	} else {
+		cell_result.textContent = res.res
+	}
+
 	res.msgs.forEach(msg => {
 		const msg_node = document.createElement('span');
 		cell_result.prepend(msg_node);

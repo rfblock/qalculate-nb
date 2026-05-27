@@ -176,6 +176,7 @@ $(build)/qalc.js $(build)/qalc.wasm &: $(OBJS) $(call libfiles,$(QALCWASM_LIBS))
 	    -o $(build)/qalc.js
 
 PUBLIC_FILES = $(build)/qalc.js $(build)/qalc.wasm \
+			   $(GNUPLOT_BINS) \
                src/index.html src/style.css \
 			   src/landing/landing.html src/landing/landing.css \
 			   src/favicon.png src/landing/showcase.mp4 \

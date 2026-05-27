@@ -2,36 +2,40 @@ import LoadModule from './qalc.js'
 import { create_notification } from './notifications.js';
 import { relist_variables } from './variable-panel.js';
 
-export const greek = [
-	'alpha', 'beta', 'gamma', 'Gamma', 'Delta', 'delta', 'epsilon', 'zeta', 'eta', 'Theta', 'theta',
-	'kappa', 'Lambda', 'lambda', 'mu', 'nu', 'Xi', 'xi', 'pi', 'rho', 'sigma', 'Phi', 'phi', 'chi', 'Psi',
-	'Omega', 'omega'
-]
-// Pi and Sigma are not included due to product and sum notation
-// psi is not included due to conflict with the unit [lbs/sqin]
-
 let calc;
 let Module;
+let gnuplot_worker;
+let pending_plots = {};
+let new_plots = [];
 
 export const calculate = exp => {
+	let res;
+
 	try {
-		const res = calc.calculateAndPrint(exp, 1000,
-				Module.default_user_evaluation_options,
-				Module.default_print_options
-			);
-		const msgs = [];
-		for (let msg = calc.message(); msg != null; msg = calc.nextMessage()) {
-			msgs.push({
-				msg: msg.message(),
-				type: msg.type().value,
-			});
-		}
-		return { res, msgs };
+		res = calc.calculateAndPrint(exp, 1000,
+			Module.default_user_evaluation_options,
+			Module.default_print_options
+		);
 	} catch (e) {
 		console.error(e);
 		create_notification('An error has occured,\nRestarting the kernel', 'error');
 		restart_calculator();
+		return;
 	}
+
+	if (new_plots.length > 0) {
+		res = [...new_plots];
+		new_plots.length = 0;
+	}
+
+	const msgs = [];
+	for (let msg = calc.message(); msg != null; msg = calc.nextMessage()) {
+		msgs.push({
+			msg: msg.message(),
+			type: msg.type().value,
+		});
+	}
+	return { res, msgs };
 }
 
 export const get_variables = () => {
@@ -84,6 +88,36 @@ export const restart_calculator = () => {
 			resolve();
 		});
 	});
+}
+
+const create_svg_URL = data => URL.createObjectURL(new Blob([data], { type: 'image/svg+xml' }));
+
+window.runGnuplot = (data_files, commands, extra_commandline, persist) => {
+	if (!gnuplot_worker) {
+		gnuplot_worker = new Worker('gnuplot-worker.js');
+		gnuplot_worker.addEventListener('message', e => {
+			const { id, output } = e.data;
+			const plot = pending_plots[id];
+			if (output) {
+				plot.src = create_svg_URL(output);
+				delete pending_plots[id];
+			} else {
+				// TODO: Replace with error
+			}
+		});
+	}
+
+	// empty SVG url
+	const id = Math.random().toString(36).slice(2);
+	const plot = new Image(600, 400);
+	pending_plots[id] = plot;
+	new_plots.push(plot);
+
+	gnuplot_worker.postMessage({
+		data_files, commands, extra_commandline, persist, id
+	});
+
+	return true;
 }
 
 if (calc === undefined) {
