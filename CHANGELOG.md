@@ -5,13 +5,20 @@ All notable changes will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (due to a lack of public API).
 
-## [0.1.7]
+## [0.1.7-dev]
 
 ### Added
  - Matrices
  - Pressing enter on a markdown cell will begin editing the markdown cell
  - On screen keyboard
  - Highlighting
+ - Integrals
+	- To create a derivative d (the `d` in `dx`), press <kbd>Alt</kbd> + <kbd>d</kbd>
+	- For an indefinite integral, delete the bounds with <kbd>Backspace</kbd> or <kbd>Delete</kbd>
+	- For an indefinite multi-integral, type `\iint` or `\iiint`
+
+#### For Developers
+ - Local storage variables `print_raw_mathml`, `print_mathml`, `print_qalc_expression` have been added. Set these to log parser state during various stages
 
 ### Changed
  - Replaced MathQuill with MathLive

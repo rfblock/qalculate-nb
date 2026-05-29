@@ -61,10 +61,21 @@ export const set_math_cell_content = (cell, content) => {
 export const run_math_cell = cell => {
 	const cell_result = cell.querySelector('.cell-result');
 	const val = get_math_cell_value(cell);
-	const exp = parse_mathml(convertLatexToMathMl(val));
+	cell_result.textContent = '';
+	let exp;
+
+	try {
+		exp = parse_mathml(convertLatexToMathMl(val));
+	} catch (e) {
+		const err = document.createElement('span');
+		cell_result.prepend(err);
+		err.classList.add('cell-message', 'message-error');
+		err.innerText = e.message;
+		return;
+	}
+
 	if (exp == '') { return; }
 
-	cell_result.textContent = '';
 	const res = calculate(exp);
 
 	if (res.res instanceof Array) {
