@@ -12,6 +12,7 @@ let unsaved_changes = false;
 const set_notebook_name = x => {
 	document.querySelector('title').innerText = x || 'Qalculate! Notebook';
 	notebook_name = x;
+	localStorage.setItem('last_notebook_name', x);
 }
 
 const prompt_unsaved_changes = next => {
@@ -167,6 +168,8 @@ const save_notebook = (autosave) => {
 	req.onsuccess = () => {
 		if (!autosave) {
 			unsaved_changes = false;
+		} else {
+			localStorage.setItem('last_notebook_name', state.notebook_name);
 		}
 		create_notification('Saved');
 	};
@@ -314,7 +317,13 @@ const initialize_database = () => {
 				console.log('Toolbox table successfully created');
 			}
 		}
-		requestAnimationFrame(() => set_db(db));
 	}
 }
+
+on_database_load(() => {
+	const last_nb = localStorage.getItem('last_notebook_name');
+	if (last_nb) {
+		load_notebook(last_nb);
+	}
+});
 initialize_database();

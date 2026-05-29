@@ -16,12 +16,16 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 	- To create a derivative d (the `d` in `dx`), press <kbd>Alt</kbd> + <kbd>d</kbd>
 	- For an indefinite integral, delete the bounds with <kbd>Backspace</kbd> or <kbd>Delete</kbd>
 	- For an indefinite multi-integral, type `\iint` or `\iiint`
+ - Automatic document continuation (reopens last document)
 
 #### For Developers
  - Local storage variables `print_raw_mathml`, `print_mathml`, `print_qalc_expression` have been added. Set these to log parser state during various stages
 
 ### Changed
  - Replaced MathQuill with MathLive
+
+### Fixed
+ - Console error regarding the toolbox for first-time startup
 
 ## [0.1.6]
 
