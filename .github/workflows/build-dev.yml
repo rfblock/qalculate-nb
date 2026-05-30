@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI Dev
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ dev ]
+
+jobs:
+  build-wasm:
+    name: Build the source code into WASM
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install deps
+        run: sudo apt install libtool-bin intltool autoconf-archive make
+
+      - name: Cache multiple paths
+        uses: actions/cache@v4
+        with:
+          path: build/release
+          key: $${{ hashFiles('Makefile') }}
+
+      - name: Build code
+        run: make deploy -j$(nproc) RELEASE=1
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v2.1.3
+        with:
+          fqdn: dev.qalc.steg.gy
+          target_branch: gh-pages-dev
+          build_dir: public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
