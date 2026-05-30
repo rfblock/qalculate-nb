@@ -51,44 +51,113 @@ export const get_math_cell_value = cell => {
 	return cell.querySelector('math-field').value;
 }
 
-export const set_math_cell_content = (cell, content) => {
-	cell.querySelector('math-field').value = content;
+export const set_math_cell_value = (cell, value) => {
+	cell.querySelector('math-field').value = value;
+}
+
+export const get_math_cell_result = cell => {
+	return [...cell.querySelectorAll('.cell-result > div')].map(div => {
+		const img = div.querySelector('img');
+		if (img) { return {
+			type: 'plot-src',
+			value: img.src,
+		}; }
+
+		if (div.classList.contains('cell-message')) {
+			let level = 'unknown';
+			if (div.classList.contains('message-info')) { level = 'info' }
+			if (div.classList.contains('message-warning')) { level = 'warning' }
+			if (div.classList.contains('message-error')) { level = 'error' }
+			return {
+				type: 'message',
+				level,
+				value: div.textContent,
+			};
+		}
+
+		return {
+			type: 'output',
+			value: div.textContent,
+		}
+	});
+}
+
+export const set_math_cell_result = (cell, result) => {
+	const div = cell.querySelector('.cell-result')
+	div.textContent = '';
+
+	result.forEach(res => {
+		const elem = document.createElement('div');
+		switch (res.type) {
+			case 'message': {
+				elem.textContent = res.value
+				elem.classList.add('cell-message');
+				elem.classList.add(`message-${res.level}`);
+				break;
+			}
+			case 'output': {
+				elem.textContent = res.value;
+				break;
+			}
+			case 'plot': {
+				elem.appendChild(res.value);
+				break;
+			}
+			case 'plot-src': {
+				const img = new Image(600, 400);
+				img.src = res.value;
+				elem.appendChild(img);
+				break;
+			}
+			default: return;
+		}
+
+		div.appendChild(elem);
+	});
 }
 
 /**
  * @param {HTMLDivElement} cell 
  */
 export const run_math_cell = cell => {
-	const cell_result = cell.querySelector('.cell-result');
 	const val = get_math_cell_value(cell);
-	cell_result.textContent = '';
 	let exp;
 
 	try {
 		exp = parse_mathml(convertLatexToMathMl(val));
 	} catch (e) {
-		const err = document.createElement('span');
-		cell_result.prepend(err);
-		err.classList.add('cell-message', 'message-error');
-		err.innerText = e.message;
+		set_math_cell_result(cell, [{
+			type: 'message',
+			level: 'error',
+			value: e.message,
+		}]);
 		return;
 	}
 
 	if (exp == '') { return; }
 
+	const output = [];
 	const res = calculate(exp);
 
+	res.msgs.forEach(msg => {
+		output.push({
+			type: 'message',
+			level: ['info', 'warning', 'error'][msg.type],
+			value: msg.msg,
+		});
+	});
+
 	if (res.res instanceof Array) {
-		res.res.forEach(plot => cell_result.appendChild(plot));
+		res.res.forEach(plot => output.push({
+			type: 'plot',
+			value: plot,
+		}));
 	} else {
-		cell_result.textContent = res.res
+		output.push({
+			type: 'output',
+			value: res.res,
+		});
 	}
 
-	res.msgs.forEach(msg => {
-		const msg_node = document.createElement('span');
-		cell_result.prepend(msg_node);
-		msg_node.classList.add('cell-message');
-		msg_node.classList.add('message-' + ['info', 'warning', 'error'][msg.type]);
-		msg_node.innerText = msg.msg + '\n';
-	});
+	set_math_cell_result(cell, output);
 }

@@ -5,23 +5,28 @@ All notable changes will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (due to a lack of public API).
 
-## [0.1.7-dev]
+## [0.1.7]
 
 ### Added
  - Matrices
  - Pressing enter on a markdown cell will begin editing the markdown cell
  - On screen keyboard
  - Highlighting
+ - Plotting
+   - To plot, use the function `plot(Expression or vector[, Minimum x value][, Maximum x value][, Options], ...)`
+   - For a full description of `plot`, see the [Qalculate! manual pages](https://qalculate.github.io/manual/qalculate-definitions-functions.html)
  - Integrals
-	- To create a derivative d (the `d` in `dx`), press <kbd>Alt</kbd> + <kbd>d</kbd>
-	- For an indefinite integral, delete the bounds with <kbd>Backspace</kbd> or <kbd>Delete</kbd>
-	- For an indefinite multi-integral, type `\iint` or `\iiint`
+   - To create an integral, type `int`, `\int` or use the hamburger menu to insert an integral
+   - To create a derivative d (the `d` in `dx`), press <kbd>Alt</kbd> + <kbd>d</kbd>
+   - For an indefinite integral, delete the bounds with <kbd>Backspace</kbd> or <kbd>Delete</kbd>
+   - For an indefinite multi-integral, type `\iint` or `\iiint`
  - Automatic document continuation (reopens last document)
 
 #### For Developers
  - Local storage variables `print_raw_mathml`, `print_mathml`, `print_qalc_expression` have been added. Set these to log parser state during various stages
 
 ### Changed
+ - Cell output is saved
  - Replaced MathQuill with MathLive
 
 ### Fixed
@@ -37,12 +42,12 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 
 ### Changed
 
-- Qalculate! has been updated to use 5.1.0
-  - For Qalculate! changes, see the [Qalculate! Website](https://qalculate.github.io/)
-  - Notable changes: added `slugs`, `ppm`, `ppb`
-- `Run All` is now `Restart and Run All`
-- Boolean values will be shown as `true` or `false` instead of `1` or `0`
-- Logical operators will be shown as `and` or `or` instead of `&&` or `||`
+ - Qalculate! has been updated to use 5.1.0
+   - For Qalculate! changes, see the [Qalculate! Website](https://qalculate.github.io/)
+   - Notable changes: added `slugs`, `ppm`, `ppb`
+ - `Run All` is now `Restart and Run All`
+ - Boolean values will be shown as `true` or `false` instead of `1` or `0`
+ - Logical operators will be shown as `and` or `or` instead of `&&` or `||`
 
 ### Fixed
 

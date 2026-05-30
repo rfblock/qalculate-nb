@@ -1,7 +1,7 @@
 'use strict';
 
-import { create_math_cell, get_math_cell_value, run_math_cell, set_math_cell_content } from './math.js'
-import { create_markdown_cell, focus_markdown_cell, get_markdown_cell_value, set_markdown_cell_content } from './markdown.js'
+import { create_math_cell, get_math_cell_value, run_math_cell, set_math_cell_value, get_math_cell_result, set_math_cell_result } from './math.js'
+import { create_markdown_cell, focus_markdown_cell, get_markdown_cell_value, set_markdown_cell_value } from './markdown.js'
 import { set_unsaved_changes } from './saves.js';
 import { create_notification } from './notifications.js';
 import { restart_calculator } from './calculator.js';
@@ -58,15 +58,25 @@ export const get_cell_value = cell => {
 	return null;
 }
 
-export const set_cell_content = (cell, content) => {
+export const set_cell_value = (cell, value) => {
 	switch (get_cell_type(cell)) {
-		case 'math': return set_math_cell_content(cell, content);
-		case 'markdown': return set_markdown_cell_content(cell, content);
+		case 'math': return set_math_cell_value(cell, value);
+		case 'markdown': return set_markdown_cell_value(cell, value);
+	}
+}
+
+export const get_cell_result = cell => {
+	switch (get_cell_type(cell)) {
+		case 'math': return get_math_cell_result(cell);
+		default: return null
 	}
 }
 
 export const set_cell_result = (cell, result) => {
-	cell.querySelector('.cell-result').innerText = result;
+	switch (get_cell_type(cell)) {
+		case 'math': return set_math_cell_result(cell, result);
+		default:
+	}
 }
 
 window.action_run_all = () => {

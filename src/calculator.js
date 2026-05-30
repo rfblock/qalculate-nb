@@ -90,7 +90,7 @@ export const restart_calculator = () => {
 	});
 }
 
-const create_svg_URL = data => URL.createObjectURL(new Blob([data], { type: 'image/svg+xml' }));
+const create_svg_URI = data => `data:image/svg+xml;utf8,${encodeURIComponent(data)}`;
 
 window.runGnuplot = (data_files, commands, extra_commandline, persist) => {
 	if (!gnuplot_worker) {
@@ -98,8 +98,12 @@ window.runGnuplot = (data_files, commands, extra_commandline, persist) => {
 		gnuplot_worker.addEventListener('message', e => {
 			const { id, output } = e.data;
 			const plot = pending_plots[id];
+
+			const svg = new DOMParser().parseFromString(output, 'text/xml');
+			const uri = create_svg_URI(svg.querySelector('svg').outerHTML);
+
 			if (output) {
-				plot.src = create_svg_URL(output);
+				plot.src = uri;
 				delete pending_plots[id];
 			} else {
 				// TODO: Replace with error

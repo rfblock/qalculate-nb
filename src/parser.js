@@ -65,6 +65,7 @@ const tag_map = {
 	'mtd': x =>        `(${x.join(',')})`,
 	'munder': x =>     `${x[0]}_under_${x[1]}`,
 	'munderover': x => `${x[0]}_under_${x[1]}_over_${accent_map[x[2]] ?? x[2] }`,
+	'menclose': x =>   `${x}`, // Non-standard (MathML 4)
 }
 
 const traverse_term = (node, exclude) => {
@@ -86,7 +87,7 @@ const traverse_integral_body = node => {
 	node = node.nextElementSibling;
 	let body = '';
 
-	const is_differential_d = node => node.tagName == 'mi' && node.textContent == 'differential_d';
+	const is_differential_d = node => node.tagName == 'mi' && (node.textContent == 'd' || node.textContent == 'differential_d');
 
 	while (node != null) {
 		if (node.getAttribute('traversed')) {
@@ -108,7 +109,7 @@ const traverse_integral_body = node => {
 		node = node.nextElementSibling;
 	}
 
-	throw new Error('Variable of integration not found. Make sure to use "DifferentialD" (Alt+d) to end your integral.');
+	throw new Error('Variable of integration not found. Make sure to end your integral with "d" or "DifferentialD" (Alt + d)');
 }
 
 const traverse_mathml = node => {
