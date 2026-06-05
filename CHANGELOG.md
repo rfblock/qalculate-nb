@@ -5,13 +5,15 @@ All notable changes will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (due to a lack of public API).
 
-## [0.1.7]
+## [1.0-dev]
+First major release
 
 ### Added
  - Matrices
  - Pressing enter on a markdown cell will begin editing the markdown cell
  - On screen keyboard
  - Highlighting
+ - Undo deleted cell (`Edit > Undo`) or <kbd>u</kbd> in command mode
  - Plotting
    - To plot, use the function `plot(Expression or vector[, Minimum x value][, Maximum x value][, Options], ...)`
    - For a full description of `plot`, see the [Qalculate! manual pages](https://qalculate.github.io/manual/qalculate-definitions-functions.html)
@@ -20,7 +22,7 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
    - To create a derivative d (the `d` in `dx`), press <kbd>Alt</kbd> + <kbd>d</kbd>
    - For an indefinite integral, delete the bounds with <kbd>Backspace</kbd> or <kbd>Delete</kbd>
    - For an indefinite multi-integral, type `\iint` or `\iiint`
- - Automatic document continuation (reopens last document)
+ - Last file is automatically reopened
 
 #### For Developers
  - Local storage variables `print_raw_mathml`, `print_mathml`, `print_qalc_expression` have been added. Set these to log parser state during various stages
@@ -31,6 +33,9 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 
 ### Fixed
  - Console error regarding the toolbox for first-time startup
+
+### Removed
+ - Beta program warning popup
 
 ## [0.1.6]
 
@@ -136,7 +141,7 @@ Public Beta!
 ### Added
 
 - Markdown cells
-	- To create a markdown cell, press `m` on an empty cell
+	- To create a markdown cell, press <kbd>m</kbd> on an empty cell
 	- To create a markdown cell directly, click `Cell > Insert Markdown Cell [Above/Below]`
 	- Markdown cells can be formated as rich text
 		- Text can be entered in standard markdown (i.e. `**xyz**` for bold)

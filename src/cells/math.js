@@ -25,6 +25,24 @@ export const create_math_cell = cell => {
 	field.mathModeSpace = '\\,';
 	field.defaultMode = 'math';
 
+	field.addEventListener('mount', () => {
+		field.keybindings = [
+			...field.keybindings,
+			{
+				key: 'ctrl+[Enter]',
+				command: [],
+			},
+			{
+				key: 'alt+[Enter]',
+				command: [],
+			},
+			{
+				key: 'alt+shift+[Enter]',
+				command: [],
+			},
+		];
+	});
+
 	field.addEventListener('click', e => {
 		focus_cell(cell, true);
 	});
