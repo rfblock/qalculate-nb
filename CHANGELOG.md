@@ -23,6 +23,7 @@ First major release
    - For an indefinite integral, delete the bounds with <kbd>Backspace</kbd> or <kbd>Delete</kbd>
    - For an indefinite multi-integral, type `\iint` or `\iiint`
  - Last file is automatically reopened
+ - Cells undo (<kbd>z</kbd>) and redo (<kbd>Ctrl</kbd>+<kbd>y</kbd>) to undo/redo deleted/created cells.
 
 #### For Developers
  - Local storage variables `print_raw_mathml`, `print_mathml`, `print_qalc_expression` have been added. Set these to log parser state during various stages

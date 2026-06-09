@@ -14,6 +14,7 @@ document.addEventListener('keydown', e => {
 		'alt + R': action_run_all,
 		'alt + C': action_clear_all,
 		'alt + T': action_toolbox,
+		'ctrl + Y': action_cell_redo,
 
 		'alt + Enter': () => { run_cell(); insert_cell_below('math'); }
 	};

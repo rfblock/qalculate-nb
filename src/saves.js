@@ -1,7 +1,7 @@
 'use strict';
 
 import { restart_calculator } from "./calculator.js";
-import { create_cell, get_cell_value, set_cell_value, get_cell_result, set_cell_result, get_cell_type, box_cell } from "./cells.js";
+import { create_cell, get_cell_value, set_cell_value, get_cell_result, set_cell_result, get_cell_type, box_cell, clear_cell_history } from "./cells.js";
 import { delete_markdown_editors } from "./markdown.js";
 import { create_notification, prompt_confirm, prompt_text } from "./notifications.js";
 
@@ -198,6 +198,7 @@ const load_state = state => {
 	});
 
 	unsaved_changes = false;
+	clear_cell_history();
 }
 
 const load_notebook = load_name => {
@@ -265,6 +266,7 @@ const new_notebook = () => {
 	restart_calculator();
 	create_cell();
 	unsaved_changes = false;
+	clear_cell_history();
 }
 
 export const save_formula = (latex, name, category) => {
