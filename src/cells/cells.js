@@ -303,6 +303,10 @@ export const create_cell = (ref, type, change_history) => {
 	document.querySelector('#notebook-cells').insertBefore(cell, ref);
 
 	if (change_history) {
+		if (past_state_changes.length >= maximum_state_history) {
+			past_state_changes.shift();
+		}
+
 		past_state_changes.push({
 			action: 'create',
 			type,
