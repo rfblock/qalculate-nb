@@ -2,7 +2,7 @@
 /lib
 /public
 /public.zip
-
+/.vscode/
 
 # Created by https://www.toptal.com/developers/gitignore/api/c,vim,c++,node,macos,linux,emacs,windows,intellij+all,visualstudio,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=c,vim,c++,node,macos,linux,emacs,windows,intellij+all,visualstudio,visualstudiocode
