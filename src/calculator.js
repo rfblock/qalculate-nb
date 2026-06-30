@@ -18,7 +18,7 @@ export const calculate = exp => {
 		);
 	} catch (e) {
 		console.error(e);
-		create_notification('An error has occured,\nRestarting the kernel', 'error');
+		create_notification('An error has occurred,\nRestarting the kernel', 'error');
 		restart_calculator();
 		return;
 	}

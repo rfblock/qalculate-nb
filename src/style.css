@@ -61,7 +61,12 @@ math-field {
 	border: none;
 	outline: none;
 
-	&::part(virtual-keyboard-toggle), &::part(menu-toggle) { visibility: hidden; }
+	&::part(virtual-keyboard-toggle), &::part(menu-toggle) {
+		/* visibility: hidden; */
+		@media print {
+			visibility: hidden;
+		}
+	}
 	&:hover::part(virtual-keyboard-toggle), &:hover::part(menu-toggle) {
 		visibility: visible;
 		@media print {

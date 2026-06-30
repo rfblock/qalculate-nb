@@ -31,6 +31,7 @@ First major release
 ### Changed
  - Cell output is saved
  - Replaced MathQuill with MathLive
+ - Updated Qalculate! to 5.11.0
 
 ### Fixed
  - Console error regarding the toolbox for first-time startup
@@ -48,7 +49,7 @@ First major release
 
 ### Changed
 
- - Qalculate! has been updated to use 5.1.0
+ - Qalculate! has been updated to use 5.10.0
    - For Qalculate! changes, see the [Qalculate! Website](https://qalculate.github.io/)
    - Notable changes: added `slugs`, `ppm`, `ppb`
  - `Run All` is now `Restart and Run All`
@@ -58,7 +59,7 @@ First major release
 ### Fixed
 
 - `%` in an expression no longer throws an error
-- `Restart and Run All` now restarts first, then runs, instead of vice verca.
+- `Restart and Run All` now restarts first, then runs, instead of vice versa.
 
 ## [0.1.5]
 
@@ -144,7 +145,7 @@ Public Beta!
 - Markdown cells
 	- To create a markdown cell, press <kbd>m</kbd> on an empty cell
 	- To create a markdown cell directly, click `Cell > Insert Markdown Cell [Above/Below]`
-	- Markdown cells can be formated as rich text
+	- Markdown cells can be formatted as rich text
 		- Text can be entered in standard markdown (i.e. `**xyz**` for bold)
 		- Text can also be entered in the same manner as other text editors (i.e. `ctrl + B` for bold)
 
