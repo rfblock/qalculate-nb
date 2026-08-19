@@ -60,7 +60,8 @@ export const create_math_cell = cell => {
 		field.blur();
 		e.preventDefault();
 	});
-	field.addEventListener('change', () => { set_unsaved_changes(); })
+	field.addEventListener('input', () => cell.querySelector('.cell-result').classList.add('changes'));
+	field.addEventListener('change', () => set_unsaved_changes() );
 	
 	cell_expr.appendChild(field);
 }
@@ -102,6 +103,7 @@ export const get_math_cell_result = cell => {
 
 export const set_math_cell_result = (cell, result) => {
 	const div = cell.querySelector('.cell-result')
+	div.classList.remove('changes');
 	div.textContent = '';
 
 	result.forEach(res => {

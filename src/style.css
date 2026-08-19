@@ -237,6 +237,10 @@ main {
 	padding-top: 2px;
 	padding-left: 24px;
 	display: block;
+	&.changes > * {
+		color: gray;
+		font-style: italic;
+	}
 }
 
 .cell-message {
