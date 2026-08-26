@@ -1,8 +1,24 @@
 'use strict';
 
-import { Editor } from 'https://esm.sh/@tiptap/core'
+import { Editor, Mark } from 'https://esm.sh/@tiptap/core'
 import StarterKit from 'https://esm.sh/@tiptap/starter-kit'
 import { Markdown } from 'https://esm.sh/@tiptap/markdown'
+
+const KbdMark = Mark.create({
+	name: 'kbd',
+	
+	parseHTML() {
+		return [
+			{
+				tag: 'kbd',
+			}
+		]
+	},
+
+	renderHTML({ HTMLAttributes }) {
+		return ['kbd', HTMLAttributes, 0]
+	},
+})
 
 let current_version;
 
@@ -21,7 +37,7 @@ const set_current_version = ver => {
 
 fetch('/CHANGELOG.md').then(res => res.text().then(text => {
 		new Editor({
-			extensions: [ StarterKit, Markdown ],
+			extensions: [ StarterKit, Markdown, KbdMark ],
 			element: document.querySelector('#whats-new > div'),
 			content: text,
 			contentType: 'markdown',

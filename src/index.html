@@ -12,10 +12,6 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Iosevka+Charon:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-	<!-- MathQuill -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css" integrity="sha512-vPg9GqsZZ4LHv9BkFfZSXt7y4D7YaARPU2JFmpZug4EgtJJrumytMAFZkNSk2LSyqWir0TNbh2tBq7UJIMxvlA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js" integrity="sha512-Qsh05D07P6dURSZn8Qk+j8GI7cEK0OhXleZvTofmucwoDSkBC0juWf1401JdSE8os2kWEezMu7e9mlnszm3yEw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<!-- Qalculate! -->
     <link rel="prefetch" href="qalc.js" as="script">
     <link rel="preload" href="qalc.wasm" as="fetch" crossorigin="anonymous">
@@ -40,8 +36,8 @@
 		<div>
 			<button>Edit</button>
 			<div><div>
-				<button onclick="alert('TODO');">Undo</button>
-				<button onclick="alert('TODO');">Redo</button>
+				<button onclick="action_cell_undo();">Undo</button>
+				<button onclick="action_cell_redo();">Redo</button>
 				<button onclick="action_toolbox();">Toolbox</button>
 			</div></div>
 		</div>
@@ -185,15 +181,6 @@
 		</script>
 	</dialog>
 
-	<dialog open>
-		<h1>Notice</h1>
-		<p>This is a beta program. Many features are not completed. Bugs are likely to be present. Breaking changes may result in loss data at any point</p>
-		<p>Bug reports, feature requests, and questions can be filed in <code>Help > Report a Bug, Request a Feature, Ask a Question</code></p>
-		<form method="dialog">
-			<input type="submit" value="I understand" style="float: right;" autofocus>
-		</form>
-	</dialog>
-
 	<dialog id="about">
 		<h1>Qalculate! Notebook</h1>
 		<p>Version <span id="about-version">Loading...</span></p>
@@ -205,13 +192,13 @@
 		<p>Created by James Sanders (aka. Steggy)</p>
 		<p>Forked from <a href="https://github.com/flaviut/qalculate-wasm">flaviut/qalculate-wasm</a> by Flaviu Tamas and Noa</p>
 		<h2>Technologies</h2>
-		<p><a href="https://github.com/Qalculate/libqalculate">libqalculate</a> by Hanna Knutsson, Sven Herzberg, and others <a href="https://github.com/Qalculate/libqalculate?tab=GPL-2.0-1-ov-file#readme">(GLPv2.0)</a></p>
+		<p><a href="https://github.com/Qalculate/libqalculate">libqalculate</a> by Hanna Knutsson, Sven Herzberg, and others <a href="https://github.com/Qalculate/libqalculate?tab=GPL-2.0-1-ov-file#readme">(GPLv2.0)</a></p>
 		<p><a href="https://mathlive.io/">MathLive</a> by Arno Gourdol <a href="https://github.com/arnog/mathlive/blob/master/LICENSE.txt">(MIT)</a></p>
 		<p><a href="https://tiptap.dev/product/editor">TipTap</a> by TipTap <a href="https://github.com/ueberdosis/tiptap/blob/main/LICENSE.md">(MIT, Free Version)</a></p>
 		<h2>Author Information</h2>
 		<p>If you like what I do, and would like to support, donations are gratefully accepted via Venmo at <code>@James-Sanders-581</code></p>
 		<form method="dialog" style="float: right;"><input type="submit" value="Close" autofocus></form>
-		<p>Qalculate! Notebook is licensed under the <a href="https://github.com/rfblock/qalculate-nb/blob/master/LICENSE">MIT License</a></p>
+		<p>Qalculate! Notebook is licensed under the <a href="https://github.com/rfblock/qalculate-nb/blob/master/LICENSE">GPLv2.0 License</a></p>
 	</dialog>
 
 	<dialog id="open-dialog">

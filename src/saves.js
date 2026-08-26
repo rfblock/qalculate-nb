@@ -1,10 +1,9 @@
 'use strict';
 
 import { restart_calculator } from "./calculator.js";
-import { create_cell, set_cell_content, get_cell_type, get_cell_value, box_cell } from "./cells.js";
+import { create_cell, get_cell_value, set_cell_value, get_cell_result, set_cell_result, get_cell_type, box_cell, clear_cell_history } from "./cells.js";
 import { delete_markdown_editors } from "./markdown.js";
 import { create_notification, prompt_confirm, prompt_text } from "./notifications.js";
-import { relist_variables } from "./variable-panel.js"
 
 let notebook_name = '';
 let unsaved_changes = false;
@@ -12,6 +11,7 @@ let unsaved_changes = false;
 const set_notebook_name = x => {
 	document.querySelector('title').innerText = x || 'Qalculate! Notebook';
 	notebook_name = x;
+	localStorage.setItem('last_notebook_name', x);
 }
 
 const prompt_unsaved_changes = next => {
@@ -128,11 +128,12 @@ window.dialog_open_button = () => {
 }
 
 const serialize_state = () => {
-	const cells = []
+	const cells = [];
 	document.querySelectorAll('.cell').forEach(cell => {
 		cells.push({
 			type: get_cell_type(cell),
 			body: get_cell_value(cell),
+			result: get_cell_result(cell),
 			boxed: cell.classList.contains('boxed'),
 		});
 	});
@@ -167,6 +168,8 @@ const save_notebook = (autosave) => {
 	req.onsuccess = () => {
 		if (!autosave) {
 			unsaved_changes = false;
+		} else {
+			localStorage.setItem('last_notebook_name', state.notebook_name);
 		}
 		create_notification('Saved');
 	};
@@ -185,13 +188,17 @@ const load_state = state => {
 
 	state.cells.forEach(cell => {
 		const e = create_cell(null, cell.type)
-		set_cell_content(e, cell.body);
+		set_cell_value(e, cell.body);
 		if (cell.boxed) {
 			box_cell(e);
+		}
+		if (cell.result) {
+			set_cell_result(e, cell.result);
 		}
 	});
 
 	unsaved_changes = false;
+	clear_cell_history();
 }
 
 const load_notebook = load_name => {
@@ -259,6 +266,7 @@ const new_notebook = () => {
 	restart_calculator();
 	create_cell();
 	unsaved_changes = false;
+	clear_cell_history();
 }
 
 export const save_formula = (latex, name, category) => {
@@ -314,7 +322,13 @@ const initialize_database = () => {
 				console.log('Toolbox table successfully created');
 			}
 		}
-		requestAnimationFrame(() => set_db(db));
 	}
 }
+
+on_database_load(() => {
+	const last_nb = localStorage.getItem('last_notebook_name');
+	if (last_nb) {
+		load_notebook(last_nb);
+	}
+});
 initialize_database();

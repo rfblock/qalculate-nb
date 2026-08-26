@@ -1,11 +1,17 @@
 'use strict';
 
-import { create_math_cell, get_math_cell_value, run_math_cell, set_math_cell_content } from './math.js'
-import { create_markdown_cell, focus_markdown_cell, get_markdown_cell_value, set_markdown_cell_content } from './markdown.js'
+import { create_math_cell, get_math_cell_value, run_math_cell, set_math_cell_value, get_math_cell_result, set_math_cell_result } from './math.js'
+import { create_markdown_cell, focus_markdown_cell, get_markdown_cell_value, set_markdown_cell_value } from './markdown.js'
 import { set_unsaved_changes } from './saves.js';
 import { create_notification } from './notifications.js';
 import { restart_calculator } from './calculator.js';
 import { relist_variables } from './variable-panel.js';
+
+const maximum_state_history = 25;
+const past_state_changes = [];
+const future_state_changes = [];
+
+window.past_state_changes = past_state_changes;
 
 export const focus_cell = (cell, enter_edit) => {
 	if (cell == null) { return; }
@@ -35,6 +41,69 @@ export const run_cell = (cell, update_variable_list) => {
 	set_unsaved_changes();
 }
 
+export const clear_cell_history = () => {
+	past_state_changes.length = 0;
+	future_state_changes.length = 0;
+}
+
+window.action_cell_undo = () => {
+	if (past_state_changes.length == 0) { return; }
+
+	const change = past_state_changes.pop();
+
+	switch (change.action) {
+		case 'delete': {
+			const cell = create_cell(get_cell_at(change.position), change.type, false);
+			set_cell_value(cell, change.value);
+			set_cell_result(cell, change.result);
+			future_state_changes.push(change);
+			break;
+		}
+		case 'create': {
+			const cell = get_cell_at(change.position);
+			future_state_changes.push({
+				...change,
+				value: get_cell_value(cell),
+				result: get_cell_result(cell),
+			});
+			delete_cell(cell, false);
+			break;
+		}
+		default: {
+			console.warn(`Unknown state change action ${change.action}`);
+		}
+	}
+}
+
+window.action_cell_redo = () => {
+	if (future_state_changes.length == 0) { return; }
+
+	const change = future_state_changes.pop();
+
+	switch (change.action) {
+		case 'delete': {
+			const cell = get_cell_at(change.position);
+			past_state_changes.push({
+				...change,
+				value: get_cell_value(cell),
+				result: get_cell_result(cell),
+			});
+			delete_cell(get_cell_at(change.position), false);
+			break;
+		}
+		case 'create': {
+			past_state_changes.push(change);
+			const cell = create_cell(get_cell_at(change.position), change.type, false);
+			set_cell_value(cell, change.value);
+			set_cell_result(cell, change.result);
+			break;
+		}
+		default: {
+			console.warn(`Unknown state change action ${change.action}`);
+		}
+	}
+}
+
 /**
  * @param {HTMLDivElement} cell 
  */
@@ -58,15 +127,33 @@ export const get_cell_value = cell => {
 	return null;
 }
 
-export const set_cell_content = (cell, content) => {
+export const set_cell_value = (cell, value) => {
 	switch (get_cell_type(cell)) {
-		case 'math': return set_math_cell_content(cell, content);
-		case 'markdown': return set_markdown_cell_content(cell, content);
+		case 'math': return set_math_cell_value(cell, value);
+		case 'markdown': return set_markdown_cell_value(cell, value);
+	}
+}
+
+export const get_cell_result = cell => {
+	switch (get_cell_type(cell)) {
+		case 'math': return get_math_cell_result(cell);
+		default: return null
 	}
 }
 
 export const set_cell_result = (cell, result) => {
-	cell.querySelector('.cell-result').innerText = result;
+	switch (get_cell_type(cell)) {
+		case 'math': return set_math_cell_result(cell, result);
+		default:
+	}
+}
+
+const get_cell_index = cell => {
+	return [...cell.parentElement.children].indexOf(cell);
+}
+
+const get_cell_at = i => {
+	return document.querySelector('#notebook-cells').children[i];
 }
 
 window.action_run_all = () => {
@@ -110,17 +197,36 @@ const convert_to_markdown = cell => {
 	delete_cell(cell);
 }
 
-export const delete_cell = cell => {
+export const delete_cell = (cell, change_history) => {
 	cell ??= document.querySelector('.cell.selected');
+	change_history ??= true;
 
+	if (change_history) {
+		if (past_state_changes.length >= maximum_state_history) {
+			past_state_changes.shift();
+		}
+
+		past_state_changes.push({
+			action: 'delete',
+			type: get_cell_type(cell),
+			position: get_cell_index(cell),
+			value: get_cell_value(cell),
+			result: get_cell_result(cell),
+		});
+
+		future_state_changes.length = 0;
+	}
+	
 	cell.remove();
 	set_unsaved_changes();
 }
 
-export const create_cell = (ref, type) => {
+export const create_cell = (ref, type, change_history) => {
 	set_unsaved_changes(true);
 	ref ??= null;
 	type ??= 'math';
+	change_history ??= true;
+	
 	const cell = document.createElement('div');
 	cell.classList.add('cell', `cell-${type}`);
 	cell.tabIndex = 0;
@@ -147,6 +253,7 @@ export const create_cell = (ref, type) => {
 			delete_cell(cell);
 		}
 		if (e.key == 'm') { convert_to_markdown(cell); }
+		if (e.key == 'z') { window.action_cell_undo(cell); }
 	});
 
 		const cell_result = document.createElement('span');
@@ -194,5 +301,19 @@ export const create_cell = (ref, type) => {
 	}
 
 	document.querySelector('#notebook-cells').insertBefore(cell, ref);
+
+	if (change_history) {
+		if (past_state_changes.length >= maximum_state_history) {
+			past_state_changes.shift();
+		}
+
+		past_state_changes.push({
+			action: 'create',
+			type,
+			position: get_cell_index(cell),
+		});
+		future_state_changes.length = 0;
+	}
+
 	return cell;
 }

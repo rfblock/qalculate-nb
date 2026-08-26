@@ -2,15 +2,8 @@
 
 This is a jupyter notebook-like environment for Qalculate!
 
-Currently supports units, arithmetic operations, basic functions, and saved variables
+The editor can be used at `qalc.steg.gy`. The manual is available on the [Wiki page](https://github.com/rfblock/qalculate-nb/wiki).
 
-## Usage
+If you would like, you can test the bleeding-edge version at `dev.qalc.steg.gy`. Note for safety reasons, files are not synced between the two versions.
 
-`make -j$(nproc) serve`
-
-Currently only tested on a Linux system with all the standard development
-tools, but it should work anywhere that has bash, aria2c, and python3.
-Everything else will be fetched in a hopefully reproducible manner.
-
-Once everything is built, a website will be hosted at http://localhost:8000
-with the built program.
+If you would like to contribute, please read [CONTRIBUTING.md](CONTRIBUTING.md).

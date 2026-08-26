@@ -61,7 +61,12 @@ math-field {
 	border: none;
 	outline: none;
 
-	&::part(virtual-keyboard-toggle), &::part(menu-toggle) { visibility: hidden; }
+	&::part(virtual-keyboard-toggle), &::part(menu-toggle) {
+		/* visibility: hidden; */
+		@media print {
+			visibility: hidden;
+		}
+	}
 	&:hover::part(virtual-keyboard-toggle), &:hover::part(menu-toggle) {
 		visibility: visible;
 		@media print {
@@ -190,6 +195,7 @@ main {
 	padding-left: 12px;
 	border-left: 2px solid #0000;
 	&:hover > .ML__toggles { visibility: visible; }
+	break-inside: avoid-page;
 }
 
 .cell.selected {
@@ -227,10 +233,18 @@ main {
 	outline: none;
 }
 
+.cell-markdown > .cell-expression {
+	background: transparent;
+}
+
 .cell-result {
 	padding-top: 2px;
 	padding-left: 24px;
 	display: block;
+	&.changes > * {
+		color: gray;
+		font-style: italic;
+	}
 }
 
 .cell-message {

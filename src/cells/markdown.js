@@ -116,7 +116,7 @@ export const get_markdown_cell_value = element => {
 	return cell_editor_map[element.id]?.getJSON();
 }
 
-export const set_markdown_cell_content = (element, value) => {
+export const set_markdown_cell_value = (element, value) => {
 	cell_editor_map[element.id]?.commands?.setContent(value);
 }
 
