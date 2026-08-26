@@ -233,6 +233,10 @@ main {
 	outline: none;
 }
 
+.cell-markdown > .cell-expression {
+	background: transparent;
+}
+
 .cell-result {
 	padding-top: 2px;
 	padding-left: 24px;

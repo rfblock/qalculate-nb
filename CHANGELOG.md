@@ -24,6 +24,7 @@ First major release
    - For an indefinite multi-integral, type `\iint` or `\iiint`
  - Last file is automatically reopened
  - Cells undo (<kbd>z</kbd>) and redo (<kbd>Ctrl</kbd>+<kbd>y</kbd>) to undo/redo deleted/created cells.
+ - Changing the contents of a cell will grey out the result until it is ran again
 
 #### For Developers
  - Local storage variables `print_raw_mathml`, `print_mathml`, `print_qalc_expression` have been added. Set these to log parser state during various stages
@@ -32,6 +33,7 @@ First major release
  - Cell output is saved
  - Replaced MathQuill with MathLive
  - Updated Qalculate! to 5.11.0
+ - Background of Markdown cells are transparent (to better differentiate)
 
 ### Fixed
  - Console error regarding the toolbox for first-time startup
