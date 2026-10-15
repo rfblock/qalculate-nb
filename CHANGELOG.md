@@ -12,7 +12,6 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
  - Units are no longer displayed in italics
 
 #### For Developers
- - Emscripten version updated to 6.0.12
  - Creating a mathfield has been moved to `mathfield.js` via factory function
 
 ### Fixed
