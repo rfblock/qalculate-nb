@@ -1,0 +1,66 @@
+:root {
+	--surface: rgb(231, 240, 254);
+	--active: rgb(91, 147, 236);
+	--border: rgb(45, 97, 181);
+}
+
+html, body {
+	width: 100%;
+	font-family: Inter, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	padding: 0;
+	margin: 0;
+	font-size: 18px;
+}
+
+header {
+	position: absolute;
+	width: 100%;
+	background-color: var(--active);
+	border-bottom: 3px solid var(--border);
+	padding: 0;
+	> p {
+		display: inline-block;
+		margin: 1rem;
+	}
+	color: white;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+}
+
+main > div {
+	height: 100vh;
+}
+
+main > div:first-child {
+	z-index: 1;
+	align-items: center;
+	display: flex;
+	box-shadow: 0 8px 5px rgba(0, 0, 0, 0.733);
+	> * {
+		flex: 1
+	}
+}
+
+.showcase {
+	pointer-events: none;
+}
+
+h2 {
+	font-size: 3rem;
+}
+
+a {
+	color: black;
+}
+
+.a-button {
+	padding: 0.5em;
+	color: white;
+	background-color: var(--active);
+	border: 3px solid var(--border);
+	border-radius: 16px;
+	text-decoration: none;
+}
