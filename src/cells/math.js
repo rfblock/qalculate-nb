@@ -4,11 +4,9 @@ import { set_unsaved_changes } from './saves.js';
 import { calculate } from './calculator.js';
 import { parse_mathml } from './parser.js';
 import { focus_cell, run_cell } from './cells.js';
+import { new_math_field } from './mathfield.js'
 
-import { MathfieldElement, convertLatexToMathMl } from 'https://esm.run/mathlive';
-
-MathfieldElement.fontsDirectory = 'https://cdn.jsdelivr.net/npm/mathlive/fonts';
-MathfieldElement.soundsDirectory = null;
+import { convertLatexToMathMl } from 'https://esm.run/mathlive';
 
 let trigFunctions = ['sin', 'cos', 'tan', 'sec', 'csc', 'cot']
 let hyperbolicFunctions = trigFunctions.map(x => `${x}h`);
@@ -21,9 +19,7 @@ trigFunctions = trigFunctions.concat(hyperbolicFunctions);
  */
 export const create_math_cell = cell => {
 	const cell_expr = cell.querySelector('.cell-expression');
-	const field = new MathfieldElement();
-	field.mathModeSpace = '\\,';
-	field.defaultMode = 'math';
+	const field = new_math_field();
 
 	field.addEventListener('mount', () => {
 		field.keybindings = [
@@ -116,7 +112,9 @@ export const set_math_cell_result = (cell, result) => {
 				break;
 			}
 			case 'output': {
-				elem.textContent = res.value;
+				const p = document.createElement('math-span');
+				p.textContent = res.value;
+				elem.appendChild(p);
 				break;
 			}
 			case 'plot': {

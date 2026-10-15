@@ -238,8 +238,7 @@ main {
 }
 
 .cell-result {
-	padding-top: 2px;
-	padding-left: 24px;
+	padding: 2px 24px;
 	display: block;
 	&.changes > * {
 		color: gray;

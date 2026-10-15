@@ -26,6 +26,8 @@ bool qalc_invoke_gnuplot(
     return val::global("runGnuplot").call<bool>("call", val::undefined(), data_obj, commands, extra, persist);
 }
 
+typedef decltype(UNICODE_SIGNS_WITHOUT_EXPONENTS) UnicodeSigns;
+
 EMSCRIPTEN_BINDINGS(calculator_bindings) {
 	class_<Calculator>("Calculator")
 		.constructor(&getCalculator, allow_raw_pointers())
@@ -37,6 +39,12 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 		.property("variables", &Calculator::variables)
 		.function("calculateAndPrint", optional_override([](Calculator& self, std::string s, int msecs, EvaluationOptions &eo, PrintOptions &po) {
 			return self.calculateAndPrint(s, msecs, eo, po);
+		}))
+		.function("calculate", optional_override([](Calculator& self, std::string s, EvaluationOptions &eo) {
+			return self.calculate(s, eo);
+		}))
+		.function("parse", optional_override([](Calculator &self, std::string s) {
+			return self.parse(s);
 		}));
 
 	class_<Unit>("Unit")
@@ -60,13 +68,49 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 	class_<ExpressionItem>("ExpressionItem")
 		.function("isLocal", &ExpressionItem::isLocal)
 		.function("name", optional_override([](ExpressionItem &self) {
-			return self.name();
+			return self.name(true);
 		}));
 
 	class_<MathStructure>("MathStructure")
+		.function("type", &MathStructure::type)
+		.function("getChild", select_overload<MathStructure *(size_t)>(&MathStructure::getChild), allow_raw_pointers())
+		.function("countChildren", &MathStructure::countChildren)
+		.function("format", &MathStructure::format)
+		.function("getFunctionName", optional_override([](MathStructure &self) {
+			return self.function()->name();
+		}))
+		.function("variable", &MathStructure::variable, allow_raw_pointers())
+		.function("rows", &MathStructure::rows)
+		.function("columns", &MathStructure::columns)
 		.function("print", optional_override([](MathStructure &self, PrintOptions &po) {
 			return self.print(po);
 		}));
+
+	enum_<StructureType>("StructureType")
+		.value("MULTIPLICATION", STRUCT_MULTIPLICATION)
+		.value("INVERSE", STRUCT_INVERSE)
+		.value("DIVISION", STRUCT_DIVISION)
+		.value("ADDITION", STRUCT_ADDITION)
+		.value("NEGATE", STRUCT_NEGATE)
+		.value("POWER", STRUCT_POWER)
+		.value("NUMBER", STRUCT_NUMBER)
+		.value("UNIT", STRUCT_UNIT)
+		.value("SYMBOLIC", STRUCT_SYMBOLIC)
+		.value("FUNCTION", STRUCT_FUNCTION)
+		.value("VARIABLE", STRUCT_VARIABLE)
+		.value("VECTOR", STRUCT_VECTOR)
+		.value("BITWISE_AND", STRUCT_BITWISE_AND)
+		.value("BITWISE_OR", STRUCT_BITWISE_OR)
+		.value("BITWISE_XOR", STRUCT_BITWISE_XOR)
+		.value("BITWISE_NOT", STRUCT_BITWISE_NOT)
+		.value("LOGICAL_AND", STRUCT_LOGICAL_AND)
+		.value("LOGICAL_OR", STRUCT_LOGICAL_OR)
+		.value("LOGICAL_XOR", STRUCT_LOGICAL_XOR)
+		.value("LOGICAL_NOT", STRUCT_LOGICAL_NOT)
+		.value("COMPARISON", STRUCT_COMPARISON)
+		.value("UNDEFINED", STRUCT_UNDEFINED)
+		.value("ABORTED", STRUCT_ABORTED)
+		.value("DATETIME", STRUCT_DATETIME);
 
 	class_<EvaluationOptions>("EvaluationOptions")
 		.property("approximation", &EvaluationOptions::approximation);
@@ -81,7 +125,12 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 
 	class_<PrintOptions>("PrintOptions")
 		.property("interval_display", &PrintOptions::interval_display)
-		.property("spell_out_logical_operators", &PrintOptions::spell_out_logical_operators);
+		.property("spell_out_logical_operators", &PrintOptions::spell_out_logical_operators)
+		.property("spacious", &PrintOptions::spacious)
+		.property("excessive_parenthesis", &PrintOptions::excessive_parenthesis)
+		.property("limit_implicit_multiplication", &PrintOptions::limit_implicit_multiplication)
+		.property("short_multiplication", &PrintOptions::short_multiplication)
+		.property("use_unicode_signs", &PrintOptions::use_unicode_signs);
 	
 	constant("default_print_options", default_print_options);
 
@@ -95,6 +144,11 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 		.value("CONCISE", INTERVAL_DISPLAY_CONCISE)
 		.value("RELATIVE", INTERVAL_DISPLAY_RELATIVE);
 
+	enum_<UnicodeSigns>("UNICODE_SIGNS")
+		.value("OFF", UNICODE_SIGNS_OFF)
+		.value("ON", UNICODE_SIGNS_ON)
+		.value("ONLY_UNIT_EXPONENTS", UNICODE_SIGNS_ONLY_UNIT_EXPONENTS)
+		.value("WITHOUT_EXPONENTS", UNICODE_SIGNS_WITHOUT_EXPONENTS);
 
 	class_<CalculatorMessage>("CalculatorMessage")
 		.function("message", &CalculatorMessage::message)

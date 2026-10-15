@@ -5,6 +5,20 @@ All notable changes will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) (due to a lack of public API).
 
+## [1.1-dev]
+
+### Changed
+ - Output is now formatted in LaTeX
+ - Units are no longer displayed in italics
+
+#### For Developers
+ - Emscripten version updated to 6.0.12
+ - Creating a mathfield has been moved to `mathfield.js` via factory function
+
+### Fixed
+ - Typing `in` will now show the unit for inches instead of the symbol for "element in set".
+   - The "element in set" symbol can still be typed with `\in`.
+
 ## [1.0]
 First major release
 

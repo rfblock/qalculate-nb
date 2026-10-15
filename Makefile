@@ -14,7 +14,7 @@ endif
 ROOT_DIR := $(PWD)
 PREFIX := $(ROOT_DIR)/$(build)/install
 CFLAGS := -I$(PREFIX)/include $(extra_flags)
-CXXFLAGS = $(CFLAGS) -fno-rtti -fno-exceptions -std=c++11 -DEMSCRIPTEN_HAS_UNBOUND_TYPE_NAMES=0
+CXXFLAGS = $(CFLAGS) -fno-rtti -fno-exceptions -std=c++17 -DEMSCRIPTEN_HAS_UNBOUND_TYPE_NAMES=0
 LDFLAGS := -L$(PREFIX)/lib -fno-rtti $(extra_flags) -gsource-map -gseparate-dwarf
 
 prepend = $(foreach a,$(2),$(1)$(a))
@@ -33,7 +33,7 @@ QALCULATE_CHKSUM := sha-256=6217a634eeb9659ebb4080c265dfab47d8f8dd4c33394b48fd5a
 QALCULATE_REQS := gmp mpfr xml2
 QALCULATE_URL = https://github.com/Qalculate/libqalculate/releases/download/v$(1)/libqalculate-$(1).tar.gz
 
-EMSDK_VER := 3.1.51
+EMSDK_VER := 6.0.12
 EMSDK_CHKSUM := sha-256=6edeb200c28505db64a1a9f14373ecc3ba3151cebf3d8314895e603561bc61c2
 EMSDK_URL = https://github.com/emscripten-core/emsdk/archive/$(1).tar.gz
 
@@ -166,7 +166,7 @@ src/%.o: src/%.cpp $(LIBDIR)/libqalculate.a
 $(build)/qalc.js $(build)/qalc.wasm &: $(OBJS) $(call libfiles,$(QALCWASM_LIBS))
 	$(EMSDK_ENV)
 	mkdir -p $(@D)
-	emcc \
+	em++ \
 	    --bind \
 	    $(LDFLAGS) \
 	    -s WARN_UNALIGNED=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s FILESYSTEM=0 -s ASSERTIONS=0 \
