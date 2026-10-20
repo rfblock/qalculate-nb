@@ -79,6 +79,7 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 		.function("getFunctionName", optional_override([](MathStructure &self) {
 			return self.function()->name();
 		}))
+		.function("comparisonType", &MathStructure::comparisonType)
 		.function("variable", &MathStructure::variable, allow_raw_pointers())
 		.function("rows", &MathStructure::rows)
 		.function("columns", &MathStructure::columns)
@@ -111,6 +112,14 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 		.value("UNDEFINED", STRUCT_UNDEFINED)
 		.value("ABORTED", STRUCT_ABORTED)
 		.value("DATETIME", STRUCT_DATETIME);
+	
+	enum_<ComparisonType>("ComparisonType")
+		.value("LESS", COMPARISON_LESS)
+		.value("GREATER", COMPARISON_GREATER)
+		.value("EQUALS_LESS", COMPARISON_EQUALS_LESS)
+		.value("EQUALS_GREATER", COMPARISON_EQUALS_GREATER)
+		.value("EQUALS", COMPARISON_EQUALS)
+		.value("NOT_EQUAL", COMPARISON_NOT_EQUALS);
 
 	class_<EvaluationOptions>("EvaluationOptions")
 		.property("approximation", &EvaluationOptions::approximation);

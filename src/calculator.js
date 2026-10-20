@@ -55,6 +55,26 @@ const print_math_structure = (root, paren_level = 0) => {
 		children.push(root.getChild(i));
 	}
 
+	const print_children = (level = 0) => children.map(x => print_math_structure(x, level));
+
+	const comparisons_map = {
+		[Module.ComparisonType.LESS.value]: ' < ',
+		[Module.ComparisonType.GREATER.value]: ' > ',
+		[Module.ComparisonType.EQUALS_LESS.value]: ' \\le ',
+		[Module.ComparisonType.EQUALS_GREATER.value]: ' \\ge ',
+		[Module.ComparisonType.EQUALS.value]: ' = ',
+		[Module.ComparisonType.NOT_EQUAL.value]: ' \\ne ',
+	}
+
+	const binary_map = {
+			[types.BITWISE_AND.value]: ' \\& ',
+			[types.BITWISE_OR.value]: ' | ',
+			[types.BITWISE_XOR.value]: ' \\veebar ',
+			[types.LOGICAL_AND.value]: ' \\operatorname{and} ',
+			[types.LOGICAL_OR.value]: ' \\operatorname{or} ',
+			[types.LOGICAL_XOR.value]: ' \\operatorname{xor} ',
+	}
+
 	switch (root.type()) {
 		case types.NUMBER:
 		case types.SYMBOLIC:
@@ -69,17 +89,18 @@ const print_math_structure = (root, paren_level = 0) => {
 			}
 	}
 
+	let s;
 	switch (root.type()) {
 		case types.MULTIPLICATION:
-			children = children.map(x => print_math_structure(x, paren_levels.add));
+			children = print_children(paren_levels.add);
 			return paren_level >= paren_levels.mul
 				? `\\left(${children.join("\\cdot ")}\\right)`
 				: children.join("\\cdot ");
 		case types.INVERSE:
-			children = children.map(print_math_structure);
+			children = print_children();
 			return `\\frac1{${children[0]}}`;
 		case types.DIVISION:
-			children = children.map(print_math_structure);
+			children = print_children();
 			return `\\frac{${children[0]}}{${children[1]}}`;
 		case types.ADDITION: {
 			let s = print_math_structure(children.shift());
@@ -93,7 +114,7 @@ const print_math_structure = (root, paren_level = 0) => {
 			return paren_level >= paren_levels.add ? `\\left(${s}\\right)` : s;
 		}
 		case types.NEGATE:
-			children = children.map(print_math_structure);
+			children = print_children();
 			return `-${children[0]}`;
 		case types.POWER:
 			const base = print_math_structure(children[0], paren_levels.mul);
@@ -114,7 +135,7 @@ const print_math_structure = (root, paren_level = 0) => {
 				}
 				return `\\int_{${children[1]}}^{${children[2]}}${children[0]}\\mathrm{d}${children[3]}`;
 			}
-			children = children.map(print_math_structure);
+			children = print_children();
 			switch (fcn) {
 				case 'sqrt':
 					return `\\sqrt{${children[0]}}`;
@@ -134,9 +155,9 @@ const print_math_structure = (root, paren_level = 0) => {
 		case types.VECTOR:
 			const rows = root.rows();
 			const cols = root.columns();
-			let s = '';
+			s = '';
 			if (rows == 1) {
-				s = children.map(x => print_math_structure(x)).join(' & ');
+				s = print_children().join(' & ');
 				return `\\begin{bmatrix}${s}\\end{bmatrix}`
 			}
 			for (let i = 0; i < rows; i++) {
@@ -148,6 +169,29 @@ const print_math_structure = (root, paren_level = 0) => {
 				s += row_items.join(' & ') + ' \\\\';
 			}
 			return `\\begin{bmatrix}${s}\\end{bmatrix}`
+		case types.BITWISE_AND:
+		case types.BITWISE_OR:
+		case types.BITWISE_XOR:
+		case types.LOGICAL_AND:
+		case types.LOGICAL_OR:
+		case types.LOGICAL_XOR:
+			children = print_children(paren_levels.mul);
+			s = children.join(`\\mathbin{${binary_map[root.type().value]}}`);
+			return paren_level >= paren_levels.add ? `\\left(${s}\\right)` : s;
+		case types.BITWISE_NOT:
+			children = print_children();
+			return `\\lnot ${children[0]} `;
+		case types.LOGICAL_NOT:
+			children = print_children();
+			return `\\operatorname{not} ${children[0]} `;
+		case types.COMPARISON:
+			children = print_children();
+			return children.join(comparisons_map[root.comparisonType().value])
+		case types.UNDEFINED:
+			return '\\operatorname{undefined}';
+		case types.ABORTED:
+			return '\\operatorname{aborted}';
+		case types.DATETIME:
 		default:
 			return root.print(Module.default_print_options);
 	}

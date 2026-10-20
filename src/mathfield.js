@@ -11,10 +11,16 @@ export const new_math_field = () => {
 	field.defaultMode = 'math';
 
 	field.addEventListener('mount', () => {
+		const symb = (x, sym) => ({[x]: sym ?? x});
 		const unit = (x, sym) => ({[x]: `\\operatorname{${sym ?? x}}` });
 		const fcn = x => ({[x]: `\\operatorname{${x}}`});
 		field.inlineShortcuts = {
 			...field.inlineShortcuts,
+
+			// Constants
+			...symb('hbar', '\\hbar'),
+			...symb('epsilon', '\\varepsilon'),
+			...symb('epsilon0', '\\varepsilon_0'),
 
 			// Trig/Hyp-trig
 			...fcn('arccot'),
