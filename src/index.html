@@ -86,9 +86,12 @@
 	<div id="table-of-contents" class="panel"></div>
 	<div id="variable-panel" class="panel">
 		<table>
-			<caption>Variables</caption>
+			<caption><button style="float: right;" onclick="toggle_variable_panel();" aria-label="Close">&#x2715;</button> Variables</caption>
 			<tbody></tbody>
 		</table>
+		<div id="variable-panel-unfold" onclick="toggle_variable_panel();">
+			&darr; Open Variable Panel &darr;
+		</div>
 	</div>
 
 	<dialog id="tutorial">

@@ -7,6 +7,9 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 
 ## [1.1-dev]
 
+### Added
+ - Variable panel can be collapsed
+
 ### Changed
  - Output is now formatted in LaTeX
  - Units are no longer displayed in italics

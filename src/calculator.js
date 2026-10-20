@@ -81,11 +81,17 @@ const print_math_structure = (root, paren_level = 0) => {
 		case types.DIVISION:
 			children = children.map(print_math_structure);
 			return `\\frac{${children[0]}}{${children[1]}}`;
-		case types.ADDITION:
-			children = children.map(print_math_structure);
-			return paren_level >= paren_levels.add
-				? `\\left(${children.join("+")}\\right)`
-				: children.join("+");
+		case types.ADDITION: {
+			let s = print_math_structure(children.shift());
+			for (const child of children) {
+				if (child.type() == types.NEGATE) {
+					s += `-${print_math_structure(child.getChild(1))}`;
+				} else {
+					s += `+${print_math_structure(child)}`;
+				}
+			}
+			return paren_level >= paren_levels.add ? `\\left(${s}\\right)` : s;
+		}
 		case types.NEGATE:
 			children = children.map(print_math_structure);
 			return `-${children[0]}`;
@@ -196,7 +202,7 @@ export const restart_calculator = () => {
 			// Module.default_print_options.limit_implicit_multiplication = false;
 			// Module.default_print_options.short_multiplication = true;
 
-			Module.default_user_evaluation_options.approximation = Module.ApproximationMode.EXACT;
+			Module.default_user_evaluation_options.approximation = Module.ApproximationMode.APPROXIMATE;
 			window.po = Module.default_print_options;
 			window.eo = Module.default_user_evaluation_options;
 

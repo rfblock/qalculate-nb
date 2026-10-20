@@ -7,7 +7,7 @@ This document outlines setting up the repository and pushing to the dev branch.
 1. [Find an issue](https://github.com/rfblock/qalculate-nb/issues?q=sort:updated-desc+is:issue+state:open+)
 2. [Fork the repository](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)
 3. [Clone the fork](https://github.com/git-guides/git-clone)
-4. Switch to the `dev` branch (run `git checkout dev`)
+4. Switch to the `dev` branch (run `git switch dev`)
 5. Build (run `make`)
 6. Make desired changes
 7. Push changes to your fork
@@ -37,19 +37,19 @@ This project is licensed under GPLv2, which requires all contributors to own the
 
 If you plan on uploading changes (via pull request), you'll likely need to [fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) the repository first. Once a fork has been created, you can then [clone your fork](https://github.com/git-guides/git-clone).
 
-By default, `git` will pull the `master` branch. This is the branch that gets deployed to `qalc.steg.gy`. However, developer contributions happen on the `dev` branch, which is deployed to `dev.qalc.steg.gy`. To switch to the right branch, run `git checkout dev` in the root directory of the repository.
+By default, `git` will pull the `master` branch. This is the branch that gets deployed to `qalc.steg.gy`. However, developer contributions happen on the `dev` branch, which is deployed to `dev.qalc.steg.gy`. To switch to the right branch, run `git switch dev` in the root directory of the repository.
 
 ### Advanced: Create a branch
 
-If you plan on working on multiple issues simultaneously, it may be a good idea to create a branch to work on each issue simultaneously. To create a branch, first ensure you are starting on the `dev` branch (`git checkout dev`). Next, create a branch with the name of the issue, such as `git branch feature/gnuplot`.
+If you plan on working on multiple issues simultaneously, it may be a good idea to create a branch to work on each issue simultaneously. To create a branch, first ensure you are starting on the `dev` branch (`git switch dev`). Next, create a branch with the name of the issue, such as `git branch feature/gnuplot`.
 
-To switch to your branch, run `git checkout <branch>` where `<branch>` is the name of the branch you want to switch to. To list branches, run `git branch`.
+To switch to your branch, run `git switch <branch>` where `<branch>` is the name of the branch you want to switch to. To list branches, run `git branch`.
 
 ### First time build
 
 This repository is made only for Linux. If you are on Windows, it is a good idea to get familiar with [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install). To start, run `wsl` to begin a Linux environment.
 
-Install the required dependencies with `sudo apt install libtool-bin intltool autoconf-archive make`, then build with `make -j$(nproc) deploy`. The first build can take anywhere from 5-20 minutes, depending on your machine.
+Install the required dependencies with `sudo apt install libtool-bin intltool autoconf-archive make`, then build with `make -j$(nproc) deploy`. The first build can take anywhere from 5-30 minutes, depending on your machine.
 
 ## Making changes
 

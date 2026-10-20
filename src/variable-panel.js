@@ -19,3 +19,7 @@ export const relist_variables = () => {
 		td_value.textContent = v.value;
 	});
 }
+
+window.toggle_variable_panel = () => {
+	document.querySelector('#variable-panel').classList.toggle('hidden');
+}

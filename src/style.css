@@ -100,6 +100,9 @@ body {
 button {
 	background: var(--background);
 	border: var(--border);
+	&:hover {
+		background: var(--background-dark);
+	}
 }
 
 input {
@@ -139,8 +142,8 @@ menu > div {
 		border: none;
 		border-bottom: var(--border);
 		border-right: var(--border);
-		&:hover:not(.spacer) {
-			background: var(--background-dark);
+		&:hover.spacer {
+			background: var(--background);
 		}
 	}
 }
@@ -385,19 +388,42 @@ dialog {
 #variable-panel {
 	top: 1rem;
 	right: 0;
-	padding-right: 1rem;
 	height: 100%;
 	border: var(--border);
 	background: var(--surface);
+	overflow-y: visible;
+
+	#variable-panel-unfold {
+		display: none;
+	}
 
 	&:not(:has(tr)) {
 		display: none;
 	}
 
+	&.hidden {
+		> table {
+			display: none;
+		}
+		#variable-panel-unfold {
+			display: block;
+			height: 100%;
+			writing-mode: sideways-rl;
+			display: flex;
+			justify-content: center;
+			user-select: none;
+			cursor: pointer;
+		}
+	}
+
 	table {
 		display: block;
 		width: 12rem;
-		overflow: auto;
+		height: 100%;
+
+		caption {
+			display: block;
+		}
 
 		tr:nth-child(odd) {
 			background: var(--background-dark);
@@ -405,6 +431,13 @@ dialog {
 
 		td {
 			white-space: nowrap;
+		}
+
+		tbody {
+			overflow: auto;
+			display: block;
+			width: 100%;
+			height: 100%;
 		}
 	}
 }
