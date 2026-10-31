@@ -27,8 +27,6 @@ export const calculate = exp => {
 		res = [...new_plots];
 		new_plots.length = 0;
 	} else {
-		res = calc.parse(res);
-		res.format(Module.default_print_options);
 		res = print_math_structure(res);
 	}
 
@@ -186,6 +184,9 @@ const print_math_structure = (root, paren_level = 0) => {
 			return `\\operatorname{not} ${children[0]} `;
 		case types.COMPARISON:
 			children = print_children();
+			if (root.isApproximate()) {
+				return children.join('\\approx ');
+			}
 			return children.join(comparisons_map[root.comparisonType().value])
 		case types.UNDEFINED:
 			return '\\operatorname{undefined}';

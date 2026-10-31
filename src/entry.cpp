@@ -38,8 +38,10 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 		.property("units", &Calculator::units)
 		.property("variables", &Calculator::variables)
 		.function("calculateAndPrint", optional_override([](Calculator& self, std::string s, int msecs, EvaluationOptions &eo, PrintOptions &po) {
-			return self.calculateAndPrint(s, msecs, eo, po);
-		}))
+			MathStructure result;
+			self.calculateAndPrint(s, msecs, eo, po, NULL, &result);
+			return result;
+		}), allow_raw_pointers())
 		.function("calculate", optional_override([](Calculator& self, std::string s, EvaluationOptions &eo) {
 			return self.calculate(s, eo);
 		}))
@@ -63,6 +65,7 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 			return (KnownVariable*) &self;
 		}), allow_raw_pointers());
 
+	register_vector<std::string>("vector<std::string>");
 	register_vector<Variable*>("vector<Variable*>");
 		
 	class_<ExpressionItem>("ExpressionItem")
@@ -80,6 +83,7 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 			return self.function()->name();
 		}))
 		.function("comparisonType", &MathStructure::comparisonType)
+		.function("isApproximate", &MathStructure::isApproximate)
 		.function("variable", &MathStructure::variable, allow_raw_pointers())
 		.function("rows", &MathStructure::rows)
 		.function("columns", &MathStructure::columns)
@@ -139,7 +143,8 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 		.property("excessive_parenthesis", &PrintOptions::excessive_parenthesis)
 		.property("limit_implicit_multiplication", &PrintOptions::limit_implicit_multiplication)
 		.property("short_multiplication", &PrintOptions::short_multiplication)
-		.property("use_unicode_signs", &PrintOptions::use_unicode_signs);
+		.property("use_unicode_signs", &PrintOptions::use_unicode_signs)
+		.property("preserve_format", &PrintOptions::preserve_format);
 	
 	constant("default_print_options", default_print_options);
 

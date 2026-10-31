@@ -11,8 +11,11 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
  - Variable panel can be collapsed
 
 ### Changed
+ - Updated Qalculate! to 5.13.2
  - Output is now formatted in LaTeX
  - Units are no longer displayed in italics
+ - Typing `epsilon` will now type `ε` instead of `ϵ`.
+   - Additionally, typing `epsilon0` will substitute it for the symbol for vaccuum permittivity
 
 #### For Developers
  - Creating a mathfield has been moved to `mathfield.js` via factory function

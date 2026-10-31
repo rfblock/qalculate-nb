@@ -192,7 +192,7 @@
 			get_version().then(x => document.querySelector('#about-version').innerText = x);
 		</script>
 		<p>Source code available on <a href="https://github.com/rfblock/qalculate-nb">GitHub</a></p>
-		<p>Created by James Sanders (aka. Steggy)</p>
+		<p>Created by Jame<a id="secret-1">s</a> <a id="secret-2">S</a>ander<a id="secret-3">s</a> (aka. <a id="secret-4">S</a>teggy)</p>
 		<p>Forked from <a href="https://github.com/flaviut/qalculate-wasm">flaviut/qalculate-wasm</a> by Flaviu Tamas and Noa</p>
 		<h2>Technologies</h2>
 		<p><a href="https://github.com/Qalculate/libqalculate">libqalculate</a> by Hanna Knutsson, Sven Herzberg, and others <a href="https://github.com/Qalculate/libqalculate?tab=GPL-2.0-1-ov-file#readme">(GPLv2.0)</a></p>
@@ -202,6 +202,22 @@
 		<p>If you like what I do, and would like to support, donations are gratefully accepted via Venmo at <code>@James-Sanders-581</code></p>
 		<form method="dialog" style="float: right;"><input type="submit" value="Close" autofocus></form>
 		<p>Qalculate! Notebook is licensed under the <a href="https://github.com/rfblock/qalculate-nb/blob/master/LICENSE">GPLv2.0 License</a></p>
+		<script>
+			let secret_clicked = '';
+			[1,2,3,4].forEach(i => {
+				const e = document.querySelector(`#secret-${i}`);
+				e.style.cursor = 'pointer';
+				e.addEventListener('click', () => {
+					secret_clicked += i;
+					if (secret_clicked.length > 4) {
+						secret_clicked = secret_clicked.slice(secret_clicked.length - 4);
+					}
+					if (secret_clicked == '1234') {
+						window.open('http://youtu.be/y3cvwwkDJ64', 'easteregg');
+					}
+				});
+			})
+		</script>
 	</dialog>
 
 	<dialog id="open-dialog">

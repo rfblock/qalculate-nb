@@ -17,6 +17,9 @@ export const new_math_field = () => {
 		field.inlineShortcuts = {
 			...field.inlineShortcuts,
 
+			// Keywords
+			...fcn('where'),
+
 			// Constants
 			...symb('hbar', '\\hbar'),
 			...symb('epsilon', '\\varepsilon'),
