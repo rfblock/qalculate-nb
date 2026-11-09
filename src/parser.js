@@ -1,6 +1,6 @@
 'use strict';
 
-import { preferences } from "./preferences";
+import { preferences } from "./preferences.js";
 
 /*
 Parser key assumptions:

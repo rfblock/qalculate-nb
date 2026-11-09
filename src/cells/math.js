@@ -99,7 +99,10 @@ export const get_math_cell_result = cell => {
 
 		return {
 			type: 'output',
-			value: div.textContent,
+			value: {
+				latex: div.dataset.latex,
+				ascii: div.dataset.ascii,
+			},
 		}
 	});
 }
@@ -121,6 +124,8 @@ export const set_math_cell_result = (cell, result) => {
 			case 'output': {
 				const output_type = preferences.output_type;
 				const p = document.createElement(output_type == 'latex' ? 'math-span' : 'span');
+				elem.dataset.latex = res.value.latex;
+				elem.dataset.ascii = res.value.ascii;
 				p.textContent = preferences.output_type == 'latex' ? res.value.latex : res.value.ascii;
 				p.addEventListener('click', () => {
 					const copy_type = preferences.copy_output_type == 'same' ? output_type : preferences.copy_output_type;
