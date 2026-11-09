@@ -256,17 +256,6 @@ export const create_cell = (ref, type, change_history) => {
 		if (e.key == 'z') { window.action_cell_undo(cell); }
 	});
 
-		const cell_result = document.createElement('span');
-		cell.appendChild(cell_result);
-		cell_result.classList.add('cell-result');
-		cell_result.tabIndex = 0;
-		cell_result.addEventListener('click', () => {
-			if (!cell_result.innerText) { return; }
-			navigator.clipboard.writeText(cell_result.innerText)
-				.then(() => { create_notification('Copied', 'success') })
-				.catch(() => { create_notification('Failed to copy', 'error') });
-		});
-
 		cell_expr.addEventListener('keydown', e => {
 			if (e.repeat) { return; }
 			if (e.key != 'Escape') { return; }

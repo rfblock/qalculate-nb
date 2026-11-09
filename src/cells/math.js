@@ -5,6 +5,8 @@ import { calculate } from './calculator.js';
 import { parse_mathml } from './parser.js';
 import { focus_cell, run_cell } from './cells.js';
 import { new_math_field } from './mathfield.js'
+import { create_notification } from './notifications.js';
+import { preferences } from './preferences.js';
 
 import { convertLatexToMathMl } from 'https://esm.run/mathlive';
 
@@ -20,6 +22,11 @@ trigFunctions = trigFunctions.concat(hyperbolicFunctions);
 export const create_math_cell = cell => {
 	const cell_expr = cell.querySelector('.cell-expression');
 	const field = new_math_field();
+
+	const cell_result = document.createElement('span');
+	cell.appendChild(cell_result);
+	cell_result.classList.add('cell-result');
+	cell_result.tabIndex = 0;
 
 	field.addEventListener('mount', () => {
 		field.keybindings = [
@@ -112,8 +119,15 @@ export const set_math_cell_result = (cell, result) => {
 				break;
 			}
 			case 'output': {
-				const p = document.createElement('math-span');
-				p.textContent = res.value;
+				const output_type = preferences.output_type;
+				const p = document.createElement(output_type == 'latex' ? 'math-span' : 'span');
+				p.textContent = preferences.output_type == 'latex' ? res.value.latex : res.value.ascii;
+				p.addEventListener('click', () => {
+					const copy_type = preferences.copy_output_type == 'same' ? output_type : preferences.copy_output_type;
+					navigator.clipboard.writeText(copy_type == 'latex' ? res.value.latex : res.value.ascii)
+						.then(() => { create_notification('Copied', 'success') })
+						.catch(() => { create_notification('Failed to copy', 'error') });
+				});
 				elem.appendChild(p);
 				break;
 			}

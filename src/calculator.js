@@ -1,6 +1,7 @@
 import LoadModule from './qalc.js'
 import { create_notification } from './notifications.js';
 import { relist_variables } from './variable-panel.js';
+import { preferences } from './preferences.js';
 
 let calc;
 let Module;
@@ -11,8 +12,14 @@ let new_plots = [];
 export const calculate = exp => {
 	let res;
 
+	Module.default_user_evaluation_options.approximation = {
+		'exact': Module.ApproximationMode.EXACT,
+		'try_exact': Module.ApproximationMode.TRY_EXACT,
+		'approximate': Module.ApproximationMode.APPROXIMATE,
+	}[preferences.eval_mode];
+
 	try {
-		res = calc.calculateAndPrint(exp, 1000,
+		res = calc.calculateAndPrint(exp, preferences.timeout,
 			Module.default_user_evaluation_options,
 			Module.default_print_options
 		);
@@ -27,7 +34,10 @@ export const calculate = exp => {
 		res = [...new_plots];
 		new_plots.length = 0;
 	} else {
-		res = print_math_structure(res);
+		res = {
+			latex: print_math_structure(res),
+			ascii: res.print(Module.default_print_options),
+		};
 	}
 
 	const msgs = [];
@@ -75,6 +85,12 @@ const print_math_structure = (root, paren_level = 0) => {
 
 	switch (root.type()) {
 		case types.NUMBER:
+			const re = /^([0-9.]+)E(\u2212?[0-9]+)$/;
+			const match = root.print(Module.default_print_options).match(re);
+			if (match == null) {
+				return root.print(Module.default_print_options);
+			}
+			return `{${match[1]}}\\times10^{${match[2]}}`;
 		case types.SYMBOLIC:
 			return root.print(Module.default_print_options);
 		case types.VARIABLE:
@@ -243,16 +259,15 @@ export const restart_calculator = () => {
 			Module.default_print_options.spell_out_logical_operators = true;
 			Module.default_print_options.spacious = false;
 			Module.default_print_options.use_unicode_signs = Module.UNICODE_SIGNS.WITHOUT_EXPONENTS.value;
+			// Module.default_print_options.exp_display = Module.EXP_DISPLAY.POWER_OF_10;
 			// Module.default_print_options.excessive_parenthesis = true;
 			// Module.default_print_options.limit_implicit_multiplication = false;
 			// Module.default_print_options.short_multiplication = true;
 
 			Module.default_user_evaluation_options.approximation = Module.ApproximationMode.APPROXIMATE;
-			window.po = Module.default_print_options;
-			window.eo = Module.default_user_evaluation_options;
 
 			calc = new Module.Calculator();
-			window.calc = calc;
+			window.calc = calc
 			calc.loadGlobalDefinitions();
 			relist_variables();
 			resolve();

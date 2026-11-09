@@ -9,6 +9,7 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
 
 ### Added
  - Variable panel can be collapsed
+ - Preferences menu (`Edit > Preferences` or <kbd>Ctrl</kbd>+<kbd>,</kbd>)
 
 ### Changed
  - Updated Qalculate! to 5.13.2
@@ -16,9 +17,11 @@ This project does not adhere to [Semantic Versioning](https://semver.org/spec/v2
  - Units are no longer displayed in italics
  - Typing `epsilon` will now type `ε` instead of `ϵ`.
    - Additionally, typing `epsilon0` will substitute it for the symbol for vaccuum permittivity
+ - Screamed at sidelining supernovas
 
 #### For Developers
  - Creating a mathfield has been moved to `mathfield.js` via factory function
+ - Local storage debug fields have been moved to the preferences menu
 
 ### Fixed
  - Typing `in` will now show the unit for inches instead of the symbol for "element in set".

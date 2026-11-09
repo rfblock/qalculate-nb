@@ -4,6 +4,7 @@ import { restart_calculator } from "./calculator.js";
 import { create_cell, get_cell_value, set_cell_value, get_cell_result, set_cell_result, get_cell_type, box_cell, clear_cell_history } from "./cells.js";
 import { delete_markdown_editors } from "./markdown.js";
 import { create_notification, prompt_confirm, prompt_text } from "./notifications.js";
+import { preferences } from "./preferences.js";
 
 let notebook_name = '';
 let unsaved_changes = false;
@@ -21,13 +22,13 @@ const prompt_unsaved_changes = next => {
 		.then(res => { if (res == 'Yes') next(); }, () => {});
 }
 
-const AUTOSAVE_INTERVAL = 1000; // TODO: Make this configurable
 let last_modification = null;
 export const set_unsaved_changes = x => {
 	x ??= true;
 	unsaved_changes = x;
 	if (unsaved_changes) {
 		clearTimeout(last_modification);
+		if (!preferences.enable_autosave) { return; }
 		last_modification = setTimeout(() => {
 			if (!unsaved_changes) { return; }
 			if (notebook_name.trim().length == 0) {
@@ -35,7 +36,7 @@ export const set_unsaved_changes = x => {
 			} else {
 				save_notebook();
 			}
-		}, AUTOSAVE_INTERVAL);
+		}, preferences.autosave_interval);
 	}
 };
 

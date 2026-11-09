@@ -41,13 +41,7 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 			MathStructure result;
 			self.calculateAndPrint(s, msecs, eo, po, NULL, &result);
 			return result;
-		}), allow_raw_pointers())
-		.function("calculate", optional_override([](Calculator& self, std::string s, EvaluationOptions &eo) {
-			return self.calculate(s, eo);
-		}))
-		.function("parse", optional_override([](Calculator &self, std::string s) {
-			return self.parse(s);
-		}));
+		}), allow_raw_pointers());
 
 	class_<Unit>("Unit")
 		.function("abbreviation", optional_override([](Unit &self) {
@@ -65,7 +59,6 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 			return (KnownVariable*) &self;
 		}), allow_raw_pointers());
 
-	register_vector<std::string>("vector<std::string>");
 	register_vector<Variable*>("vector<Variable*>");
 		
 	class_<ExpressionItem>("ExpressionItem")
@@ -144,8 +137,8 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 		.property("limit_implicit_multiplication", &PrintOptions::limit_implicit_multiplication)
 		.property("short_multiplication", &PrintOptions::short_multiplication)
 		.property("use_unicode_signs", &PrintOptions::use_unicode_signs)
-		.property("preserve_format", &PrintOptions::preserve_format);
-	
+		.property("exp_display", &PrintOptions::exp_display);
+
 	constant("default_print_options", default_print_options);
 
 	enum_<IntervalDisplay>("IntervalDisplay")
@@ -163,6 +156,12 @@ EMSCRIPTEN_BINDINGS(calculator_bindings) {
 		.value("ON", UNICODE_SIGNS_ON)
 		.value("ONLY_UNIT_EXPONENTS", UNICODE_SIGNS_ONLY_UNIT_EXPONENTS)
 		.value("WITHOUT_EXPONENTS", UNICODE_SIGNS_WITHOUT_EXPONENTS);
+
+	enum_<ExpDisplay>("EXP_DISPLAY")
+		.value("DEFAULT", EXP_DEFAULT)
+		.value("UPPERCASE_E", EXP_UPPERCASE_E)
+		.value("LOWERCASE_E", EXP_LOWERCASE_E)
+		.value("POWER_OF_10", EXP_POWER_OF_10);
 
 	class_<CalculatorMessage>("CalculatorMessage")
 		.function("message", &CalculatorMessage::message)
