@@ -160,7 +160,7 @@ const traverse_mathml = node => {
 
 export const parse_mathml = mathml => {
 	// Parsed DOM is unsafe and should be sanitized if ever used in the actual DOM
-	if (preferences.debug_print_raw_mathml) { console.log(mathml); }
+	if (preferences.debug.print_raw_mathml) { console.log(mathml); }
 
 	const doc = new DOMParser().parseFromString(`<mrow>${mathml}</mrow>`, 'text/xml');
 	if (doc.querySelector('parsererror')) {
@@ -193,10 +193,10 @@ export const parse_mathml = mathml => {
 	});
 
 	// Parsing
-	if (preferences.debug_print_mathml) { console.log(doc); }
+	if (preferences.debug.print_mathml) { console.log(doc); }
 
 	const ret = traverse_mathml(doc.firstChild);
-	if (preferences.debug_print_qalc_expression) {
+	if (preferences.debug.print_qalc_expression) {
 		console.log(ret);
 	}
 	return ret;

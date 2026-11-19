@@ -16,10 +16,10 @@ export const calculate = exp => {
 		'exact': Module.ApproximationMode.EXACT,
 		'try_exact': Module.ApproximationMode.TRY_EXACT,
 		'approximate': Module.ApproximationMode.APPROXIMATE,
-	}[preferences.eval_mode];
+	}[preferences.cells.eval_mode];
 
 	try {
-		res = calc.calculateAndPrint(exp, preferences.timeout,
+		res = calc.calculateAndPrint(exp, preferences.cells.timeout,
 			Module.default_user_evaluation_options,
 			Module.default_print_options
 		);

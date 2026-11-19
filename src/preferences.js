@@ -1,79 +1,94 @@
 'use strict';
 
 const preference_def = {
-	eval_mode: {
-		title: 'Evaluation Mode',
-		type: 'enum', 
-		values: { 'exact': 'Exact', 'try_exact': 'Approximate (Accurate)', 'approximate': 'Approximate (Fast)' },
-		default: 'try_exact',
-		description: 'Determines the accuracy of the calculations\nExact: Calculates and displays exact values\nApproximate (Accurate): Calculates exact values and displays approximate value\nApproximate (Fast): Calculates and displays approximate values',
-		visualizer: val => {
-			const div = document.createElement('div');
-			div.classList.add('visualizer');
-			const p1 = document.createElement('math-div');
-			div.appendChild(p1);
-			const p2 = document.createElement('math-div');
-			div.appendChild(p2);
-			switch (val) {
-				case 'exact':
-					p1.textContent = '\\sin(\\pi/3) = \\sqrt{3}/2';
-					p2.textContent = '\\sin(\\pi/2) = 1'; break;
-				case 'try_exact':
-					p1.textContent = '\\sin(\\pi/3) \\approx 0.86602540';
-					p2.textContent = '\\sin(\\pi/2) = 1'; break;
-				case 'approximate':
-					p1.textContent = '\\sin(\\pi/3) \\approx 0.86602540';
-					p2.textContent = '\\sin(\\pi/2) \\approx 1.0000000'; break;
-			}
-			return div;
-		}
+	cells: {
+		section: 'Cells',
+		properties: {
+			eval_mode: {
+				title: 'Evaluation Mode',
+				type: 'enum', 
+				values: { 'exact': 'Exact', 'try_exact': 'Approximate (Accurate)', 'approximate': 'Approximate (Fast)' },
+				default: 'try_exact',
+				description: 'Determines the accuracy of the calculations\nExact: Calculates and displays exact values\nApproximate (Accurate): Calculates exact values and displays approximate value\nApproximate (Fast): Calculates and displays approximate values',
+				visualizer: val => {
+					const div = document.createElement('div');
+					div.classList.add('visualizer');
+					const p1 = document.createElement('math-div');
+					div.appendChild(p1);
+					const p2 = document.createElement('math-div');
+					div.appendChild(p2);
+					switch (val) {
+						case 'exact':
+							p1.textContent = '\\sin(\\pi/3) = \\sqrt{3}/2';
+							p2.textContent = '\\sin(\\pi/2) = 1'; break;
+						case 'try_exact':
+							p1.textContent = '\\sin(\\pi/3) \\approx 0.86602540';
+							p2.textContent = '\\sin(\\pi/2) = 1'; break;
+						case 'approximate':
+							p1.textContent = '\\sin(\\pi/3) \\approx 0.86602540';
+							p2.textContent = '\\sin(\\pi/2) \\approx 1.0000000'; break;
+					}
+					return div;
+				}
+			},
+			timeout: {
+				title: 'Computation Timeout (ms)',
+				type: 'int',
+				default: 1000,
+				description: 'Maximum computation time before stopping.\nIf set to 0, the computation will go on indefinitely',
+			},
+			output_type: {
+				title: 'Output Formatting',
+				type: 'enum',
+				values: { 'latex': 'LaTeX', 'ascii': 'ASCII' },
+				default: 'latex',
+			},
+			copy_output_type: {
+				title: 'Copy to Clipboard Formatting',
+				type: 'enum',
+				values: { 'same': 'Same format as shown', 'latex': 'LaTeX always', 'ascii': 'ASCII always' },
+				default: 'ascii',
+			},
+		},
 	},
-	timeout: {
-		title: 'Computation Timeout (ms)',
-		type: 'int',
-		default: 1000,
-		description: 'Maximum computation time before stopping.\nIf set to 0, the computation will go on indefinitely',
+	saving: {
+		section: 'Saving',
+		properties: {
+			enable_autosave: {
+				title: 'Enable Autosave',
+				type: 'bool',
+				default: true,
+			},
+			autosave_interval: {
+				title: 'Autosave Interval (ms)',
+				type: 'int',
+				values: [0, null],
+				default: 1000,
+			},
+		},
 	},
-	output_type: {
-		title: 'Output Formatting',
-		type: 'enum',
-		values: { 'latex': 'LaTeX', 'ascii': 'ASCII' },
-		default: 'latex',
-	},
-	copy_output_type: {
-		title: 'Copy to Clipboard Formatting',
-		type: 'enum',
-		values: { 'same': 'Same format as shown', 'latex': 'LaTeX always', 'ascii': 'ASCII always' },
-		default: 'ascii',
-	},
-	enable_autosave: {
-		title: 'Enable Autosave',
-		type: 'bool',
-		default: true,
-	},
-	autosave_interval: {
-		title: 'Autosave Interval (ms)',
-		type: 'int',
-		values: [0, null],
-		default: 1000,
-	},
-	debug_print_raw_mathml: {
-		title: 'Debug: Print Raw MathML',
-		description: 'Print the MathML before preprocessing to console.log when a cell is ran',
-		type: 'bool',
-		default: false,
-	},
-	debug_print_mathml: {
-		title: 'Debug: Print MathML',
-		description: 'Print the MathML after preprocessing to console.log when a cell is ran',
-		type: 'bool',
-		default: false,
-	},
-	debug_print_qalc_expression: {
-		title: 'Debug: Print Qalc Expression',
-		description: 'Print the expression passed to Qalculate to console.log when a cell is ran',
-		type: 'bool',
-		default: false,
+	debug: {
+		section: 'Debug',
+		properties: {
+			print_raw_mathml: {
+				title: 'Print Raw MathML',
+				description: 'Print the MathML before preprocessing to console.log when a cell is ran',
+				type: 'bool',
+				default: false,
+			},
+			print_mathml: {
+				title: 'Print MathML',
+				description: 'Print the MathML after preprocessing to console.log when a cell is ran',
+				type: 'bool',
+				default: false,
+			},
+			print_qalc_expression: {
+				title: 'Print Qalc Expression',
+				description: 'Print the expression passed to Qalculate to console.log when a cell is ran',
+				type: 'bool',
+				default: false,
+			},
+		},
 	},
 }
 
@@ -86,8 +101,9 @@ window.action_preferences = () => {
 
 const load_preferences = () => {
 	const dialog = document.querySelector('#preferences');
-	Object.keys(preference_def).forEach(name => {
-		const pref = preference_def[name];
+	Object.keys(preference_def).forEach(section_name => Object.keys(preference_def[section_name].properties).forEach(name => {
+		const section = preference_def[section_name].section;
+		const pref = preference_def[section_name].properties[name];
 	
 		if (pref.title == undefined) {
 			console.warn(`Preference definition ${name} does not contain title`);
@@ -101,14 +117,20 @@ const load_preferences = () => {
 			console.warn(`Preference definition ${name} does not include default`);
 			return;
 		}
-		preferences[name] = get_preference(name) ?? pref.default;
+		preferences[section_name] ??= {};
+		preferences[section_name][name] = get_preference(name) ?? pref.default;
 
 		const li = document.createElement('div');
 		dialog.appendChild(li);
 
 		const label = document.createElement('label');
-		li.appendChild(label);
-		label.textContent = pref.title;
+		li.appendChild(label)
+			const section_span = document.createElement('span');
+			label.appendChild(section_span);
+			section_span.textContent = `${section}: `;
+			section_span.classList.add('section');
+
+		label.append(pref.title);
 		label.htmlFor = `preferences-${name}`;
 
 		if (pref.description) {
@@ -124,11 +146,11 @@ const load_preferences = () => {
 				input.type = 'number';
 				input.min = pref?.values?.[0];
 				input.max = pref?.values?.[1];
-				input.value = get_preference(name);
+				input.value = get_preference(section_name, name);
 				input.placeholder = pref.default;
 			} else if (pref.type == 'bool') {
 				input.type = 'checkbox';
-				input.checked = preferences[name];
+				input.checked = preferences[section_name][name];
 			}
 		} else if (pref.type == 'enum') {
 			input = document.createElement('select');
@@ -138,13 +160,13 @@ const load_preferences = () => {
 				option.value = x;
 				option.textContent = pref.values[x];
 			});
-			input.value = preferences[name];
+			input.value = preferences[section_name][name];
 		}
 		input.id = `preferences-${name}`;
 		li.appendChild(input);
 
 		if (pref.visualizer) {
-			li.appendChild(pref.visualizer(preferences[name]));
+			li.appendChild(pref.visualizer(preferences[section_name][name]));
 		}
 
 		input.addEventListener('input', () => {
@@ -155,26 +177,26 @@ const load_preferences = () => {
 			}
 
 			if (val === '') {
-				localStorage.clear(`preferences-${name}`);
+				localStorage.clear(`preferences-${section_name}.${name}`);
 			} else {
-				localStorage.setItem(`preferences-${name}`, val);
+				localStorage.setItem(`preferences-${section_name}.${name}`, val);
 			}
-			preferences[name] = get_preference(name) ?? pref.default;
+			preferences[section_name][name] = get_preference(section_name, name) ?? pref.default;
 		});
-	});
+	}));
 }
 
-const get_preference = pref => {
-	const val = localStorage.getItem(`preferences-${pref}`);
+const get_preference = (sec, pref) => {
+	const val = localStorage.getItem(`preferences-${sec}.${pref}`);
 	if (val == null) {
 		return null;
 	}
 
-	if (preference_def[pref].type == 'int') {
+	if (preference_def[sec].properties[pref].type == 'int') {
 		return Number(val);
 	}
 
-	if (preference_def[pref].type == 'bool') {
+	if (preference_def[sec].properties[pref].type == 'bool') {
 		return val == 'true';
 	}
 

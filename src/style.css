@@ -483,6 +483,9 @@ dialog {
 	label {
 		font-weight: bold;
 		display: block;
+		.section {
+			color: gray;
+		}
 	}
 	p {
 		white-space: pre;

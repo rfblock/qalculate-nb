@@ -28,7 +28,7 @@ export const set_unsaved_changes = x => {
 	unsaved_changes = x;
 	if (unsaved_changes) {
 		clearTimeout(last_modification);
-		if (!preferences.enable_autosave) { return; }
+		if (!preferences.saving.enable_autosave) { return; }
 		last_modification = setTimeout(() => {
 			if (!unsaved_changes) { return; }
 			if (notebook_name.trim().length == 0) {
@@ -36,7 +36,7 @@ export const set_unsaved_changes = x => {
 			} else {
 				save_notebook();
 			}
-		}, preferences.autosave_interval);
+		}, preferences.saving.autosave_interval);
 	}
 };
 
